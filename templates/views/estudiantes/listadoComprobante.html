@@ -1,0 +1,45 @@
+{% include "views/default/header.html" %}
+
+
+
+<div class="card">
+    <div class="card-header">{{name}}</div>
+
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                   <th>Estudiante</th>
+                   
+                    <th>Comprbante</th>                               
+                   
+                </tr>
+            </thead>
+            <tbody>
+                {% for items in object_list %}
+                <tr>
+                    <td>{{items.Estudiante}}</td>
+                    
+                    <td>  <iframe src="{{items.file_comp.url}}" style="border-radius: 30px;" alt="{{items.Estudiante}}" width="100" height="100" > </td>
+                   
+                    <td>
+                        <a href="salud/edit/{{items.id_fichsal}}" class="btn btn-outline-warning">Editar</a>
+                        <a href="salud/delete/{{items.id_fichsal}}" class="btn btn-outline-danger">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+        <a href="addComprobante" type="button" class="btn btn-primary">Agregar Comprobante</a>
+
+    </div>
+</div>
+
+
+
+
+
+
+  {% include "views/default/footer.html" %}

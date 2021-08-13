@@ -1,0 +1,172 @@
+
+{% load i18n static %}
+<!--<img src="{%static 'images/portada2.jpg'%}" class="imgport" >-->
+
+
+<div class="container">
+    <div class="row">
+        {% if programa_list %}
+        {% for curso in programa_list %}
+        <div class="col-xs-6 col-md-2">
+            <div class="card">
+                <div class="card-header ">
+                    <a href="details/{{ curso.id_curso }}">
+                        <img src="/media/{{ curso.imagen_curso }}"  class="thumbnail" />
+                    </a>
+                </div>
+                <div class="card-body">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h5>{{ programa.nombre }}</h5>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p class="card-text"> <b> Horario de :</b></p>
+                                    <p class="card-text">{{programa.horario }}</p>
+                                    {% for i in detalle %}
+                                    <ul>
+                                        <li> {{ i }} </li>
+                                    </ul>
+                                    
+                                    {% endfor %}
+                                 <!--   {% if curso.precioxnivel_curso == null %}
+                                    
+                                    {% else %}
+
+                                    <p class="card-text"> <b> Precio por nivel:</b> $ {{curso.precioxnivel_curso }}</p>
+                                    {% endif %}-->
+
+                                   <!-- <p> <b> mensualidad de :</b>  $ {{ curso.precioxmes_curso}}</p>-->
+                                    
+                                  <!--  {% if curso.tiempoxnivel_curso == none %}
+
+                                    <p>El tiempo que el estudiante lo requiera</p>
+                                    {% else %}
+
+                                    <p class="card-text"> <b> Tiempo por nivel : </b></p>
+                                    <p class="card-text"> {{curso.tiempoxnivel_curso }} </p>
+
+                                    {% endif %}-->
+                                  <!--  {% if curso.tiempoxnivel_curso == none %}
+
+                                    <br>
+                                    <br>
+                                    <br>
+                                    {% else %}
+
+                                    <p class="card-text"> <b>Niveles :</b> 7 </p>
+                                    
+
+                                    {% endif %} -->
+                                    
+
+                                    
+                                    <p class="card-text"></p>
+                                    <form method="POST" action="Registrar">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="{{curso.id_curso}}"
+                                        name="id_curso" size="1"/>
+                                       <!-- <input type="submit" class="btn btn-success btn-sm" value="Resgistrar">-->
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                    
+
+
+
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+        {% for curso in programa_list %}
+        <div class="col-xs-6 col-md-2">
+            <div class="card">
+                <div class="card-header ">
+                    
+                        <img src="/media/{{ programa.imagen }}"  class="thumbnail" />
+                    </a>
+                </div>
+                <div class="card-body">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h5>{{ programa.nombre }}</h5>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p class="card-text"> <b> Horario de :</b></p>
+                                    <p class="card-text">{{program.horario }}</p>
+                                   
+                                 <!--   {% if curso.precioxnivel_curso == null %}
+                                    
+                                    {% else %}
+
+                                    <p class="card-text"> <b> Precio por nivel:</b> $ {{curso.precioxnivel_curso }}</p>
+                                    {% endif %}-->
+
+                                   <!-- <p> <b> mensualidad de :</b>  $ {{ curso.precioxmes_curso}}</p>-->
+                                    
+                                  <!--  {% if curso.tiempoxnivel_curso == none %}
+
+                                    <p>El tiempo que el estudiante lo requiera</p>
+                                    {% else %}
+
+                                    <p class="card-text"> <b> Tiempo por nivel : </b></p>
+                                    <p class="card-text"> {{curso.tiempoxnivel_curso }} </p>
+
+                                    {% endif %}-->
+                                  <!--  {% if curso.tiempoxnivel_curso == none %}
+
+                                    <br>
+                                    <br>
+                                    <br>
+                                    {% else %}
+
+                                    <p class="card-text"> <b>Niveles :</b> 7 </p>
+                                    
+
+                                    {% endif %} -->
+                                    
+
+                                    
+                                    <p class="card-text"></p>
+                                    <form method="POST" action="Registrar">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="{{curso.id_curso}}"
+                                        name="id_curso" size="1"/>
+                                       <!-- <input type="submit" class="btn btn-success btn-sm" value="Resgistrar">-->
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                    
+
+
+
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+        {% else %}
+        <p>No hay cursos disponibles.</p>
+        {% endif %}
+    </div>
+</div>
+
+

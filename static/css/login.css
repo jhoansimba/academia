@@ -1,0 +1,96 @@
+/* LOGIN FORM */
+
+body.login {
+    background: #f8f8f8;
+}
+
+.login #header {
+    height: auto;
+    padding: 5px 16px;
+    text-align: center;
+}
+
+.login #header h1 {
+    font-size: 18px;
+    color: #fff;
+}
+
+/*.login #header h1 a {
+    color: #fff;
+}*/
+
+.login #content {
+    padding: 20px 20px 0;
+}
+
+.login #container {
+    background: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 6px;
+    overflow: hidden;
+    width: 100%;
+    min-width: 300px;
+    margin: 50px auto;
+}
+
+.login #content-main {
+    width: 100%;
+    padding: 20px 20px 20px;
+}
+
+.login .form-row {
+    padding: 4px 0;
+    float: center;
+    width: 100%;
+    border-bottom: none;
+}
+
+.login .form-row label {
+    padding-right: 0.5em;
+    line-height: 2em;
+    font-size: 1em;
+    clear: both;
+    color: #333;
+}
+.form-row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -5px;
+    margin-left: 0px; 
+}
+.login .form-row #id_username, .login .form-row #id_password {
+    clear: both;
+    padding: 5px;
+    width: 100%;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+.login span.help {
+    font-size: 10px;
+    display: block;
+}
+
+.login .submit-row {
+    clear: both;
+    padding: 20px 0px 0px;
+    margin: 0;
+    border: none;
+    background: none;
+    text-align: center;
+}
+
+.login .password-reset-link {
+    text-align: center;
+}
+.errornote{
+    padding: 20px 20px 0px;
+}
+@media (min-width: 768px) {
+    .login #container {
+        width: 30%;
+    }
+}

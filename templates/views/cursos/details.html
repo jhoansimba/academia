@@ -1,0 +1,46 @@
+{% include "views/default/header.html" %}
+{% load i18n static %}
+<img src="{%static 'images/portada2.jpg'%}" class="imgport" >
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <div class="card" style="width: 21rem;">
+                <img src="/media/{{ curso.imagen_curso }}" alt="thumbnail">
+                <div class="card-body">
+                    <h3 class="card-title"> {{curso.nombre_curso }}</h3>
+                </div>
+            </div>
+           
+
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="card">
+            <div class="card-body">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>
+                                Horario
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>{{ curso.id_horario }}</p>
+                                <form method="POST" action="Resgistrar">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{curso.id_curso}}"
+                                    name="id_curso" size="1"/>
+                                    <input type="submit" class="btn btn-success btn-sm" value="Resgistrar">
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% include "views/default/footer.html" %}

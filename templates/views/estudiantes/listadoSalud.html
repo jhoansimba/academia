@@ -1,0 +1,60 @@
+{% include "views/default/header.html" %}
+<nav aria-label="...">
+    <ul class="pagination">
+      <li class="page-item disabled">
+        <span class="page-link">Previous</span>
+      </li>
+      <li class="page-item"><a class="page-link" href="/representante">1</a></li>
+      <li class="page-item active" aria-current="page">
+        <span class="page-link">2</span>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#">Next</a>
+      </li>
+    </ul>
+  </nav>
+
+
+
+
+<div class="card">
+    <div class="card-header">{{name}}</div>
+
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                   <th>Estudiante</th>
+                    <th>Enfermedad</th>
+                    <th>Descripción</th>
+                    <th>Acciones a tomar</th>
+                    <th>Teléfono de emergencia</th>                               
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for items in object_list %}
+                <tr>
+                    <td>{{items.id_est}}</td>
+                    <td> {{items.NomEnfer_fichsa}} </td>
+                    <td> {{items.descripcion_fichsal}} </td>
+                    
+                    <td> {{items.accionesTomar_fichsal}} </td>
+                    <td> {{items.telefonoEmer_fichsal}} </td>
+                   
+                    <td>
+                        <a href="salud/edit/{{items.id_fichsal}}" class="btn btn-outline-warning">Editar</a>
+                        <a href="salud/delete/{{items.id_fichsal}}" class="btn btn-outline-danger">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+        <a href="addsalud" type="button" class="btn btn-primary">Agregar Ficha</a>
+
+    </div>
+</div>
+  {% include "views/default/footer.html" %}

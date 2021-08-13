@@ -1,0 +1,200 @@
+<link rel="stylesheet" href="http://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+<script src="cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+{% include "views/default/header.html" %}
+<nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item disabled">
+      <span class="page-link">Previous</span>
+    </li>
+    <li class="page-item active" aria-current="page">
+      <span class="page-link">1</span>
+    </li>
+    <li class="page-item"><a class="page-link" href="salud">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item">
+      <a class="page-link" href="#">Next</a>
+    </li>
+  </ul>
+</nav>
+
+
+
+<div class="card">
+  <div class="card-header">{{name}}</div>
+
+  <div class="card-body table-responsive ">
+    <table class="table" id="table_estudiantes">
+      <thead>
+        <tr>
+          <th>Cédula</th>
+          <th>Nombres</th>
+          <th>Fecha de nacimiento</th>
+          <th>Correo</th>
+          <th>Dirección</th>
+          <th>Teléfono</th>
+          <th>Foto</th>
+          <th>Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for items in object_list %}
+        <tr>
+          <td> {{items.id_est}} </td>
+          <td> {{items.Estudiante}} </td>
+          <td> {{items.fecha_est}} </td>
+          <td> {{items.email_est}} </td>
+          <td> {{items.id_direccion}} </td>
+          <td> {{items.telefono_est}} </td>
+          <td> <img src="{{items.imagen_est.url}}" style="border-radius: 30px;" alt="{{items.Estudiante}}" width="100"
+              height="100"> </td>
+          <td>
+            <a onclick="Opciones('{{items.id_est}}')" class="btn btn-outline-success">Opciones</a>
+            <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#opciones">
+              Consultar
+            </button> -->
+            <a href="edit/{{items.id_est}}" class="btn btn-outline-warning">Editar</a>
+            <a href="comprobante/{{items.id_est}}" target="_blank" class="btn btn-outline-success">Comprobante a
+              pagar</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer">
+    <a href="add" type="button" class="btn btn-primary">Agregar Estudiantes</a>
+
+  </div>
+  <!-- Button trigger modal -->
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="opciones" tabindex="-1" role="dialog" aria-labelledby="opcionesModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"> <b> Opciones </b> </h5>
+          <button type="button" class="close" onclick="CerrarModal2()" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body table-responsive">
+         <form action="" id="form" >
+          <div class="row">
+            <div class="col">
+              <select name="programa" class="form-select" id="id_programa">
+                <option value="">Seleccione una Materia</option>
+                {% for i in programas %}
+                <option value="{{i.id}}">{{i}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col">
+              <select name="numero" class="form-select" id="id_numero">
+                <option value="">Seleccione una Nivel</option>
+                {% for i in numero %}
+                <option value="{{i.id}}">{{i}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col">
+              <a onclick="Notas()" class="btn btn-success" >Consutar</a>
+            </div>
+          </div>
+         </form>
+        </div>
+        <div class="modal-footer">
+          <a type="button" class="btn btn-secondary" onclick="CerrarModal2()">Cerrar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Notas de <b id="est"></b></h5>
+        <button type="button" class="close" onclick="CerrarModal()" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body table-responsive">
+        <table class="table" id="tb_estudiantes" >
+          <thead>
+            <tr>
+              <th>Curso</th>
+              <th>Parcial Uno</th>
+              <th>Parcial Dos</th>
+              <th>Parcial Tres</th>
+              <th>Sumatoria</th>
+              <th>Promedio</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="align-content: center;text-align: center;">
+              <td id = 'curso' ></td>
+              <td id = 'uno' ></td>
+              <td id = 'dos' ></td>
+              <td id = 'tres' ></td>
+              <td id = 'suma' ></td>
+              <td id = 'promedio' ></td>
+              <td id = 'estado' ></td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+      <div class="modal-footer">
+        <a type="button" class="btn btn-secondary" onclick="CerrarModal()">Cerrar</a>
+
+       
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<i id="idEst" style="color: aliceblue;" ></i>
+<script>
+  function Notas() {
+    id = document.getElementById('idEst').innerText;
+    programa = $('#id_programa').val()
+    numero = $('#id_numero').val()
+    $.ajax({
+      url: '',
+      method: 'POST',
+      data: { 'id': id, 'programa' : programa , 'numero': numero }
+    }).done((req) => {
+      if (!req.error) {
+        document.getElementById('est').innerHTML = req.est;
+        document.getElementById('curso').innerHTML = req.materia;
+        document.getElementById('uno').innerHTML = req.uno;
+        document.getElementById('dos').innerHTML = req.dos;
+        document.getElementById('tres').innerHTML = req.tres;
+        document.getElementById('suma').innerHTML = req.suma;
+        document.getElementById('promedio').innerHTML = req.promedio;
+        document.getElementById('estado').innerHTML = req.estado === true ? 'Aprobado' : 'Reprobado';
+        $('#exampleModal').modal('show');
+      } else {
+        alert(req.error)
+      }
+
+    })
+  }
+
+  function CerrarModal() {
+    $('#exampleModal').modal('hide');
+  }
+
+  function CerrarModal2() {
+    $('#opciones').modal('hide');
+    document.getElementById('form').reset()
+
+  }
+  function Opciones(id){
+    document.getElementById('idEst').innerHTML = id
+    $('#opciones').modal('show');
+  }
+</script>
+{% include "views/default/footer.html" %}

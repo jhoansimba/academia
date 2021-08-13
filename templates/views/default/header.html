@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academia</title>
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  {%load static%}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/sheetslider.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}">
+  <link rel="stylesheet" href="http://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <script src="http://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+  <!-- <script src="{%static 'js/jquery-3.6.0.min.js' %}" type="text/javascript"></script> -->
+  <script src="{%static 'js/bootstrap.bundle.js' %}" type="text/javascript"></script>
+
+  <link rel="stylesheet" href="{% static 'css/fancybox/jquery.fancybox.css' %}">
+
+  <link href="{% static 'css/bootstrap-theme.css' %}" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/slippry.css' %}">
+  <!--<link href="assets/css/style.css" rel="stylesheet" />-->
+  <link rel="stylesheet" href="{% static 'color/default.css' %}">
+  <script src="{% static 'js/modernizr.custom.js' %}"></script>
+
+</head>
+
+<body>
+
+  <!--  <header>
+
+    <div  id="navigation" class="navbar navbar-inverse navbar-fixed-top default" role="navigation">
+      <div class="container">
+-->
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <!-- <div class="navbar-header">
+          <a class="navbar-brand"><img src="{%static 'images/LIBRO.png'%}" class="imglogo">
+          </a>
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href=>Academia de Formación</a>
+        </div>
+
+        <div class="navbar-collapse d-sm-inline-flex flex-sm-row-reverse">
+          <ul class="nav nav-pills">
+            <li class="nav-item">
+              <a class="nav-link active bg-danger" aria-current="page" href="/">Inicio</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link" href="{% url 'cursos'%}" aria-current="page" style="color: rgb(255, 255, 255);">Servicios</a>
+
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'nosotros' %}" style="color: rgb(255, 254, 254);">Nosotros</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" style="color: rgb(255, 254, 254);">Contactos</a>
+            </li>
+
+            {% if user.is_authenticated %}
+      <a class="btn btn-primary" href="/admin" role="button">Admin</a>
+
+
+      <li>
+        <a href="{% url 'admin:logout' %}" role="button">Cerrar Sesion</a>
+      </li>
+
+      {% else %}
+      <a class="btn btn-primary" href="/admin" role="button">Iniciar Sesion</a>
+      <div>
+        <li>
+          <a class="breadcrumb-item" href="/adduser" role="button">Registrar</a>
+        </li>
+      </div>
+      {% endif %}
+          </ul>
+
+        </div> -->
+
+
+  <!-- /.navbar-collapse -->
+  <!-- </div>
+
+      </div>
+    </div> 
+
+  </header> -->
+  <header>
+    <nav style="background: rgba(2, 121, 8, 0.932);"
+      class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+      <div class="container">
+        
+        <a class="navbar-brand"><img src="{%static 'images/LIBRO.png'%}" class="imglogo"><a
+            class="navbar-brand"><img src="{%static 'images/academia.png'%}" class="letras"></a>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse d-sm-inline-flex flex-sm-row-reverse">
+          <ul class="nav nav-pills">
+            <li class="nav-item">
+              <a class="nav-link active bg-info" aria-current="page" href="/">Inicio</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link" href="{% url 'cursos'%}" aria-current="page"
+                style="color: rgb(255, 255, 255);">Servicios</a>
+
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'nosotros' %}" style="color: white;">Nosotros</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" style="color: white;">Contactos</a>
+            </li>
+
+          </ul>
+
+        </div>
+      </div>
+
+      {% if user.is_authenticated %}
+
+      {% if request.user.is_superuser %}
+      <a class="btn btn-primary" href="/Bienvenido" role="button">Admin</a>
+
+
+
+
+
+      {% else %}
+      {% for i in request.user.groups.all %}
+      <a class="btn btn-primary" href="/Bienvenido" role="button">
+        {{i}}
+      </a>
+      {% endfor %}
+      {% endif %}
+
+
+      <div>
+
+
+        <a style="margin: 21px" style="color: aliceblue;" href="{% url 'logout' %}" role="button"><img
+            src="{%static 'images/logout.png'%}" width="35" height="35" style="margin-top: 2%;"></a>
+
+      </div>
+      {% else %}
+      <a style="margin: 21px" class="btn btn-primary" href="/login/" role="button">Iniciar Sesion</a>
+
+      {% endif %}
+    </nav>
+  </header>
+ 

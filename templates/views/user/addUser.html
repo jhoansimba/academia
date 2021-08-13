@@ -1,0 +1,65 @@
+{% include "views/default/header.html" %}
+<div class="container">
+
+
+<div class="card">
+      <div class="card-header">Registro</div>
+      {{form.errors}}
+      <div class="card-body">
+          <form action="" method="POST">
+              {% csrf_token %}
+              {% for field in form %}
+              {% if field.name == 'password' %}
+              <input type="hidden" name="password" value="password">
+              {% elif field.name == 'groups' %}
+             <label for="id_groups">Cargo</label>
+              <select class="form-select"  name="groups" required id="id_groups">
+                  <option value="0">Seleccione una opción</option>
+                  {% for i in grupos %}
+                  <option value="{{i.id}}">{{i.name}}</option>
+                  {% endfor %}
+              </select>
+              <div id="cursos" >
+
+
+              </div>
+              {% else %}
+              {{field.label}}
+              {{field}}
+              {% endif %}
+              {% endfor %}
+              <button type="submit" class="btn btn-success" >Aceptar</button>
+          </form>
+      </div>
+  </div>  
+</div>  
+{{cursos}}
+<script>
+    $('#id_groups').on('change', function(){
+        let info = $(this).val();
+        let docente = document.getElementById('id_groups')[info].innerText;
+        if(docente == 'Docentes'){
+            $.ajax({
+                url : '',
+                method : 'GET',
+                data : {'data': 'docente'}
+            }).done((req)=>{
+                console.log('Respuesta _: ', req);
+                let opciones = '<br>';
+                opciones += '<select class="form-select" required name="curso">';
+                $.each(req, (key, val)=>{
+                    opciones += '<option value="'+val.name+'">'+val.name+'</option>';
+
+                })
+                opciones += '<br>'
+                document.getElementById('cursos').innerHTML = opciones;
+            });
+        }else{
+            document.getElementById('cursos').innerHTML = '';
+
+        }
+        // console.log('Cambio a ', $(this).val());
+        // console.log('Cambio a ', $(this).innerText());
+    })
+</script>
+  {% include "views/default/footer.html" %}

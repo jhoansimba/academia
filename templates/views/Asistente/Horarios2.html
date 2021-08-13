@@ -1,0 +1,50 @@
+{% include "views/default/header.html" %}
+
+
+
+
+<ul class="nav nav-tabs " >
+    <li class="nav-item">
+      <a class="nav-link" href="horarios">Programas</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="horarios2">Cursos</a>
+    </li>
+   
+  </ul>
+
+<div class="card">
+    <div class="card-header">{{name}}</div>
+
+    <div class="card-body table-responsive ">
+        <table class="table" id="table_estudiantes">
+            <thead>
+                <tr>
+                    <th>Hora</th>
+                    <th>Curso</th>
+                    <th>Docentes</th>
+                   
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for items in object_list %}
+                <tr>
+                    <td> {{items.nombre}} </td>
+                  
+                    <td> {{items.horario}} </td>
+                    
+                    <td>
+                        <a href="editHorario2/{{items.id}}" class="btn btn-warning" type="button">Editar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                
+
+            </tbody>  
+        </table>
+    </div>
+    <div class="card-footer">
+        <a href="add" type="button" class="btn btn-success">Agregar Matrícula</a>
+    </div>
+    {% include "views/default/footer.html" %}

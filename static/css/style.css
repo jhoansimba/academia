@@ -1,0 +1,104 @@
+.imglogo {
+    max-width: 81%;
+}
+.imgmenu {
+	width: 21px; 
+	height: 21px;
+}
+.imgport {
+	max-width: 100%;
+	
+}
+.imglogout {
+    max-width: 1%;
+}
+
+.letras {
+    max-width: 191%;
+}
+.navbar-brand {
+    max-width: 15%;
+}
+.imgSlider{
+    max-width :50%;
+}
+.sheetSlider {
+    background-color: #ffffff; 
+    text-align: center;
+}
+.sh__meta span, .sh__meta h4 {
+    color:rgb(85, 85, 85);
+}
+.thumbnail{
+    max-width :100%;
+}
+.card-body h5{
+    font-size: 14px;
+    max-width :100%;
+}
+.card-body p{
+    font-size: 12px;
+}
+
+.imglogout {
+
+    max-width: 15%;
+}
+
+* {
+	margin:0;
+	padding:0;
+}
+
+/*Estilos Generales*/
+.button {
+	background:#7f8c8d;
+	color:#fff;
+	display:inline-block;
+	font-size:1.25em;
+	margin:20px;
+	padding:10px 0;
+	text-align:center;
+	width:200px;
+	text-decoration:none;
+	box-shadow:0px 3px 0px #373c3c;
+}
+
+.button span {
+	margin-right:10px;
+}
+
+/*Colores*/
+.button.blue {
+	background:#3498db;
+	box-shadow:0px 3px 0px #266792;
+}
+
+.button.yellow {
+	background:#e67e22;
+	box-shadow:0px 3px 0px #b55704;
+}
+
+
+/*TamaÃ±os*/
+.button.medium {
+	width:350px;
+}
+
+
+.button.large {
+	width:450px;
+}
+
+
+.button.radius {
+	border-radius:50px;
+}
+
+/*Efectos, Hover*/
+.button:hover {
+	box-shadow:0px 0px 0px;
+	padding-top:7px;
+}
+
+

@@ -1,0 +1,46 @@
+{% include "views/default/header.html" %}
+
+
+<div class="card">
+    <div class="card-header">{{name}}</div>
+
+    <div class="card-body table-responsive ">
+        <table class="table" id="table_estudiantes">
+            <thead>
+                <tr>
+                    <th>Estudiante</th>
+                    <th>Curso</th>
+                    <th>Fecha</th>
+                    <th>Matricula</th>
+                    <th>Opciones</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for items in object_list %}
+                <tr>
+                    <td> {{items.estudiante}} </td>
+                   <td>
+                    {% for j in items.Curso %}
+                    <p> {{j}} </p>
+                    {% endfor %}
+                   </td>
+                    <td> {{items.fecha}} </td>
+                    <td>
+                        {% if items.matricula == True %}
+                        <input type="checkbox" checked disabled >
+                        {%endif%}
+                    </td>
+                    <td>
+                        <a href="edit/{{items.id}}" class="btn btn-warning" type="button">Editar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>  
+        </table>
+    </div>
+    <div class="card-footer">
+        <a href="add" type="button" class="btn btn-success">Agregar Matrícula</a>
+    </div>
+    {% include "views/default/footer.html" %}

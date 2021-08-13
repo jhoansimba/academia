@@ -1,0 +1,67 @@
+{% include "views/default/header.html" %}
+<div class="container">
+
+
+  <div class="card">
+    <div class="card-header">{{name}}</div>
+    {{form.errors}}
+    <div class="card-body">
+      <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if info %}
+        <h2> Está seguro de eliminar a <b style="color: red;">{{info.object}}</b> </h2>
+        {% endif %}
+        {% for field in form %}
+        {% if field.name == 'id_est' %}
+        <label for="id_id_est">Estudiante</label>
+        <select class="form-select"  name="id_est" required id="id_id_est">
+            <option value="">Seleccione una opción</option>
+            {% for i in estudiantes %}
+            <option value="{{i.id_est}}">{{i.Estudiante}}</option>
+            {% endfor %}
+        </select>
+        {% elif field.name == 'fecha_est' or field.name == 'fecha' %}
+        <label for="{{field.name}}"> {{field.label}}</label>
+        <input type="date" name="{{field.name}}" class="form-control" id="{{field.name}}">
+        {% elif field.name == 'estudiante' %}
+        <label for="id_estudiante">Estudiantes</label>
+        <select name="estudiante" id="id_estudiante" class="form-select" >
+          {% for i in estudianteAdd %}
+          <option value="{{i.id}}">{{i.name}}</option>
+          {% endfor %}
+        </select>
+
+        {% elif field.name == 'curso_id' %}
+        <label for="curso_id">Curso</label>
+        <select name="curso_id" id="id_curso_id" class="form-select" >
+          {% for i in cursosUsuario %}
+          <option value="{{i.id_curso}}">{{i.nombre_curso}}</option>
+          {% endfor %}
+        </select>
+        {% elif field.name == 'id_rep' %}
+        <input type="hidden" name="id_rep" value="{{request.user.pk}}">
+        {% elif field.name == 'id_direccion' %}
+        {{field.label}}
+        <div class="input-group">
+          {{field}}
+          <div class="input-group-append">
+            <a class="related-widget-wrapper-link add-related btn btn-outline-success " id="add_id_id_ciudad"
+            href="/direccion/" title="Añadir otro ciudad"><img
+                src="/static/admin/img/icon-addlink.svg" alt="Añadir" type="button">Agregar otra</a>
+          </div>
+        </div>
+        <br>
+
+        {% else %}
+        {{field.label}}
+        {{field}}
+        {% endif %}
+        {% endfor %}
+        <br>
+        <button type="submit" class="btn btn-success">Aceptar</button>
+        <a href='{{regresar}}' class="btn btn-primary">Regresar</a>
+      </form>
+    </div>
+  </div>
+</div>
+{% include "views/default/footer.html" %}

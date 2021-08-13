@@ -1,0 +1,44 @@
+{% include "views/default/header.html" %}
+<div class="container">
+
+
+  <div class="card">
+    <div class="card-header">{{name}}</div>
+    {{form.errors}}
+    <div class="card-body">
+      <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if info %}
+        <h2> Está seguro de eliminar a <b style="color: red;">{{info.object}}</b> </h2>
+        {% endif %}
+        {% for field in form %}
+        {% if field.name == 'fecha_est' %}
+        <label for="{{field.name}}"> {{field.label}}</label>
+        <input type="date" name="{{field.name}}" class="form-control" id="{{field.name}}">
+        {% elif field.name == 'id_rep' %}
+        <input type="hidden" name="id_rep" value="{{request.user.pk}}">
+        {% elif field.name == 'id_direccion' %}
+        {{field.label}}
+        <div class="input-group">
+          {{field}}
+          <div class="input-group-append">
+            <a class="related-widget-wrapper-link add-related btn btn-outline-success " id="add_id_id_ciudad"
+            href="/direccion/" title="Añadir otro ciudad"><img
+                src="/static/admin/img/icon-addlink.svg" alt="Añadir" type="button">Agregar otra</a>
+          </div>
+        </div>
+        <br>
+
+        {% else %}
+        {{field.label}}
+        {{field}}
+        {% endif %}
+        {% endfor %}
+        <br>
+        <button type="submit" class="btn btn-success">Aceptar</button>
+        <a href='{{regresar}}' class="btn btn-primary">Regresar</a>
+      </form>
+    </div>
+  </div>
+</div>
+{% include "views/default/footer.html" %}

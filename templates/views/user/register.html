@@ -1,0 +1,82 @@
+{% include "views/default/header.html" %}
+{% load i18n static %}
+<div class="login">
+    <div id="container">
+        <div id="header" class="bg-info">
+            <h1>Registro de usuarios</h1>
+        </div>
+        <div id="content-main">
+            <form action="{{ app_path }}" method="post" id="login-form">
+                {% csrf_token %}
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    {{ form.first_name.label_tag }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    {{ form.first_name }}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    {{ form.last_name.label_tag }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    {{ form.last_name }}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    {{ form.user.label_tag }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    {{ form.user }}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    {{ form.email.label_tag }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    {{ form.email }}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    {{ form.password.label_tag }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    {{ form.password }}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="submit-row">
+                    <input type="submit" value="Registrar" class="btn btn-success">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% include "views/default/footer.html" %}

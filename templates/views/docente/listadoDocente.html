@@ -1,0 +1,130 @@
+{% include "views/default/header.html" %}
+<nav aria-label="...">
+    <ul class="pagination">
+      <li class="page-item disabled">
+        <span class="page-link">Previous</span>
+      </li>     
+      <li class="page-item active" aria-current="page">
+        <span class="page-link">1</span>
+      </li>
+      <li class="page-item"><a class="page-link" href="asistencia">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#">Next</a>
+      </li>
+    </ul>
+  </nav>
+<div class="card">
+    <div class="card-header">{{name}}</div>
+
+    <div class="card-body table-responsive ">
+        <table class="table" id="table_listado">
+            <thead>
+                <tr>
+                    <th>Estudiante</th>
+                    <th>Curso</th>
+                    <th>Parcial Uno</th>
+                    <th>Parcial Dos</th>
+                    <th>Parcial Tres</th>
+                    <th>Sumatoria</th>
+                    <th>Promedio</th>
+                    <th>Estado</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <!-- <tbody>
+                {% for items in object_list %}
+                <tr>
+                    <td> {{items.Estudiante}} </td>
+                    <td> {{items.curso_id}} </td>
+                    <td> {{items.s_nota1}} </td>
+                    <td> {{items.s_nota2}} </td>
+                    <td> {{items.s_nota3}} </td>
+                    <td> {{items.sumatoria}} </td>
+                    <td> {{items.promedio}} </td>
+                    <td> {% if items.estado == True %} <b style="color: green;">Aprobado</b> {% else %} <b style="color: red;" >Reprobado</b> {%  endif %}</td>
+                    
+                     <td>
+                        <a href="edit/{{items.id}}" class="btn btn-outline-warning" >Editar</a>
+                      
+                    </td> 
+                </tr>
+                {% endfor %}
+            </tbody> -->
+        </table>
+    </div>
+    <div class="card-footer">
+        <a href="add" type="button" class="btn btn-primary">Agregar Notas</a>
+
+    </div>
+    <script>
+
+        $(document).ready(function () {
+            $('#table_listado').DataTable({
+                language: {
+                    "lengthMenu": "Elementos _MENU_ por página",
+                    "zeroRecords": "Sin resultados",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sin resultados",
+                    "infoFiltered": "(Filtrado de _MAX_ elementos registrados)",
+                    "search" : 'Buscar: ',
+
+                    'paginate' :{
+                        'first' : 'Primero',
+                        'last' : 'Ultimo',
+                        'next' : 'Siguiente',
+                        'previous' : 'Anterior',
+                    }
+
+                },
+                responsive: true,
+                autoWidth: false,
+                destroy: true,
+                referRender: true,
+                ajax: {
+                    url: '',
+                    type: 'POST',
+                    data: { 'action': 'listado' },
+                    dataSrc: ''
+                },
+                columnDefs: [
+                    {
+                        targets: [7],
+                        orderable: false,
+                        render: function (data, type, row) {
+                            let btn = ''
+                            if (row[7] == true) {
+                                btn = '<b style="color: green;">Aprobado</b>'
+
+
+                            } else {
+
+                                btn = '<b style="color: red;" >Reprobado</b>'
+                            }
+                            return btn;
+                        }
+                    },
+                    {
+                        targets: [-1],
+                        orderable: false,
+                        render: function (data, type, row) {
+                            let btn = '<a href="edit/' + row[8] + '" class="btn btn-outline-warning">Editar</a>'
+                            return btn;
+                        }
+                    }, {
+                        targets: [0],
+                        orderable: false,
+                        render: function (data, type, row) {
+                            let btn = '<b style="color: blue;">' + data + '</b>'
+                            return btn;
+                        }
+                    },
+                ]
+
+            });
+
+
+        });
+    </script>
+    {% include "views/default/footer.html" %}
