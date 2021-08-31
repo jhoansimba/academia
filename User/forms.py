@@ -13,9 +13,10 @@ class FormularioUser(ModelForm):
         # self.fields['is_superuser'].widget.attrs['class'] = 'form-check-input'
         self.fields['is_staff'].widget.attrs['class'] = 'form-check-input'
         self.fields['curso'].widget.attrs['hidden'] = True
+        self.fields['programa'].widget.attrs['hidden'] = True
     class Meta:
         model = Usuario
-        fields = ('username', 'first_name', 'last_name', 'password', 'email', 'groups', 'is_staff', 'curso')
+        fields = ('username', 'first_name', 'last_name', 'password', 'email', 'groups', 'is_staff', 'curso', 'programa')
         labels = {
             'username' : 'Cédula de Identidad'
         }

@@ -1,6 +1,6 @@
 from django.forms import ModelForm, widgets
 from django import forms
-from app.models import Cursos, Ficha_salud, Horarios, Matricula, Programa
+from app.models import Cursos, Ficha_salud, Horarios, Matricula, Programa, Talento_Humano
 from django.forms import ModelForm, widgets
 
 
@@ -67,3 +67,13 @@ class EditHorarios(ModelForm):
         model = Cursos
         fields = '__all__'
         
+class FormHumano (ModelForm):
+     def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for i in self.visible_fields():
+            i.field.widget.attrs['class'] = 'form-control'
+            i.field.widget.attrs['autocomplete'] = 'off'
+       
+     class Meta:
+            model = Talento_Humano
+            fields = '__all__'

@@ -49,9 +49,8 @@ class listEstudiantes(LoginRequiredMixin, PermisosUsuario, TemplateView):
 
     def get_context_data(self, **kwargs):
         # est = Estudiante.objects.filter(id_rep = self.request.user.pk)
-        programas = Programa.objects.filter(estudiante__id_est = '0401916937')
+        programas = Programa.objects.all()#(estudiante__id_est = '0401916937')
         numero = Numero.objects.all()
-        print('programas : ', programas)
         context = super().get_context_data(**kwargs)
         context['name'] = 'Listado de Estudiantes'
         context['programas'] = programas
@@ -68,9 +67,9 @@ class listEstudiantes(LoginRequiredMixin, PermisosUsuario, TemplateView):
             id = request.POST['id']
             numero = request.POST['numero']
             programa = int(request.POST['programa'])
-            data = Notas.objects.get(estudiante_id = id, niveles = numero, materia_id = programa).json()
+            data = Notas.objects.get(estudiante_id = id, niveles = numero, materia_id = programa).json()#, niveles = numero, materia_id = programa).json()
         except Exception as e:
-            print('Error ln-78 ', e)
+            print('Error ln-72 ', e)
             data = {'error':'Estudiante sin Notas'}
         return JsonResponse(data, safe=False)
 

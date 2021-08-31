@@ -1,0 +1,103 @@
+{% include "views/default/header.html" %}
+<nav aria-label="...">
+    <ul class="pagination">
+      <li class="page-item disabled">
+        <span class="page-link">Previous</span>
+      </li>     
+      <li class="page-item"><a class="page-link" href="/docentes">1</a></li>
+      <li class="page-item active" aria-current="page">
+        <span class="page-link">2</span>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#">Next</a>
+      </li>
+    </ul>
+  </nav>
+<div class="card">
+    <div class="card-header">Agregar Asistencia</div>
+    <div class="card-body">
+        {% if form.errors %}
+        <p> {{form.errors}} </p>
+        {% endif %}
+        <form action="" id="form" method="POST" >
+            {% csrf_token %}
+            <select name="horario" class="form-select" aria-label="Default select example" id="horarios">
+                <option value=""> Seleccione el horario </option>
+                {% for j in horarios %}
+                <option value="{{j.id_horario}}"> {{j.inicio_horario}} {{j.final_horario}} </option>
+                {% endfor %}
+            </select>
+            <table class="table">
+                <thead>
+                    <th>Nombre del Estudiante</th>
+                    <th>Asistencia / Fecha</th>
+                </thead>
+                <tbody>
+                    {% for i in estudiantes %}
+                    <tr>
+                        <td>{{i}}</td>
+                        <td>
+                            <div class="form-check">
+                                <input class="" type="checkbox" value="" name="{{i.id_est}}" >
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <input type="submit" class="btn btn-outline-primary"  value="Aceptar">
+        </form>
+    </div>
+    <div class="card-footer">
+        <button class="btn btn-outline-primary" id="asistencia">Aceptar no</button>
+    </div>
+    <p> {{date}} </p>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+<script>
+    $('#asistencia').on('click', (e) => {
+        let form = $('#form').serializeArray();
+        let cont = 1;
+        let fecha = '{{date|lower}}'.split(' ')
+        console.log(form);
+        let formularioNulo = false;
+        $.each(form, (key, value) => {
+            let data = []
+            if (key != 0) {
+                if (value['name'] != 'horario'){
+                    data.push(form[0]);
+                    data.push({ 'name': 'estudiante', 'value': value['name'] })
+                    data.push({ 'name': 'fecha_asis', 'value': fecha[0] })
+                    data.push({ 'name': 'horario_id', 'value':form[1].value})
+                    data.push({ 'name': 'estado_asis', 'value':1})
+                    ajax(data);
+                }
+            }else{
+                formularioNulo = true;
+            }
+            
+            
+        });
+        if(formularioNulo == true){
+            ajax(form);
+        }
+    });
+    function ajax(data){
+        $.ajax({
+            url : '3',
+            method : 'POST',
+            data : data
+        }).done((req) =>{
+            console.log(req);
+        });
+    }
+    // $('#horarios').on('change', function(){
+    //     let valor = document.getElementById('horarios')[$(this).val()].innerHTML;
+    //     document.getElementsByName('hora')[0].value = valor;
+    // });
+</script>
+
+
+{% include "views/default/footer.html" %}

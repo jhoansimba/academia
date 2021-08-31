@@ -1,8 +1,9 @@
-from app.controller.AsistenteController import HorariosList, HorariosList2, MatriculaList, addMatricula, editHorario, editHorario2, editMatricula
-from app.controller.AsistenciaController import AddAsistencia, Asistencialist
+from app.models import Talento_Humano
+from app.controller.AsistenteController import *
+from app.controller.AsistenciaController import *
 from app.controller.DocenteController import *
-from app.controller.SaludController import addSalud, deleteSalud, editSalud, fichaSalud
-from app.controller.EstudiantesController import addComprobante, addEstudiuantes, deleteEstudiuantes, editEstudiuantes, listComprobante, listEstudiantes, Comprobante
+from app.controller.SaludController import *
+from app.controller.EstudiantesController import *
 from django.urls import path
 from django.contrib.auth.decorators import login_required
 urlpatterns = [
@@ -20,12 +21,20 @@ urlpatterns = [
     
     #Docente
     path('docentes/', DocenteView.as_view(), name='list_estudiantes_docente'),
-    path('docentes/add', login_required(addNotas.as_view()), name='addNotas'),
+    # path('docentes/add', login_required(addNotas.as_view()), name='addNotas'),
     path('docentes/edit/<pk>', login_required(editNotas.as_view()), name='EDITNotas'),
-     path('docentes/asistencia/', Asistencialist, name='asistencia'),
-    path('docentes/asistencia/add', AddAsistencia.as_view(), name='add_asistencia'),
+    #  path('docentes/listado/asistencia/add/<str:pro>', AddAsistencia.as_view(), name='add_asistencia'),
+    # path('docentes/asistencia/add/<str:pro>', AddAsistencia.as_view(), name='add_asistencia'),
+    path('docentes/programa/<programa>', Niveles.as_view(), name='listado_est'),
+    # path('docentes/niveles/listado/<mt>/<pk>', Listado.as_view(), name='add_listado_est'),
+    path('docentes/programa/<programa>/nivel/<nivel>/', Listado.as_view(), name='add_listado_est'),
+     path('docentes/programa/<programa>/nivel/<nivel>/asistencia', AsistenciaPro.as_view(), name='asistencia'),
+    path('docentes/programa/<programa>/nivel/<nivel>/add/<pk>', AddListado.as_view(), name='add_listado_est'),
 #Asistente
 path('asistente/', MatriculaList.as_view() ,name='list_matricula'),
+path('asistente/asignarprograma', AsignarNiveles.as_view() ,name='asignar_matricula_programa'),
+path('asistente/asignarcursos', AsignarNivelesCurso.as_view() ,name='asignar_matricula_curso'),
+path('asistente/talentohumano', TalentoHumano.as_view() ,name='Talento_Humano'),
 path('asistente/add', addMatricula.as_view() ,name='add_matricula'),
 path('asistente/edit/<pk>', editMatricula.as_view() ,name='edit_matricula'),
 path('asistente/horarios', HorariosList.as_view() ,name='list_Horario'),

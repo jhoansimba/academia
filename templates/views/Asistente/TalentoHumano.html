@@ -1,0 +1,114 @@
+{% include "views/default/header.html" %}
+{%load static%}
+
+<div class="card">
+    <div class="card-header">{{name}}</div>
+
+    <div class="card-body table-responsive ">
+        <table class="table" id="table_estudiantes">
+            <thead>
+                <tr>
+                    <th>Cedula</th>
+                    <th>Nombres</th>
+                    <th>Cargo</th>
+                    <th>Fecha entrega</th>
+                    <th>Telefono</th>
+                    <th>Documentos</th>
+                    <th>Direccion</th>
+                    <th>Opciones</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for items in object_list %}
+                <tr>
+                    <td> {{items.cedula_th}} </td>
+                    <td> {{items.TalentoHumano}} </td>
+                    <td> {{items.cargo_th}} </td>
+
+                    <td> {{items.Fecha}} </td>
+                    <td> {{items.telefono}} </td>
+
+                    <td>
+                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-heading{{items.cedula_th}}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#flush-collapse{{items.cedula_th}}" aria-expanded="false"
+                                        aria-controls="flush-collapse{{items.cedula_th}}">
+                                        Listado de documentos
+                                    </button>
+                                </h2>
+                                <div id="flush-collapse{{items.cedula_th}}" class="accordion-collapse collapse"
+                                    aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                    <div>
+                                        <a href="/media/{{items.HojaVida}}" target="_blank"> <img
+                                                src="{%static 'images/doc.png'%}" class="imgmenu"></a> Hoja de Vida
+                                    </div>
+                                    <div>
+                                        <a href="/media/{{items.CopiaCedula}}" target="_blank"> <img
+                                                src="{%static 'images/doc.png'%}" class="imgmenu"></a> Copia de Cédula
+                                    </div>
+                                    <div>
+                                        <a href="/media/{{items.CertiImpedimento}}" target="_blank"> <img
+                                                src="{%static 'images/doc.png'%}" class="imgmenu"></a> Certificado de
+                                        Impedimento
+                                    </div>
+                                    <div>
+                                        <a href="/media/{{items.Antecedentes}}" target="_blank"> <img
+                                                src="{%static 'images/doc.png'%}" class="imgmenu"></a> Antecedentes
+                                    </div>
+                                    <div>
+                                        <a href="/media/{{items.Titulos}}" target="_blank"> <img
+                                                src="{%static 'images/doc.png'%}" class="imgmenu"></a> Títulos
+                                    </div>
+                                    <div>
+                                        <a href="/media/{{items.Experiencia}}" target="_blank"> <img
+                                                src="{%static 'images/doc.png'%}" class="imgmenu"></a>Experiencia
+                                    </div>
+                                    <div>
+                                        <a href="/media/{{items.Cursos}}" target="_blank"> <img
+                                                src="{%static 'images/doc.png'%}" class="imgmenu"></a>Cursos Realizados
+                                    </div>
+                                    <div>
+                                        <a href="/media/{{items.Historial}}" target="_blank"> <img
+                                                src="{%static 'images/doc.png'%}" class="imgmenu"></a> Historial Laboral
+                                    </div>
+                                    <div>
+                                        <a href="/media/{{items.CarnetDiscap}}" target="_blank"> <img
+                                                src="{%static 'images/doc.png'%}" class="imgmenu"></a> Carnet
+                                        Discapacidad
+                                    </div>
+                                    <div>
+                                        <a href="/media/{{items.CertiBancaria}}" target="_blank"> <img
+                                                src="{%static 'images/doc.png'%}" class="imgmenu"></a> Certificacion
+                                        Entidad Bancaria
+                                    </div>
+                                    <div>
+                                        <a href="/media/{{items.CopiaRuc}}" target="_blank"> <img
+                                                src="{%static 'images/doc.png'%}" class="imgmenu"></a> Copia del RUC
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+    </div>
+    
+    <td>
+        {{items.id_direccion}}
+    </td>
+    <td>
+        <a href="edit/{{items.id}}" class="btn btn-warning" type="button">Editar</a>
+    </td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+    </table>
+</div>
+<div class="card-footer">
+    <a href="" type="button" class="btn btn-success">Agregar</a>
+
+</div>
+{% include "views/default/footer.html" %}

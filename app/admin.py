@@ -4,7 +4,6 @@ from django.contrib import admin
 
 
 # Register your models here.
-
 @admin.register(Notas)
 class Notas(admin.ModelAdmin):
     list_display = ('Estudiante','Nivel','SumaParcialUno','SumaParcialDos','SumaParcialTres','SumaGeneral','Promedio','Estado')
@@ -20,17 +19,10 @@ class Asistencia(admin.ModelAdmin):
 @admin.register(Representante)
 class Representante (admin.ModelAdmin):
     list_display=('Representante', 'cedula_rep', 'telefono_est', 'parentezco_rep')
-
-
-
-
-
 admin.site.register(Ciudad )
 admin.site.register(Direccion)
 admin.site.register(Provincia)
-
-
-
+admin.site.register(MatriculaActual)
 admin.site.register(Horarios)
 admin.site.register(Estudiante)
 admin.site.register(Matricula)

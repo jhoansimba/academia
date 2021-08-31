@@ -1,0 +1,39 @@
+{% include "views/default/header.html" %}
+{%load static%}
+<nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item disabled">
+      <span class="page-link">Previous</span>
+    </li>
+    <li class="page-item active" aria-current="page">
+      <span class="page-link">1</span>
+    </li>
+    <!-- docente/listado/asistencia/3 -->
+    <li class="page-item"><a class="page-link" href="asistencia/{{programa}}">2</a></li> 
+    <li class="page-item"><a class="page-link" href="asistencia/3">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item">
+      <a class="page-link" href="">Siguiente</a>
+    </li>
+  </ul>
+</nav>
+<div class="row oscuro justify-content-center" >
+  {% for i in niveles %}
+    <!-- <div class="col-lg-2 col-md-3 col-sm-6"> -->
+    <div class="col">
+
+    <!-- <div class="col-3"> -->
+      <br>
+      <div class="card" style="width: 12rem;">
+       
+        <center class="oscuro" >
+          <div class="card-body">
+          <h5 class="card-title">Nivel</h5>
+          <a href="{{programa}}/nivel/{{i}}" class="btn btn-outline-primary btn-lg btn-block btn-sm">{{i}}</a>
+        </div>
+        </center>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% include "views/default/footer.html" %}

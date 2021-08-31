@@ -10,8 +10,10 @@
                 <tr>
                     <th>Estudiante</th>
                     <th>Curso</th>
+                    <th>Programas</th>
                     <th>Fecha</th>
                     <th>Matricula</th>
+                    <th>Ver Comprobante</th>
                     <th>Opciones</th>
 
                 </tr>
@@ -20,16 +22,23 @@
                 {% for items in object_list %}
                 <tr>
                     <td> {{items.estudiante}} </td>
-                   <td>
-                    {% for j in items.Curso %}
-                    <p> {{j}} </p>
-                    {% endfor %}
-                   </td>
+                    <td>
+                        {% for j in items.Curso %}
+                        <p> {{j}} </p>
+                        {% endfor %}
+                       </td><td>
+                        {% for j in items.Programa %}
+                        <p> {{j}} </p>
+                        {% endfor %}
+                       </td>
                     <td> {{items.fecha}} </td>
                     <td>
                         {% if items.matricula == True %}
                         <input type="checkbox" checked disabled >
                         {%endif%}
+                    </td>
+                    <td>
+                        <a href="/media/{{items.id_comp.File}}" target="_blank" > Click aquí</a>
                     </td>
                     <td>
                         <a href="edit/{{items.id}}" class="btn btn-warning" type="button">Editar</a>
@@ -42,5 +51,7 @@
     </div>
     <div class="card-footer">
         <a href="add" type="button" class="btn btn-success">Agregar Matrícula</a>
+        <a href="asignarprograma" type="button" class="btn btn-success">Matricula Programas</a>
+        <a href="asignarcursos" type="button" class="btn btn-success">Matricula Cursos</a>
     </div>
     {% include "views/default/footer.html" %}

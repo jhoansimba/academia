@@ -1,15 +1,16 @@
 from json.encoder import JSONEncoder
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
 from app.mixin import PermisosUsuario
 from app.Formularios.formNotas import addNotasEstudiante, editNotasEstudiante
 from django.http.response import JsonResponse
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, View
 from app.Formularios.formSalud import AddSalud
 from django.views.generic.edit import DeleteView, UpdateView
 from django.views.generic.list import ListView
 from app.Formularios.formErtudiante import AddEstudiante, FormEstudiante
-from app.models import Cursos, Estudiante,Ficha_salud, Notas
+from app.models import Cursos, Estudiante,Ficha_salud, Matricula, MatriculaActual, Notas, Numero, Programa
 from django.views.generic import CreateView
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -22,63 +23,17 @@ class DocenteView(LoginRequiredMixin,TemplateView):
     title = 'Lista de Estudiantes'
 
     def get_context_data(self, **kwargs):
+        cursos = [i.nombre for i in Cursos.objects.filter(usuario__id = self.request.user.id).exclude(nombre='Ninguno')]
+        programa = [i for i in Programa.objects.filter(usuario__id = self.request.user.id).exclude(nombre='Ninguno')]
+        # print(programas)
         context = super().get_context_data(**kwargs)
         context['name'] = 'Listado de Estudiantes'
-        context['object_list'] = Notas.objects.all()
+        context['cursos_list'] = programa
         return context
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request,  *args, **kwargs)
-    def post(self, request,  *args, **kwargs):
-        data = {}
-        try:
-            cursos = [i.nombre for i in Cursos.objects.filter(usuario__pk = self.request.user.pk)]
-            action = request.POST['action']
-            if action == 'listado':
-                data = []
-                opciones = ''
-                for i in Notas.objects.filter(curso_id_id = cursos[0]):
-                    data.append([
-                        i.Estudiante(),
-                        i.Cursos(),
-                        i.SumaParcialUno(),
-                        i.SumaParcialDos(),
-                        i.SumaParcialTres(),
-                        i.SumaGeneral(), 
-                        i.Promedio(), 
-                        i.EstadoEst(),
-                        i.id,
-                        opciones
-                    ])
-                return JsonResponse(data, safe=False)
-            else:
-                id = request.POST['id']
-                data = Notas.objects.get(estudiante_id = id).json()
-
-        except Exception as e:
-            print('Error: ', e)
-            data = {'error':'Estudiante sin Notas'}
-        return JsonResponse(data, safe=False)
-
-class addNotas(LoginRequiredMixin,PermisosUsuario, CreateView):
-    permission_required = 'app.view_notas'
-    model = modelo
-    form_class = addNotasEstudiante 
-    template_name = 'views/main.html'
-    success_url = '/docentes/'
-    def get_context_data(self, **kwargs):
-        data = []
-        cursos = [i.nombre for i in Cursos.objects.filter(usuario__pk = self.request.user.pk)]
-        for i in Estudiante.objects.filter(id_curso = cursos[0]):
-            x = Notas.objects.filter(estudiante__id_est = i.id_est).exists()
-            if x == False:
-                data.append({'id': i.id_est, 'name': i.Estudiante()})
-        context = super().get_context_data(**kwargs)
-        context['name'] = 'Agregar notas de Estudiantes'
-        context['cursosUsuario'] = Cursos.objects.filter(usuario__pk = self.request.user.pk)
-        context['estudianteAdd'] = data
-        context['regresar'] = '/docentes/'
-        return context
+  
 class editNotas(LoginRequiredMixin,UpdateView):
     model = Notas
     form_class = editNotasEstudiante
@@ -97,4 +52,61 @@ class editNotas(LoginRequiredMixin,UpdateView):
         context = super().get_context_data(**kwargs)
         context['name'] = 'Actualizar Notas del Estudiante'
         context['regresar'] = '/docentes/'
+        return context
+
+class Listado(LoginRequiredMixin, TemplateView):
+    template_name = 'listadoEstudiantes.html'
+    def get(self, request, *args, **kwargs):
+        data = []
+        nivel = self.kwargs['nivel']
+        pro = self.kwargs['programa']
+        programa = [i for i in Programa.objects.filter(id = pro).exclude(nombre='Ninguno')]
+        if programa:
+            for i in programa:
+                for j in Estudiante.objects.filter(id_programa = int(i.id)):
+                    for k in MatriculaActual.objects.filter(nivel = nivel):
+                        for l in k.asignacion.all():
+                            if l == j:
+                                data.append(j)  
+
+        return render(request, 'views/docente/listadoEstudiantes.html', {'Estudiantes' : data, 'programa':pro})
+class AddListado(LoginRequiredMixin,PermisosUsuario, CreateView):
+    permission_required = 'app.view_notas'
+    model = modelo
+    form_class = addNotasEstudiante 
+    template_name = 'views/main.html'
+    success_url = '/docentes/programa/'
+    def dispatch(self, request, *args, **kwargs):
+        programa = self.kwargs['programa']
+        nivel = self.kwargs['nivel']
+        self.success_url = self.success_url + f'{programa}/nivel/{nivel}/'
+        return super().dispatch(request, *args, **kwargs)
+    def get_context_data(self, **kwargs):
+        id = self.kwargs['pk']
+        mt = self.kwargs['programa']
+        est = Estudiante.objects.filter(id_est = id)
+        existe = Notas.objects.filter(estudiante__id_est = id).exists()
+        n = []
+        if existe:
+            for i in Numero.objects.all():
+                notas = Notas.objects.filter(estudiante__id_est = id, niveles = i, materia = mt).exists()
+                if notas == False:
+                    n.append(i)
+        else:
+            n = [i for i in Numero.objects.all()]
+        context = super().get_context_data(**kwargs)
+        context['estudiantes'] = Estudiante.objects.filter(id_est = id)
+        context['nivel'] = n
+        context['regresar'] = self.success_url
+        context['materia'] = Programa.objects.filter(id = int(mt))
+        return context
+class Niveles(TemplateView):
+    template_name="views/docente/listadoNiveles.html"
+    
+    def get_context_data(self, **kwargs):
+        id = self.kwargs['programa']
+        print('Programa : ', id)
+        context  = super().get_context_data(**kwargs)
+        context['niveles'] = [1,2,3,4,5,6,7]
+        context['programa'] = id
         return context

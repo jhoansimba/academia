@@ -1,7 +1,5 @@
 {% include "views/default/header.html" %}
 <div class="container">
-
-
   <div class="card">
     <div class="card-header">{{name}}</div>
     {{form.errors}}
@@ -12,15 +10,38 @@
         <h2> Está seguro de eliminar a <b style="color: red;">{{info.object}}</b> </h2>
         {% endif %}
         {% for field in form %}
-        {% if field.name == 'id_est' %}
-        <label for="id_id_est">Estudiante</label>
-        <select class="form-select"  name="id_est" required id="id_id_est">
-            <option value="">Seleccione una opción</option>
+        {% if field.name == 'estudiante' %}
+        <label for="id_est">Estudiante</label>
+        <select class="form-select"  name="estudiante" required id="id_est"  >
             {% for i in estudiantes %}
             <option value="{{i.id_est}}">{{i.Estudiante}}</option>
             {% endfor %}
         </select>
-        {% elif field.name == 'fecha_est' or field.name == 'fecha' %}
+        {% elif field.name == 'asignacion' %}
+        <label for="id_asignacion">Estudiantes a matricular</label>
+        <select class="form-select"  name="asignacion" multiple required id="id_asignacion">
+            {% for i in programa %}
+            <option value="{{i.id_est}}">{{i}}</option>
+            {% endfor %}
+        </select>
+        {% elif field.name == 'nivel' and niveles %}
+        <br>
+        {% elif field.name == 'materia' %}
+        <label for="id_materia">Materia</label>
+        <select class="form-select"  name="materia" required id="id_materia">
+            {% for i in materia %}
+            <option value="{{i.id}}">{{i}}</option>
+            {% endfor %}
+        </select>
+        {% elif field.name == 'niveles' %}
+        <label for="id_niveles">Seleccione el Nivel</label>
+        <select class="form-select"  name="niveles" required id="id_niveles">
+            <option value="">Seleccione una opción</option>
+            {% for i in nivel %}
+            <option value="{{i.id}}">{{i}}</option>
+            {% endfor %}
+        </select>
+        {% elif field.name == 'fecha_est' or field.name == 'fecha' or field.name == 'inicio' or field.name == 'fin'  %}
         <label for="{{field.name}}"> {{field.label}}</label>
         <input type="date" name="{{field.name}}" class="form-control" id="{{field.name}}">
         {% elif field.name == 'estudiante' %}

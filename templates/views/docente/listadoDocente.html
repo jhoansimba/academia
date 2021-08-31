@@ -1,63 +1,63 @@
 {% include "views/default/header.html" %}
-<nav aria-label="...">
-    <ul class="pagination">
-      <li class="page-item disabled">
-        <span class="page-link">Previous</span>
-      </li>     
-      <li class="page-item active" aria-current="page">
-        <span class="page-link">1</span>
-      </li>
-      <li class="page-item"><a class="page-link" href="asistencia">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item">
-        <a class="page-link" href="#">Next</a>
-      </li>
-    </ul>
-  </nav>
-<div class="card">
-    <div class="card-header">{{name}}</div>
 
-    <div class="card-body table-responsive ">
-        <table class="table" id="table_listado">
-            <thead>
-                <tr>
-                    <th>Estudiante</th>
-                    <th>Curso</th>
-                    <th>Parcial Uno</th>
-                    <th>Parcial Dos</th>
-                    <th>Parcial Tres</th>
-                    <th>Sumatoria</th>
-                    <th>Promedio</th>
-                    <th>Estado</th>
-                    <th>Opciones</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-            <!-- <tbody>
-                {% for items in object_list %}
-                <tr>
-                    <td> {{items.Estudiante}} </td>
-                    <td> {{items.curso_id}} </td>
-                    <td> {{items.s_nota1}} </td>
-                    <td> {{items.s_nota2}} </td>
-                    <td> {{items.s_nota3}} </td>
-                    <td> {{items.sumatoria}} </td>
-                    <td> {{items.promedio}} </td>
-                    <td> {% if items.estado == True %} <b style="color: green;">Aprobado</b> {% else %} <b style="color: red;" >Reprobado</b> {%  endif %}</td>
-                    
-                     <td>
-                        <a href="edit/{{items.id}}" class="btn btn-outline-warning" >Editar</a>
-                      
-                    </td> 
-                </tr>
-                {% endfor %}
-            </tbody> -->
+<div class="container">
+    <div class="row">
+        {% if cursos_list %}
+        {% for curso in cursos_list %}
+        <div class="col-xs-6 col-md-2">
+            <div class="card">
+                <div class="card-header ">
+                    <a href="programa/{{curso.id}}">
+                        <img src="/media/{{ curso.imagen }}"  class="thumbnail" width="200" height="200" />
+                    </a>
+                </div>
+                <div class="card-body">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h5>{{ curso.nombre }}</h5>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p class="card-text"> <b> Horario de :</b></p>
+                                    <p class="card-text">{{curso.horario }}</p>
+                                    {% for i in detalle %}
+                                    <ul>
+                                        <li> {{ i }} </li>
+                                    </ul>
+                                    {% endfor %}
+                                    <p class="card-text"></p>
+                                    <form method="POST" action="Registrar">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="{{curso.id_curso}}"
+                                        name="id_curso" size="1"/>
+                                       <!-- <input type="submit" class="btn btn-success btn-sm" value="Resgistrar">-->
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>No hay cursos disponibles.</p>
+        {% endif %}
+    </div>
+</div>
+
+
+
+
+
+
+
         </table>
     </div>
-    <div class="card-footer">
-        <a href="add" type="button" class="btn btn-primary">Agregar Notas</a>
-
-    </div>
+   
     <script>
 
         $(document).ready(function () {

@@ -20,16 +20,18 @@
                   {% endfor %}
               </select>
               <div id="cursos" >
-
-
+              </div>
+              <div id="programas" >
               </div>
               {% else %}
               {{field.label}}
               {{field}}
               {% endif %}
               {% endfor %}
+              <br>
               <button type="submit" class="btn btn-success" >Aceptar</button>
           </form>
+          
       </div>
   </div>  
 </div>  
@@ -44,18 +46,29 @@
                 method : 'GET',
                 data : {'data': 'docente'}
             }).done((req)=>{
-                console.log('Respuesta _: ', req);
-                let opciones = '<br>';
-                opciones += '<select class="form-select" required name="curso">';
-                $.each(req, (key, val)=>{
-                    opciones += '<option value="'+val.name+'">'+val.name+'</option>';
-
+                console.log('Respuesta : ', req);
+                console.log('Respuesta : ', req[1].c);
+                console.log('Respuesta : ', req[0].p);
+                let opciones1 = '<br>';
+                opciones1 += '<label for="id_curso">Cursos</label>';
+                opciones1 += '<select multiple class="form-select" mul required name="curso" id="id_curso" >';
+                $.each(req[1].c, (key, val)=>{
+                    opciones1 += '<option value="'+val.name+'">'+val.name+'</option>';
                 })
-                opciones += '<br>'
-                document.getElementById('cursos').innerHTML = opciones;
+                opciones1 += '</select>'
+                document.getElementById('cursos').innerHTML = opciones1;
+                let opciones2 = '<label for="id_programa">Programas</label>';
+                opciones2 += '<select multiple class="form-select" required name="programa" id="id_programa" >';
+                    $.each(req[0].p, (key, val)=>{
+                        opciones2 += '<option value="'+val.id+'">'+val.name+'</option>';
+                    })
+                    opciones2 += '</select>'
+                    // opciones2 += '<br>'
+                    document.getElementById('programas').innerHTML = opciones2;
             });
         }else{
             document.getElementById('cursos').innerHTML = '';
+            document.getElementById('programas').innerHTML = '';
 
         }
         // console.log('Cambio a ', $(this).val());

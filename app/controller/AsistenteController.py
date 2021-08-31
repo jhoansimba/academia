@@ -1,3 +1,4 @@
+from app.Formularios.formAsignar import AsignaciondeNivel
 from django.forms.models import ModelFormOptions
 from app.Formularios.formAsistente import *
 from app.mixin import PermisosUsuario
@@ -5,7 +6,7 @@ from app.Formularios.formSalud import AddSalud, FormSalud
 from django.views.generic.edit import DeleteView, UpdateView
 from django.views.generic.list import ListView
 
-from app.models import Estudiante, Ficha_salud, Horarios, Matricula, Programa
+from app.models import Estudiante, Ficha_salud, Horarios, Matricula, MatriculaActual, Programa, Talento_Humano
 from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 Modelo = Matricula
@@ -44,8 +45,7 @@ class addMatricula (LoginRequiredMixin, CreateView):
         def get_context_data(self, **kwargs):
             context = super().get_context_data(**kwargs)
             context['name'] = f'Agregar {ModeloTitulo}'
-            # context['estudiantes'] = Estudiante.objects.filter(id_rep = self.request.user.pk)
-
+            context['estudiantes'] = Estudiante.objects.all()
             context['regresar'] = self.success_url
             return context
 
@@ -120,7 +120,7 @@ class editHorario(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['name'] = f'Actualizar {ModeloTitulo}'
-        context['regresar'] = URL
+        context['regresar'] = "../horarios"
         return context
 
 class editHorario2(LoginRequiredMixin, UpdateView):
@@ -141,5 +141,55 @@ class editHorario2(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['name'] = f'Actualizar {ModeloTitulo}'
-        context['regresar'] = URL
+        context['regresar'] = "Horarios2"
+        return context
+class AsignarNiveles(CreateView):
+    model = MatriculaActual
+    form_class = AsignaciondeNivel
+    template_name = 'views/main.html'
+    success_url = URL
+    def get_context_data(self, **kwargs):
+        curso = Estudiante.objects.filter(id_programa = None)
+        programa = Estudiante.objects.filter(id_curso = None)
+        data = []
+        for i in Estudiante.objects.all():
+            if i.id_programa.all():
+                data.append(i)
+        context = super().get_context_data(**kwargs)
+        context['name'] = f'Agregar {ModeloTitulo}'
+        context['programa'] = data
+        context['regresar'] = self.success_url
+        return context
+class AsignarNivelesCurso(CreateView):
+    model = MatriculaActual
+    form_class = AsignaciondeNivel
+    template_name = 'views/main.html'
+    success_url = URL
+    def get_context_data(self, **kwargs):
+        curso = Estudiante.objects.filter(id_programa = None)
+        programa = Estudiante.objects.filter(id_curso = None)
+        data = []
+        for i in Estudiante.objects.all():
+            if i.id_curso.all():
+                data.append(i)
+        context = super().get_context_data(**kwargs)
+        context['name'] = f'Agregar {ModeloTitulo}'
+        context['programa'] = data
+        context['niveles'] = 'Niveles'
+        context['regresar'] = self.success_url
+        return context
+
+class TalentoHumano( LoginRequiredMixin,ListView):
+    permission_required = listado
+    model = Talento_Humano
+    form_class = FormHumano
+    template_name ='views/Asistente/TalentoHumano.html'
+   
+    title = Title
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['name'] = 'Horarios'
+      #  context['object_list'] = self.model.objects.filter(matricula = True)
+
         return context

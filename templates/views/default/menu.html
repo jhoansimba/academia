@@ -78,11 +78,10 @@
                 {% endif %}
                 {% if i.name == 'Docentes' %}
                 <a href="docentes/"><img src="{%static 'images/graduado.png'%}" class="imgmenu">
-                    <p>Listado de estuadiantes</p>
+                    <p>Listado de Cursos</p>
                 </a>
 
-                <a href="docentes/asistencia/"> <img src="{%static 'images/asistencia.png'%}" class="imgmenu">
-                    <p>Asistencia</p>
+                
                 </a>
                 {% endif %}
                 {% if i.name == 'Asistente' %}
@@ -91,10 +90,12 @@
                 </a>
                 <a href="asistente/horarios"><img src="{%static 'images/horario.png'%}" class="imgmenu">
                     <p>Horarios</p>
+                <a href="asistente/talentohumano"><img src="{%static 'images/talento.png'%}" class="imgmenu">
+                    <p>Talento Humano</p>
                 </a>
-                <a href=""><img src="{%static 'images/cursos.png'%}" class="imgmenu">
+                <!--<a href=""><img src="{%static 'images/cursos.png'%}" class="imgmenu">
                     <p>Agregar cursos</p>
-                </a>
+                </a>-->
                 {% endif %}
 
 

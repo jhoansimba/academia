@@ -1,0 +1,72 @@
+{% include "views/default/header.html" %}
+
+ 
+<div class="card">
+    <div class="card-header">{{name}}</div>
+
+    <div class="card-body table-responsive ">
+        <table class="table" id="table_listado">
+            <thead>
+                <tr>
+                    <th>Estudiante</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for items in Estudiantes %}
+                <tr>
+                    <td> {{items.Estudiante}} </td>
+                     <td>
+                        <a href="add/{{items.id_est}}" class="btn btn-outline-success" >Agregar Notas</a>
+                      
+                    </td> 
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+      <a href="asistencia" type="button" class="btn btn-success">asistencia</a>
+        <a href="/docentes/programa/{{programa}}" type="button" class="btn btn-success">Regresar</a>
+
+    </div>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Estudiantes</th>
+          <th>Inicio</th>
+          <th>Fin</th>
+          <th>Nivel</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in matricula %}
+          {% for j in i.asignacion.all %}
+          <tr>
+            <td>{{j}}</td>
+            <td>{{i.inicio}}</td>
+            <td>{{i.fin}}</td>
+            <td>{{i.nivel}}</td>
+          </tr>
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+   </div>
+   <div class="row">
+     {% for i in niveles %}
+     <div class="col-xs|sm|md|lg|xl-1-12">
+       <div class="card">
+         <div class="card-body">
+           <h3 class="card-title">Nivel {{i}} </h3>
+           <!-- Orden Programa MAtricula/Curso IDPrograma / 040 -->
+          <!-- docente/listado/matricula/1/idPOR/ -->
+           <p class="card-text"><a href="matricula/{{i}}/{{Materia}}" type="button" class="btn btn-white" >Ingresar a este nivel<a></p>
+         </div>
+       </div>
+     </div>
+     {% endfor %}
+   </div>
+    {% include "views/default/footer.html" %}
+    

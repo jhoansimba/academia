@@ -1,4 +1,4 @@
-from django.db.models.fields import CharField
+from django.db.models.fields import CharField, DateField
 from django.db.models.fields.files import ImageField
 from django.forms.models import model_to_dict
 from django.utils import tree
@@ -9,7 +9,6 @@ from django.db.models.base import Model
 from django.db.models.deletion import CASCADE
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models.enums import ChoicesMeta
-
 
 class Provincia (models.Model):
     id_provincia = models.AutoField(primary_key=True)
@@ -60,6 +59,9 @@ class Horarios (models.Model):
     id_horario = models.AutoField(primary_key=True)
     inicio_horario = models.TimeField()
     final_horario = models.TimeField()
+    def json(self):
+        txt = model_to_dict(self)
+        return txt
 
     def Horario(self):
         txt = '{0}{1}{2}'
@@ -78,14 +80,24 @@ class Numero(models.Model):
 
 
 class Niveles(models.Model):
+    
     id = models.AutoField(primary_key=True)
     nivel = models.ForeignKey(Numero, on_delete=CASCADE)
     precio = models.FloatField()
+    horario=models.ManyToManyField(Horarios)
     duracion = models.CharField(
         verbose_name='Duración del Nivel: ', max_length=1, help_text='Duración en meses')
 
+    def json(self):
+        txt = model_to_dict(self)
+        txt['horario'] = self.horario.json()
+        return txt
     def __str__(self) -> str:
-        return '{}'.format(self.nivel)
+        txt = ''
+        for i in self.horario.all():
+            txt += str(i) + '  '
+        
+        return '{}, horarios de: {}'.format(self.nivel, txt)
 
 
 class Programa(models.Model):
@@ -97,11 +109,13 @@ class Programa(models.Model):
         upload_to='images/programas/', verbose_name='Imagen del Programa')
     total = models.FloatField(null=True, blank=True, editable=False)
     nivel = models.ManyToManyField(Niveles)
-    horario=models.ForeignKey(Horarios,on_delete=CASCADE)
+    # horario=models.ForeignKey(Horarios,on_delete=CASCADE)
     # def json(self):
     #     txt = model_to_dict(self, exclude=['imagen', 'nivel'])
     #     return txt
-
+    def json(self):
+        txt = model_to_dict(self)
+        return txt
     def __str__(self) -> str:
         return '{}'.format(self.nombre)
 
@@ -203,32 +217,61 @@ class Cargo (models.Model):
     def __str__(self) -> str:
         txt = '{0}'
         return txt.format(self.nombre_car)
-
-
+def HojaDeVida(instance, filename):
+    return 'file/talento_humano/{0}/HojadeVida/{1}'.format(instance.cedula_th, filename)
+def CopiadeCedula(instance, filename):
+    return 'file/talento_humano/{0}/Copia de Cedula/{1}'.format(instance.cedula_th, filename)
+def CertificadoNoImpedimento(instance, filename):
+    return 'file/talento_humano/{0}/Certificado de Impedimento/{1}'.format(instance.cedula_th, filename)
+def CertificadoAntecedentes(instance, filename):
+    return 'file/talento_humano/{0}/Certificado de antecedentes/{1}'.format(instance.cedula_th, filename)
+def TitulosAcreditados(instance, filename):
+    return 'file/talento_humano/{0}/Titulos acreditados/{1}'.format(instance.cedula_th, filename)
+def CertificadosCapacitacion(instance, filename):
+    return 'file/talento_humano/{0}/Certificados de Capacitacion/{1}'.format(instance.cedula_th, filename)
+def ExperienciaLaboral(instance, filename):
+    return 'file/talento_humano/{0}/Certificados de Experiencia laboral/{1}'.format(instance.cedula_th, filename)
+def HistorialLaboral(instance, filename):
+    return 'file/talento_humano/{0}/Historial Laboral/{1}'.format(instance.cedula_th, filename)
+def CarnetDiscapacidad(instance, filename):
+    return 'file/talento_humano/{0}/Carnet de discapacidad/{1}'.format(instance.cedula_th, filename)
+def CertificacionBancaria(instance, filename):
+    return 'file/talento_humano/{0}/Certificacion Bancaria/{1}'.format(instance.cedula_th, filename)
+def Ruc(instance, filename):
+    return 'file/talento_humano/{0}/Copia del RUC/{1}'.format(instance.cedula_th, filename)
+    # return 'file/talento_humano/04016452221/Cedula)
 class Talento_Humano (models.Model):
     imagen_th = models.ImageField(null=True, upload_to='images/talento_humano')
     cedula_th = models.CharField(
         max_length=10, primary_key=True, verbose_name='Cedula')
     nombres_th = models.CharField(max_length=25, verbose_name='Nombres')
     apellidos_th = models.CharField(max_length=25, verbose_name='Apellidos')
-    cargo_th = models.ForeignKey(Cargo, on_delete=models.CASCADE)
-    email_est = models.EmailField(verbose_name='E-mail')
-    telefono_est = models.CharField(max_length=10)
+    cargo_th = models.ForeignKey(Cargo, on_delete=models.CASCADE, verbose_name='Cargo por el que postula')
+    Fecha= models.DateField(verbose_name='Fecha de Entrega lista chequeo')
+    telefono = models.CharField(max_length=10)
+    HojaVida= models.FileField(upload_to = HojaDeVida)
+    # HojaVida= models.FileField(upload_to='file/talento_humano/hoja de vida')
+    CopiaCedula= models.FileField(upload_to=CopiadeCedula)
+    CertiImpedimento= models.FileField(upload_to=CertificadoNoImpedimento)
+    Antecedentes= models.FileField(upload_to=CertificadoAntecedentes)
+    Titulos= models.FileField(upload_to=TitulosAcreditados)
+    Experiencia= models.FileField(upload_to= ExperienciaLaboral)
+    Cursos= models.FileField(upload_to= CertificadosCapacitacion)
+    Historial= models.FileField(upload_to= HistorialLaboral)
+    CarnetDiscap= models.FileField(upload_to=CarnetDiscapacidad)
+    CertiBancaria= models.FileField(upload_to=CertificacionBancaria)
+    CopiaRuc= models.FileField(upload_to=Ruc)
+    
    # id_curso=models.ManyToManyField(Cursos,verbose_name='Curso')
     id_direccion = models.ForeignKey(
         Direccion, on_delete=models.CASCADE, verbose_name='Dirección')
-
-    def Talento_Humano(self):
+    def TalentoHumano(self):
         txt = '{0} {1} '
         return txt.format(self.nombres_th, self.apellidos_th)
 
     def __str__(self) -> str:
         txt = '{0} {1} '
         return txt.format(self.nombres_th, self.apellidos_th)
-
-    def Cargo(self):
-        txt = '{0}'
-        return txt.format(self.Cargo.nombre_car)
 
 
 class Notas (models.Model):
@@ -332,7 +375,8 @@ class Notas (models.Model):
     def Cursos(self):
         txt = '{0}'
         return txt.format(self.curso_id.nombre_curso)
-
+    def __str__(self) -> str:
+        return '{}'.format(self.niveles)
 
 class Comprobante (models.Model):
     i_comp = models.AutoField(primary_key=True)
@@ -346,6 +390,8 @@ class Comprobante (models.Model):
     def comp(self):
         txt = '{0}{1}'
         return txt.format("comprobante de: ", self.id_est)
+    def File(self):
+        return '{}'.format(self.file_comp)
 
     def __str__(self) -> str:
         txt = '{0}{1}'
@@ -364,6 +410,11 @@ class Matricula(models.Model):
         for i in self.estudiante.id_curso.all():
             txt.append(i.nombre)
         return txt
+    def Programa(self):
+        txt = []
+        for i in self.estudiante.id_programa.all():
+            txt.append(i.nombre)
+        return txt
 
     def __str__(self) -> str:
         txt = []
@@ -375,15 +426,30 @@ class Matricula(models.Model):
 
 
 class Asistencia (models.Model):
-    estudiante = models.ManyToManyField(Estudiante)
     id_asis = models.AutoField(primary_key=True)
+    estudiante = models.ManyToManyField(Estudiante,blank=True,null=True)
     estado_asis = models.BooleanField()
-    fecha_asis = models.DateField(verbose_name='Fecha de asistencia')
+    niveles = models.CharField(max_length=1, null = True, blank = True)
+    fecha_asis = models.DateField(blank=True,null=True, verbose_name='Fecha de asistencia')
     horario_id = models.ForeignKey(
-        Horarios, on_delete=CASCADE, verbose_name='Hora')
+        Horarios, on_delete=CASCADE,blank=True,null=True, verbose_name='Hora')
 
     def Estudiante(self) -> str:
         txt = ''
         for i in self.estudiante.all():
             txt += i.nombres_est
         return txt
+class MatriculaActual(models.Model):
+    niveles = [
+        ('1','Nivel 1'),
+        ('2','Nivel 2'),
+        ('3','Nivel 3'),
+        ('4','Nivel 4'),
+        ('5','Nivel 5'),
+        ('6','Nivel 6'),
+        ('7','Nivel 7'),
+    ]
+    asignacion = models.ManyToManyField(Estudiante)
+    inicio = models.DateField(verbose_name='Inicio del Período académico')
+    nivel = models.CharField(verbose_name='Nivel a matricular', choices=niveles, max_length=1, null=True, blank = True)
+    fin = models.DateField(verbose_name='Fin del Período académico')

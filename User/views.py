@@ -14,7 +14,7 @@ class addUser(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['grupos'] = Group.objects.order_by('id')
-        context['cursos'] = [i for i in Cursos.objects.order_by('nombre')]
+        context['cursos'] = [i for i in Cursos.objects.order_by('nombre')] 
         context['programa'] = [i for i in Programa.objects.order_by('nombre')]
         return context
     def get(self, request, *args, **kwargs):
@@ -25,8 +25,15 @@ class addUser(CreateView):
         except:
             pass
         if d == 'docente':
+            programas = []
+            cursos = []
             for i in Programa.objects.all():
-                data.append({'name':i.nombre})
+                programas.append({'id': i.id, 'name':i.nombre})
+            for i in Cursos.objects.all():
+                cursos.append({'name':i.nombre})
+            data.append({'p': programas})
+            data.append({'c':cursos})
+            print(data)
             return JsonResponse(data, safe = False) 
         else:
             return super().get(request, *args, **kwargs)
