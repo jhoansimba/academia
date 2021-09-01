@@ -4,11 +4,11 @@ from django.contrib import admin
 
 
 # Register your models here.
-@admin.register(Notas)
-class Notas(admin.ModelAdmin):
-    list_display = ('Estudiante','Nivel','SumaParcialUno','SumaParcialDos','SumaParcialTres','SumaGeneral','Promedio','Estado')
-    def Nivel(self, obj):
-        return obj.niveles
+admin.site.register(Notas)
+# class Notas(admin.ModelAdmin):
+#     list_display = ('Estudiante','Nivel','SumaParcialUno','SumaParcialDos','SumaParcialTres','SumaGeneral','Promedio','Estado')
+#     def Nivel(self, obj):
+#         return obj.niveles
 
 @admin.register(Asistencia)
 class Asistencia(admin.ModelAdmin):

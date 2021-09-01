@@ -22,14 +22,15 @@ urlpatterns = [
     #Docente
     path('docentes/', DocenteView.as_view(), name='list_estudiantes_docente'),
     # path('docentes/add', login_required(addNotas.as_view()), name='addNotas'),
-    path('docentes/edit/<pk>', login_required(editNotas.as_view()), name='EDITNotas'),
+    path('docentes/programa/<programa>/nivel/<nivel>/edit/<pk>', editNotas.as_view(), name='EDITNotas'),
+    # path('edit/<pk>', editNotasEstudiantes.as_view(), name='NotasEdit'),
     #  path('docentes/listado/asistencia/add/<str:pro>', AddAsistencia.as_view(), name='add_asistencia'),
     # path('docentes/asistencia/add/<str:pro>', AddAsistencia.as_view(), name='add_asistencia'),
     path('docentes/programa/<programa>', Niveles.as_view(), name='listado_est'),
     # path('docentes/niveles/listado/<mt>/<pk>', Listado.as_view(), name='add_listado_est'),
     path('docentes/programa/<programa>/nivel/<nivel>/', Listado.as_view(), name='add_listado_est'),
      path('docentes/programa/<programa>/nivel/<nivel>/asistencia', AsistenciaPro.as_view(), name='asistencia'),
-    path('docentes/programa/<programa>/nivel/<nivel>/add/<pk>', AddListado.as_view(), name='add_listado_est'),
+    path('docentes/programa/<programa>/nivel/<nivel>/add', addNotas.as_view(), name='add_listado_est'),
 #Asistente
 path('asistente/', MatriculaList.as_view() ,name='list_matricula'),
 path('asistente/asignarprograma', AsignarNiveles.as_view() ,name='asignar_matricula_programa'),

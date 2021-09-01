@@ -21,9 +21,6 @@ class editNotasEstudiante(ModelForm):
         for i in self.visible_fields():
             i.field.widget.attrs['class'] = 'form-control'
             i.field.widget.attrs['autocomplete'] = 'off'
-        # self.fields['id_est'].widget.attrs['autofocus'] = True
-        # self.fields['id_direccion'].widget.attrs['class'] = 'custom-select'
     class Meta:
         model = Notas
         fields = '__all__'
-        exclude = ('estudiante','curso_id')

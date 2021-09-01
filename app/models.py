@@ -178,7 +178,9 @@ class Estudiante(models.Model):
     def Cursos(self):
         txt = '{0}'
         return txt.format(self.cursos.nombre_curso)
-
+    def json(self):
+        txt = model_to_dict(self, exclude=['imagen_est'])
+        return txt
     def Direccion(self):
         txt = '{0}{1}{2}'
         return txt.format(self.direccion.calle1_direc, " y ", self.direccion.calle2_direc)
@@ -281,7 +283,7 @@ class Notas (models.Model):
     materia = models.ForeignKey(
         Programa, on_delete=CASCADE, verbose_name='Materia')
     parcial = models.CharField(
-        choices=[('1', 'Uno')], default=1, max_length=1, verbose_name='Parcial')
+        choices=[('1', 'Uno')], default=1, max_length=1, verbose_name='Parcial', null=True)
     p_nota1 = models.FloatField(verbose_name='Trabajos', default=0, validators=[
                                 MaxValueValidator(10), MinValueValidator(0)])
     p_nota2 = models.FloatField(verbose_name='Tareas', default=0, validators=[
@@ -290,7 +292,7 @@ class Notas (models.Model):
                                 MaxValueValidator(10), MinValueValidator(0)])
 
     parcial2 = models.CharField(
-        choices=[('1', 'Dos')], default=1, max_length=1, verbose_name='Parcial')
+        choices=[('1', 'Dos')], default=1, max_length=1, verbose_name='Parcial', null=True)
     s_nota1 = models.FloatField(verbose_name='Trabajos', default=0, blank=True, validators=[
                                 MaxValueValidator(10), MinValueValidator(0)])
     s_nota2 = models.FloatField(verbose_name='Tareas', default=0, blank=True, validators=[
@@ -298,7 +300,7 @@ class Notas (models.Model):
     s_nota3 = models.FloatField(verbose_name='examen', default=0, blank=True, validators=[
                                 MaxValueValidator(10), MinValueValidator(0)])
     parcial3 = models.CharField(choices=[(
-        '1', 'Tres')], default=1, blank=True, max_length=1, verbose_name='Parcial')
+        '1', 'Tres')], default=1, blank=True, max_length=1, verbose_name='Parcial', null=True)
     t_nota1 = models.FloatField(verbose_name='Trabajos', default=0, blank=True, validators=[
                                 MaxValueValidator(10), MinValueValidator(0)])
     t_nota2 = models.FloatField(verbose_name='Tareas', default=0, blank=True, validators=[
@@ -314,11 +316,6 @@ class Notas (models.Model):
         self.promedio = self.Promedio()
         self.estado = self.EstadoEst()
         return super(Notas, self).save(*args, **kwargs)
-    # def Programas(self):
-    #     data = []
-    #     for i in self.estudiante.id_programa.all():
-    #         data.append(i.nombre)
-    #     return data
 
     def json(self):
         datos = model_to_dict(self)
@@ -329,7 +326,6 @@ class Notas (models.Model):
         datos['tres'] = self.SumaParcialTres()
         datos['materia'] = self.materia.nombre
         datos['estado'] = self.EstadoEst()
-        # datos['programas'] = self.Programas()
         datos['est'] = self.Estudiante()
         return datos
 

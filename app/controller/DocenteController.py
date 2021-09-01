@@ -45,9 +45,14 @@ class editNotas(LoginRequiredMixin,UpdateView):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, instance = self.get_object())
+        data = {}
         if form.is_valid():
+            data['info'] = 'Success'
             form.save()
-        return super().post(request, *args, **kwargs)
+        else:
+            print('Error ln-53: ', form.errors)
+            data['error'] = 'Error: ' + str(form.errors)
+        return JsonResponse(data , safe=False)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['name'] = 'Actualizar Notas del Estudiante'
@@ -60,6 +65,10 @@ class Listado(LoginRequiredMixin, TemplateView):
         data = []
         nivel = self.kwargs['nivel']
         pro = self.kwargs['programa']
+        save = ''
+        code = ''
+        for i in Notas.objects.all():
+            save += str(i.id) + ','
         programa = [i for i in Programa.objects.filter(id = pro).exclude(nombre='Ninguno')]
         if programa:
             for i in programa:
@@ -67,46 +76,54 @@ class Listado(LoginRequiredMixin, TemplateView):
                     for k in MatriculaActual.objects.filter(nivel = nivel):
                         for l in k.asignacion.all():
                             if l == j:
-                                data.append(j)  
-
-        return render(request, 'views/docente/listadoEstudiantes.html', {'Estudiantes' : data, 'programa':pro})
-class AddListado(LoginRequiredMixin,PermisosUsuario, CreateView):
-    permission_required = 'app.view_notas'
-    model = modelo
-    form_class = addNotasEstudiante 
-    template_name = 'views/main.html'
-    success_url = '/docentes/programa/'
-    def dispatch(self, request, *args, **kwargs):
-        programa = self.kwargs['programa']
-        nivel = self.kwargs['nivel']
-        self.success_url = self.success_url + f'{programa}/nivel/{nivel}/'
-        return super().dispatch(request, *args, **kwargs)
-    def get_context_data(self, **kwargs):
-        id = self.kwargs['pk']
-        mt = self.kwargs['programa']
-        est = Estudiante.objects.filter(id_est = id)
-        existe = Notas.objects.filter(estudiante__id_est = id).exists()
-        n = []
-        if existe:
-            for i in Numero.objects.all():
-                notas = Notas.objects.filter(estudiante__id_est = id, niveles = i, materia = mt).exists()
-                if notas == False:
-                    n.append(i)
-        else:
-            n = [i for i in Numero.objects.all()]
-        context = super().get_context_data(**kwargs)
-        context['estudiantes'] = Estudiante.objects.filter(id_est = id)
-        context['nivel'] = n
-        context['regresar'] = self.success_url
-        context['materia'] = Programa.objects.filter(id = int(mt))
-        return context
+                                try:
+                                    # Existen notas de este estudiante registradas
+                                    data.append({'notas': Notas.objects.get(estudiante_id = j.id_est).json()})
+                                except Exception as e:
+                                    # No existen notas de este estudiante registradas
+                                    data.append(
+                                        {'notas':{
+                                            'code' : f'ID_{j.id_est}',
+                                            'est': j,
+                                            'estudiante': j.id_est,
+                                            'p_nota1':0,
+                                            'p_nota2':0,
+                                            'p_nota3':0,
+                                            's_nota1':0,
+                                            's_nota2':0,
+                                            's_nota3':0,
+                                            't_nota1':0,
+                                            't_nota2':0,
+                                            't_nota3':0,
+                                            'suma':0,
+                                            'promedio':0,
+                                            }
+                                        }
+                                    )
+                                    code += f'ID_{j.id_est}' + ','
+                                
+        return render(request, 'views/docente/listadoEstudiantes.html', {'Estudiantes' : data, 'programa':pro, 'nivel':nivel, 'save': save, 'code' : code, 'name': 'Registro de notas', 'prog': [i.nombre for i in Programa.objects.filter(id = pro)]})
 class Niveles(TemplateView):
     template_name="views/docente/listadoNiveles.html"
-    
     def get_context_data(self, **kwargs):
         id = self.kwargs['programa']
-        print('Programa : ', id)
         context  = super().get_context_data(**kwargs)
         context['niveles'] = [1,2,3,4,5,6,7]
         context['programa'] = id
         return context
+class addNotas(CreateView):
+    model = Notas
+    form_class = editNotasEstudiante
+    template_name = 'views/main.html'
+    success_url = '/docentes/'
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        data = {}
+        if form.is_valid():
+            print('Registro Guardado: ')
+            data['info'] = 'Success'
+            form.save()
+        else:
+            print('Error ln-127 : ', form.errors)
+            data['error'] = 'Error: ' + str(form.errors)
+        return JsonResponse(data , safe=False)
