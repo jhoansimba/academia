@@ -1,0 +1,23 @@
+{% include "views/default/header.html" %}
+{%load static%}
+
+<div class="row oscuro justify-content-center" >
+  {% for i in numero %}
+    <!-- <div class="col-lg-2 col-md-3 col-sm-6"> -->
+    <div class="col">
+
+    <!-- <div class="col-3"> -->
+      <br>
+      <div class="card" style="width: 12rem;">
+       
+        <center class="oscuro" >
+          <div class="card-body">
+          <h5 class="card-title">Nivel</h5>
+          <a href="{{programa}}/nivel/{{i.nivel}}" class="btn btn-outline-primary btn-lg btn-block btn-sm">{{i.nivel}}</a>
+        </div>
+        </center>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% include "views/default/footer.html" %}

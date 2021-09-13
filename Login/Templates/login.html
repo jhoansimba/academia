@@ -1,10 +1,21 @@
 {% include "views/default/header.html" %}
+<script src="//code.jquery.com/jquery.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <div class="container">
 
 
     <div class="card">
         <div class="card-header">Inicio de Sesión</div>
         {{form.errors}}
+        {% if success %}
+        
+        <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <strong>Éxito!</strong> {{success}}
+        </div>
+        
+        {% endif %}
+
         <div class="card-body">
             <form action="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -16,6 +27,7 @@
                 <br>
                 <button type="submit" class="btn btn-success">Aceptar</button>
                 <a href='/' class="btn btn-primary">Regresar</a>
+                <a class="form-recovery" href=" reset ">Olvidé mi Contraseña</a>
             </form>
         </div>
     </div>

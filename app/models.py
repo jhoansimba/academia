@@ -74,7 +74,6 @@ class Horarios (models.Model):
 
 class Numero(models.Model):
     nivel = models.CharField(verbose_name='Nivel Número #: ', max_length=1)
-
     def __str__(self) -> str:
         return '{}'.format(self.nivel)
 
@@ -436,16 +435,5 @@ class Asistencia (models.Model):
             txt += i.nombres_est
         return txt
 class MatriculaActual(models.Model):
-    niveles = [
-        ('1','Nivel 1'),
-        ('2','Nivel 2'),
-        ('3','Nivel 3'),
-        ('4','Nivel 4'),
-        ('5','Nivel 5'),
-        ('6','Nivel 6'),
-        ('7','Nivel 7'),
-    ]
     asignacion = models.ManyToManyField(Estudiante)
-    inicio = models.DateField(verbose_name='Inicio del Período académico')
-    nivel = models.CharField(verbose_name='Nivel a matricular', choices=niveles, max_length=1, null=True, blank = True)
-    fin = models.DateField(verbose_name='Fin del Período académico')
+    nivel = models.ForeignKey(Numero, on_delete=CASCADE)

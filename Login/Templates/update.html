@@ -1,0 +1,32 @@
+{% include "views/default/header.html" %}
+<div class="container">
+    <script src="//code.jquery.com/jquery.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <div class="card">
+        <div class="card-header">Creación de nueva clave</div>
+        
+       {% if errorp %}
+
+<div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <strong>Error!</strong> {{errorp}}
+</div>
+
+       {% endif %}
+        
+        <div class="card-body">
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="id_password">Contraseña</label>
+                <input type="password" class="form-control" name="password" id="id_password">
+                <br>
+                <label for="id_password1">Repita Contraseña</label>
+                <input type="password" class="form-control" name="password1" id="id_password1">
+                <br>
+                <button type="submit" class="btn btn-success">Aceptar</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% include "views/default/footer.html" %}

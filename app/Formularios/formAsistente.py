@@ -1,3 +1,4 @@
+from User.models import AsigacionParalelo
 from django.forms import ModelForm, widgets
 from django import forms
 from app.models import Cursos, Ficha_salud, Horarios, Matricula, Programa, Talento_Humano
@@ -77,3 +78,15 @@ class FormHumano (ModelForm):
      class Meta:
             model = Talento_Humano
             fields = '__all__'
+class AgregarEstudiantesForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for i in self.visible_fields():
+            i.field.widget.attrs['class'] = 'form-control'
+            i.field.widget.attrs['autocomplete'] = 'off'
+        # self.fields['id_est'].widget.attrs['autofocus'] = True
+        # self.fields['id_direccion'].widget.attrs['class'] = 'custom-select'
+    class Meta:
+        model = AsigacionParalelo
+        fields = '__all__'
+    

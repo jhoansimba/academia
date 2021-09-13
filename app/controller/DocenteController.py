@@ -1,3 +1,4 @@
+from User.models import AsigacionParalelo
 from json.encoder import JSONEncoder
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -67,51 +68,56 @@ class Listado(LoginRequiredMixin, TemplateView):
         pro = self.kwargs['programa']
         save = ''
         code = ''
+        paralelo = ''
         for i in Notas.objects.all():
             save += str(i.id) + ','
         programa = [i for i in Programa.objects.filter(id = pro).exclude(nombre='Ninguno')]
+        getEstudiantes = AsigacionParalelo.objects.filter(paralelo__usuario = self.request.user.id)
         if programa:
             for i in programa:
                 for j in Estudiante.objects.filter(id_programa = int(i.id)):
                     for k in MatriculaActual.objects.filter(nivel = nivel):
                         for l in k.asignacion.all():
-                            if l == j:
-                                try:
-                                    # Existen notas de este estudiante registradas
-                                    data.append({'notas': Notas.objects.get(estudiante_id = j.id_est).json()})
-                                except Exception as e:
-                                    # No existen notas de este estudiante registradas
-                                    data.append(
-                                        {'notas':{
-                                            'code' : f'ID_{j.id_est}',
-                                            'est': j,
-                                            'estudiante': j.id_est,
-                                            'p_nota1':0,
-                                            'p_nota2':0,
-                                            'p_nota3':0,
-                                            's_nota1':0,
-                                            's_nota2':0,
-                                            's_nota3':0,
-                                            't_nota1':0,
-                                            't_nota2':0,
-                                            't_nota3':0,
-                                            'suma':0,
-                                            'promedio':0,
-                                            }
-                                        }
-                                    )
-                                    code += f'ID_{j.id_est}' + ','
-                                
-        return render(request, 'views/docente/listadoEstudiantes.html', {'Estudiantes' : data, 'programa':pro, 'nivel':nivel, 'save': save, 'code' : code, 'name': 'Registro de notas', 'prog': [i.nombre for i in Programa.objects.filter(id = pro)]})
-class Niveles(TemplateView):
+                            for est in getEstudiantes:
+                                paralelo =  est.nombre
+                                for item in est.estudiantes.all():
+                                    if l == j and j == item and nivel == est.paralelo.nivel.nivel:
+                                        try:
+                                            # Existen notas de este estudiante registradas
+                                            data.append({'notas': Notas.objects.get(estudiante_id = j.id_est).json()})
+                                        except Exception as e:
+                                            # No existen notas de este estudiante registradas
+                                            data.append(
+                                                {'notas':{
+                                                    'code' : f'ID_{j.id_est}',
+                                                    'est': j,
+                                                    'estudiante': j.id_est,
+                                                    'p_nota1':0,
+                                                    'p_nota2':0,
+                                                    'p_nota3':0,
+                                                    's_nota1':0,
+                                                    's_nota2':0,
+                                                    's_nota3':0,
+                                                    't_nota1':0,
+                                                    't_nota2':0,
+                                                    't_nota3':0,
+                                                    'suma':0,
+                                                    'promedio':0,
+                                                    }
+                                                }
+                                            )
+                                            code += f'ID_{j.id_est}' + ','
+                                        
+        return render(request, 'views/docente/listadoEstudiantes.html', {'Estudiantes' : data, 'programa':pro, 'nivel':nivel, 'save': save, 'code' : code, 'name': 'Registro de notas', 'prog': [i.nombre for i in Programa.objects.filter(id = pro)], 'paralelo':paralelo})
+class Niveles(LoginRequiredMixin,TemplateView):
     template_name="views/docente/listadoNiveles.html"
     def get_context_data(self, **kwargs):
         id = self.kwargs['programa']
         context  = super().get_context_data(**kwargs)
-        context['niveles'] = [1,2,3,4,5,6,7]
+        context['numero'] = Numero.objects.all()
         context['programa'] = id
         return context
-class addNotas(CreateView):
+class addNotas(LoginRequiredMixin,CreateView):
     model = Notas
     form_class = editNotasEstudiante
     template_name = 'views/main.html'

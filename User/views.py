@@ -8,7 +8,7 @@ from django.views.generic import CreateView
 # Create your views here.
 class addUser(CreateView):
     model = Usuario
-    template_name = 'views/user/addUser.html'
+    template_name = 'user/addUser.html'
     form_class = FormularioUser
     success_url = '/Bienvenido'
     def get_context_data(self, **kwargs):

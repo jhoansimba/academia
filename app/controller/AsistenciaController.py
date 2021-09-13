@@ -1,13 +1,13 @@
+from app.Formularios.formAsistencia import AddAsistenciaForm
 from django.http.response import JsonResponse
 from django.views.generic.base import TemplateView
-from app.formularios import AddAsistenciaForm
 from django.views.generic.edit import CreateView
+from django.contrib.auth.mixins import *
 from app.models import Asistencia, Estudiante, Horarios, Programa
 from django.shortcuts import render, HttpResponse
 from datetime import datetime
 from User.models import *
 def Asistencialist(request):
-    # pro = request.GET['']
     data = {
         'estudiantes' : Estudiante.objects.all(),
         'horarios' : Horarios.objects.all(),
@@ -15,7 +15,7 @@ def Asistencialist(request):
     }
     return render(request, 'views/asistencia/asistencia.html', data)
 
-class AsistenciaPro(CreateView):
+class AsistenciaPro(LoginRequiredMixin,CreateView):
     model = Asistencia
     form_class = AddAsistenciaForm
     template_name = 'views/asistencia/asistencia.html'
@@ -71,49 +71,6 @@ class AsistenciaPro(CreateView):
                 print('Error Formulario no valido: ', form.errors)
                 data={'errors' : 'Error uno ' + str(form.errors)}
         except Exception as e:
-            print('Error Formulario l-71 : ', e)
+            print('Error Formulario l-74 : ', e)
             data={'errors' : 'Error ' + str(e)}
         return JsonResponse(data, safe=False)
-    
-
-# class addAsistencia(CreateView):
-#     permission_required = 'Estudiantes.add_asistencia'
-#     model = Asistencia
-#     form_class = AsistenciaFormulario
-#     template_name = 'Asistencia/add.html'
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['object_data'] = Estudiante.objects.order_by('nombres')
-#         context['date'] = datetime.datetime.now()
-#         return context
-    
-#     def post(self, request, *args, **kwargs):
-#         form = self.form_class(request.POST)
-#         data = {}
-#         try:
-#             if form.is_valid():
-#                 data = form.cleaned_data['estudiante']
-#                 for i in Estudiante.objects.all():
-#                     cont = False
-#                     for j in data:
-#                         if i.cedula == j.cedula:
-#                             est = Estudiante.objects.filter(cedula = j.cedula)
-#                             cont = True
-#                             break
-#                     if cont:
-#                         form.cleaned_data['presente'] = True
-#                     else:
-#                         est = Estudiante.objects.filter(cedula = i.cedula)
-#                         form.cleaned_data['presente'] = False
-#                     form.cleaned_data['estudiante'] = est
-#                     registro = AsistenciaFormulario(form.clean())
-#                     if registro.is_valid():
-#                         registro.save()
-#                     else:
-#                         print(registro.errors)
-#                 data={'info' : 'Datos Guardados'}
-#             else:
-#                 data={'errors' : 'Error ' + str(form.errors)}
-#         except Exception as e:
-#             data={'errors' : 'Error ' + str(e)}
-#         return JsonResponse(data, safe=False)

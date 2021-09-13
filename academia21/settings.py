@@ -139,3 +139,8 @@ LOGOUT_REDIRECT_URL = '/login/' # Cuando cierra seción
 LOGIN_REDIRECT_URL = '/Bienvenido' #Cuando se loguea
 LOGIN_URL = '/login/' #Cuando no está logueadi
 AUTH_USER_MODEL = 'User.Usuario'
+
+EMAIL_HOST_USER = 'fabricioimbaquingo@gmail.com'
+EMAIL_HOST_PASSWORD = '0991797782Fi'
+EMAIL_HOST='smtp.gmail.com.'
+EMAIL_PORT='587'

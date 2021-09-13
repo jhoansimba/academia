@@ -1,0 +1,24 @@
+{% include "views/default/header.html" %}
+<div class="container">
+
+
+    <div class="card">
+        <div class="card-header">Inicio de Sesión</div>
+        {{form.errors}}
+        <div class="card-body">
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="id_username">Usuario</label>
+                <input type="text" class="form-control" name="username" id="id_username">
+                <br>
+                <label for="id_password">Contraseña</label>
+                <input type="password" class="form-control" name="password" id="id_password">
+                <br>
+                <button type="submit" class="btn btn-success">Aceptar</button>
+                <a href='/' class="btn btn-primary">Regresar</a>
+                <a class="form-recovery" href=" /reset/ ">Olvidé mi Contraseña</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% include "views/default/footer.html" %}

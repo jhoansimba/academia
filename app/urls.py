@@ -36,11 +36,16 @@ path('asistente/', MatriculaList.as_view() ,name='list_matricula'),
 path('asistente/asignarprograma', AsignarNiveles.as_view() ,name='asignar_matricula_programa'),
 path('asistente/asignarcursos', AsignarNivelesCurso.as_view() ,name='asignar_matricula_curso'),
 path('asistente/talentohumano', TalentoHumano.as_view() ,name='Talento_Humano'),
+path('asistente/talentohumano/add', addTalentoHumano.as_view() ,name='Add_Talento_Humano'),
+path('asistente/talentohumano/edit/<pk>', editTalentoHumano.as_view() ,name='edit_Talento_Humano'),
 path('asistente/add', addMatricula.as_view() ,name='add_matricula'),
 path('asistente/edit/<pk>', editMatricula.as_view() ,name='edit_matricula'),
 path('asistente/horarios', HorariosList.as_view() ,name='list_Horario'),
 path('asistente/horarios2', HorariosList2.as_view() ,name='list_Horario2'),
 path('asistente/editHorario/<pk>', editHorario.as_view() ,name='edit_Horario'),
-path('asistente/editHorario2/<pk>', editHorario2.as_view() ,name='edit_Horario2')
+path('asistente/editHorario2/<pk>', editHorario2.as_view() ,name='edit_Horario2'),
+path('asistente/asignacion', AsignacionListado.as_view() ,name='asignacion_p'),
+path('asistente/programa/<programa>/', AsignacionPrograma.as_view(), name='programa_asistente'),
+path('asistente/programa/<programa>/add', AgregarEstudiantes.as_view(), name='AgregarEstudiantes'),
  
 ] 

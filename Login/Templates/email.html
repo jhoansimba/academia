@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reseteo de contraseña</title>
+</head>
+<body>
+    <h1>Usted <b></b> {{user.first_name | upper}} {{user.last_name | upper}} </b>, ha solicitado reestablecer su contraseña</h1>
+    <h2>Para hacerlo de clic en el siguiente botón</h2>
+    <a href="http://127.0.0.1:8000/login/update/{{password}}" type="button" class="btn btn-success"  > Clic aquí </a>
+
+    
+</body>
+</html>
+
+
+
