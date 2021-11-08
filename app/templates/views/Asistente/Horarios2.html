@@ -1,5 +1,5 @@
 {% include "views/default/header.html" %}
-
+{% include "views/default/direccion.html" %}
 
 
 
@@ -20,9 +20,9 @@
         <table class="table" id="table_estudiantes">
             <thead>
                 <tr>
-                    <th>Hora</th>
                     <th>Curso</th>
-                    <th>Docentes</th>
+                    <th>Hora</th>
+                    <th>Opciones</th>
                    
 
                 </tr>
@@ -45,6 +45,8 @@
         </table>
     </div>
     <div class="card-footer">
-        <a href="" type="button" class="btn btn-success">Agregar Curso</a>
+        <a class="related-widget-wrapper-link add-related btn btn-success" id="add_id_id_curso"
+            href="/admin/app/cursos/add/?_to_field=nombre&amp;_popup=1" title="Añadir otro cursos" style=""><img
+                src="/static/admin/img/icon-addlink.svg" alt="Añadir"> Agregar Programa</a>
     </div>
     {% include "views/default/footer.html" %}

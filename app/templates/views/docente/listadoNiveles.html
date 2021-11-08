@@ -13,11 +13,16 @@
         <center class="oscuro" >
           <div class="card-body">
           <h5 class="card-title">Nivel</h5>
-          <a href="{{programa}}/nivel/{{i.nivel}}" class="btn btn-outline-primary btn-lg btn-block btn-sm">{{i.nivel}}</a>
+          <a href="{{programa}}/nivel/{{i.nivel}}/getparalelo" class="btn btn-outline-primary btn-lg btn-block btn-sm">{{i.nivel}}</a>
         </div>
         </center>
       </div>
     </div>
     {% endfor %}
+   
+    
   </div>
+  <br>
+  <div class="container"><a class="btn btn-primary" href="javascript:history.back()"> Volver Atrás</a></div>
+  <br>
 {% include "views/default/footer.html" %}

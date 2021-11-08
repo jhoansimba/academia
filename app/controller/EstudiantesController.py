@@ -147,9 +147,19 @@ class Comprobante (LoginRequiredMixin,View):
         # response['Content-Disposition'] = 'attachment; filename="Comprobante.pdf"'
         template = get_template('views/estudiantes/comprobante.html')
         est = Estudiante.objects.get(id_est = id)
+        precioPrograma = 0
+        precioCurso = 0
+        for i in est.id_programa.all():
+            precioPrograma += i.mensualidad
+        for i in  est.id_curso.all():
+            for j in i.detalle.all():
+                precioCurso+= j.valor
         data = {
             'est' : est, 
-            'title' : f'Comprobante a pagar de {est.Estudiante()}'
+            'title' : f'Comprobante a pagar de {est.Estudiante()}',
+            'precioPrograma' : precioPrograma,
+            'precioCurso' : precioCurso,
+            'total' : precioCurso + precioPrograma
         }
         html = template.render(data)
          # create a pdf

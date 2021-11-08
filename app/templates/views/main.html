@@ -1,5 +1,5 @@
 {% include "views/default/header.html" %}
-
+{% include "views/default/direccion.html" %}
 
 
 
@@ -12,6 +12,7 @@
     <div class="card-body">
       <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+        
         {% if info %}
         <h2> Está seguro de eliminar a <b style="color: red;">{{info.object}}</b> </h2>
         {% endif %}
@@ -44,13 +45,11 @@
           <option value="{{i.id}}">{{i}}</option>
           {% endfor %}
         </select>
-        <a class="related-widget-wrapper-link add-related" href="" id="anchor" 
-           title="Añadir otra"><img
-            src="/static/admin/img/icon-addlink.svg" alt="Añadir">Añadir otra </a>
-       
+        <a class="related-widget-wrapper-link add-related"
+          href="http://127.0.0.1:8000/admin/User/paralelo/add/?_to_field=id&_popup=1" id="add_id_paralelo"
+          title="Añadir otra"><img src="/static/admin/img/icon-addlink.svg" alt="Añadir">Añadir otra </a>
+
         <br>
-        
-        
         {% elif field.name == 'nivel' and niveles %}
         <br>
         {% elif field.name == 'materia' %}
@@ -68,9 +67,8 @@
           <option value="{{i.id}}">{{i}}</option>
           {% endfor %}
         </select>
-        {% elif field.name == 'fecha_est' or field.name == 'fecha' or field.name == 'inicio' or field.name == 'fin' or
-        field.name == 'Fecha' %}
-        <label for="{{field.name}}"> {{field.label}}</label>
+        {% elif field.name == 'fecha_est' or field.name == 'fecha' or field.name == 'Fecha' %}
+        <label for="{{field.name}}">{{field.label}}</label>
         <input type="date" name="{{field.name}}" class="form-control" id="{{field.name}}">
         {% elif field.name == 'estudiante' %}
         <label for="id_estudiante">Estudiantes</label>
@@ -94,9 +92,13 @@
         <div class="input-group">
           {{field}}
           <div class="input-group-append">
-            <a class="related-widget-wrapper-link add-related btn btn-outline-success " id="add_id_id_ciudad"
-              href="/direccion/" title="Añadir otro ciudad"><img src="/static/admin/img/icon-addlink.svg" alt="Añadir"
+
+            <a class="related-widget-wrapper-link add-related btn btn-outline-success " id="add_id_id_direccion"
+              href="/admin/app/direccion/add/?_to_field=id_direc&amp;_popup=1" title="Añadir otro direccion"
+              title="Añadir otro ciudad"><img src="/static/admin/img/icon-addlink.svg" alt="Añadir"
                 type="button">Agregar otra</a>
+            <br>
+
           </div>
         </div>
         <br>
@@ -116,12 +118,13 @@
 
 
 <script>
-    window.onload = function() {
-            var anchor = document.getElementById("anchor");         
-            anchor.onclick = () => {
-                var url = "http://127.0.0.1:8000/admin/User/paralelo/add/?_to_field=id&_popup=1";
-                let a = window.open(url, "_blank", 'width=600,height=500'); 
-              };
-        }
+  window.onload = function () {
+    var anchor = document.getElementById("anchor");
+    anchor.onclick = () => {
+      var url = "http://127.0.0.1:8000/admin/User/paralelo/add/?_to_field=id&_popup=1";
+      let a = window.open(url, "_blank", 'width=600,height=500');
+    };
+
+  }
 </script>
 {% include "views/default/footer.html" %}

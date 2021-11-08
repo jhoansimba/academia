@@ -13,13 +13,15 @@ from django.db.models.enums import ChoicesMeta
 class Provincia (models.Model):
     id_provincia = models.AutoField(primary_key=True)
     nombre_provincia = models.CharField(max_length=11)
-
+    def __str__(self) -> str:
+        return '{}'.format(self.nombre_provincia)
 
 class Ciudad (models.Model):
     id_ciudad = models.AutoField(primary_key=True)
     nombre_ciudad = models.CharField(max_length=11)
     id_provincia = models.ForeignKey(Provincia, on_delete=models.CASCADE)
-
+    def __str__(self) -> str:
+        return '{}'.format(self.nombre_ciudad)
 
 class Direccion (models.Model):
     id_direc = models.AutoField(primary_key=True)
@@ -91,11 +93,15 @@ class Niveles(models.Model):
         txt = model_to_dict(self)
         txt['horario'] = self.horario.json()
         return txt
+    def getHorarios(self):
+        txt = ''
+        for i in self.horario.all():
+            txt += str(i) + '  '
+        return txt
     def __str__(self) -> str:
         txt = ''
         for i in self.horario.all():
             txt += str(i) + '  '
-        
         return '{}, horarios de: {}'.format(self.nivel, txt)
 
 
@@ -161,7 +167,6 @@ class Estudiante(models.Model):
     def Estudiante(self):
         txt = '{0} {1} '
         return txt.format(self.nombres_est, self.apellidos_est)
-
     def __str__(self) -> str:
         txt = '{0} {1} '
         return txt.format(self.nombres_est, self.apellidos_est)
@@ -389,8 +394,8 @@ class Comprobante (models.Model):
         return '{}'.format(self.file_comp)
 
     def __str__(self) -> str:
-        txt = '{0}{1}'
-        return txt.format("comprobante de: ", self.id_est)
+        txt = '{}'
+        return txt.format( self.id_est)
 
 
 class Matricula(models.Model):
@@ -437,3 +442,5 @@ class Asistencia (models.Model):
 class MatriculaActual(models.Model):
     asignacion = models.ManyToManyField(Estudiante)
     nivel = models.ForeignKey(Numero, on_delete=CASCADE)
+    def __str__(self) -> str:
+        return '{} {} {}'.format(self.asignacion,"a",self.nivel)

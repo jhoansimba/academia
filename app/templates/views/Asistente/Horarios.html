@@ -1,14 +1,15 @@
 {% include "views/default/header.html" %}
+{% include "views/default/direccion.html" %}
 
 <ul class="nav nav-tabs">
     <li class="nav-item">
-      <a class="nav-link active" aria-current="page" href="horarios1">Programas</a>
+        <a class="nav-link active" aria-current="page" href="horarios1">Programas</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="horarios2">Cursos</a>
+        <a class="nav-link" href="horarios2">Cursos</a>
     </li>
-   
-  </ul>
+
+</ul>
 
 
 <div class="card">
@@ -18,10 +19,10 @@
         <table class="table" id="table_estudiantes">
             <thead>
                 <tr>
-                    <th>Hora</th>
                     <th>Curso</th>
-                    <th>Docentes</th>
-                   
+                    <th>Hora</th>
+                    <th>Opciones</th>
+
 
                 </tr>
             </thead>
@@ -29,20 +30,25 @@
                 {% for items in object_list %}
                 <tr>
                     <td> {{items.nombre}} </td>
-                  
-                    <td> {{items.horario}} </td>
-                    
+                    <td> 
+                    {% for i in items.nivel.all %}
+                    <li>Nivel {{i}} </li>
+                    {% endfor %}</td>
+
                     <td>
                         <a href="editHorario/{{items.id}}" class="btn btn-warning" type="button">Editar</a>
                     </td>
                 </tr>
                 {% endfor %}
-                
 
-            </tbody>  
+
+            </tbody>
         </table>
     </div>
     <div class="card-footer">
-        <a href="" type="button" class="btn btn-success">Agregar Programa</a>
+        <a class="related-widget-wrapper-link add-related btn btn-success" id="add_id_id_curso"
+        href="/admin/app/programa/add/?_to_field=id&amp;_popup=1"  title="Añadir otro cursos" style=""><img
+                src="/static/admin/img/icon-addlink.svg" alt="Añadir"> Agregar Programa</a>
+     
     </div>
     {% include "views/default/footer.html" %}

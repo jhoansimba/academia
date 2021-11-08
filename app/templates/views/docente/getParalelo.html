@@ -1,0 +1,33 @@
+{% include "views/default/header.html" %}
+<div class="container">
+<div class="card-group">
+    {% if paralelo %}
+    {% for i in paralelo %}
+    
+    <div class="card">
+        <h4 class="card-title" align = "center" >Paralelo</h4>
+        <div class="card-body">
+            <h1 style="font-size: 100px;" align = "center">{{i.nombre | upper}} </h1>
+            <p class="card-text" align = "center"><a href="{{i.nombre}}" type="button" class="btn btn-outline-dark"  >Acceder</a></p>
+        </div>
+    </div>
+{% endfor %}
+{% else %}
+<div class="card">
+    <h4 class="card-title">404</h4>
+    <div class="card-body">
+        <h1 style="font-size: 50px;">No se le ha asignado ninguno paralelo </h1>
+        <p class="card-text"><a href="/docentes/programa/{{programa}}" type="button" class="btn btn-outline-dark" >Regresar</a></p>
+    </div>
+</div>
+
+
+    {% endif %}
+</div>
+<br>
+<a class="btn btn-primary" href="javascript:history.back()"> Volver Atrás</a>
+<br>
+</div>
+<br>
+
+{% include "views/default/footer.html" %}

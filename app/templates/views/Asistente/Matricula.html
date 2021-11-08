@@ -11,47 +11,92 @@
                     <th>Estudiante</th>
                     <th>Curso</th>
                     <th>Programas</th>
+                    <th>Nivel</th>
                     <th>Fecha</th>
                     <th>Matricula</th>
-                    <th>Ver Comprobante</th>
-                    <th>Opciones</th>
-
                 </tr>
             </thead>
             <tbody>
                 {% for items in object_list %}
-                <tr>
-                    <td> {{items.estudiante}} </td>
-                    <td>
-                        {% for j in items.Curso %}
-                        <p> {{j}} </p>
-                        {% endfor %}
-                       </td><td>
-                        {% for j in items.Programa %}
-                        <p> {{j}} </p>
-                        {% endfor %}
-                       </td>
-                    <td> {{items.fecha}} </td>
-                    <td>
-                        {% if items.matricula == True %}
-                        <input type="checkbox" checked disabled >
-                        {%endif%}
-                    </td>
-                    <td>
-                        <a href="/media/{{items.id_comp.File}}" target="_blank" > Click aquí</a>
-                    </td>
-                    <td>
-                        <a href="edit/{{items.id}}" class="btn btn-warning" type="button">Editar</a>
-                    </td>
+                <td> {{items.estudiante}} </td>
+                <td>
+                    {% for i in items.estudiante.id_curso.all %}
+                    <li> {{i}} </li>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for i in items.estudiante.id_programa.all %}
+                    <li> {{i}} </li>
+                    {% endfor %}
+                </td>
+                <td> {{items.nivel}} </td>
+                <td> {{items.fecha}} </td>
+                <td>
+                    {% if items.matricula == True %}
+                    <input type="checkbox" checked disabled>
+                    <a href="/media/{{items.id_comp.File}}"> Ver Comprobante </a>
+                    {% else %}
+                    <div class="row">
+                        <div class="col-lg-10">
+                            {% for comprobante in items.comprobante %}
+                            {% if comprobante.id_est_id == items.estudiante.id_est %}
+                            <form action="" method="POST" id="{{items.estudiante.id_est}}">
+                                {% csrf_token %}
+                                <input type="hidden" name="estudiante" value="{{items.estudiante.id_est}}">
+                                <input type="hidden" name="fecha" value="{{date}}">
+                                <select class="form-control" name="id_comp">
+                                    <option value="{{comprobante.i_comp}}" selected>{{comprobante}} </option>
+                                </select>
+                                <a href="/media/{{comprobante.File}}"> Ver</a>
+                                {% endif %}
+                                {% endfor %}
+                        </div>
+                        <div class="col-lg-2">
+                            <input type="checkbox" name="matricula">
+                        </div>
+                    </div>
+                    </form>
+                    {%endif%}
+                </td>
                 </tr>
                 {% endfor %}
 
-            </tbody>  
+            </tbody>
         </table>
     </div>
     <div class="card-footer">
-        <a href="add" type="button" class="btn btn-success">Agregar Matrícula</a>
+        <button id="save" type="button" class="btn btn-success">Guardar</button>
         <a href="asignarprograma" type="button" class="btn btn-success">Matricula Programas</a>
-        <a href="asignarcursos" type="button" class="btn btn-success">Matricula Cursos</a>
+                <a href="asignarcursos" type="button" class="btn btn-success">Matricula Cursos</a>
     </div>
+    
+    <script>
+        $('#save').on('click', function () {
+            let array = "{{noMatriculados}}".split(",")
+            for (let index = 0; index < array.length - 1; index++) {
+                const element = '#' + array[index];
+                let form = $(element).serializeArray();
+                if (form.length == 5) {
+                    $.ajax({
+                        url: 'add',
+                        method: 'post',
+                        data: form
+                    }).done((req => {
+                        if (req.info) {
+                            alert('Matrícula registrada');
+                            location.reload();
+
+                        } else {
+                            alert('Error: ', req.errors);
+                        }
+
+                    }));
+                }
+            }
+
+
+        });
+
+
+    </script>
     {% include "views/default/footer.html" %}

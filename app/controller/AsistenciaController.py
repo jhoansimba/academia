@@ -3,11 +3,12 @@ from django.http.response import JsonResponse
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import *
-from app.models import Asistencia, Estudiante, Horarios, Programa
-from django.shortcuts import render, HttpResponse
+from app.models import Asistencia, Estudiante, Horarios, Niveles, Programa
+from django.shortcuts import redirect, render, HttpResponse
 from datetime import datetime
 from User.models import *
 def Asistencialist(request):
+    
     data = {
         'estudiantes' : Estudiante.objects.all(),
         'horarios' : Horarios.objects.all(),
@@ -20,20 +21,25 @@ class AsistenciaPro(LoginRequiredMixin,CreateView):
     form_class = AddAsistenciaForm
     template_name = 'views/asistencia/asistencia.html'
     success_url = '/docente/listado/'
-    est = ''
+    est = []
     horario = []
     def dispatch(self, request, *args, **kwargs):
+        self.est = []
+        nivel = self.kwargs['nivel']
         pro = self.kwargs['programa']
-        n = self.kwargs['nivel']
+        par = self.kwargs['paralelo']
+        validacion = AsigacionParalelo.objects.filter(paralelo__usuario_id= self.request.user.id).filter(paralelo__nivel=nivel).order_by('nombre').filter(paralelo__programa_general__programa=pro).filter(nombre = par)
+        for items in AsigacionParalelo.objects.filter(paralelo__usuario_id= self.request.user.id).filter(paralelo__nivel=nivel).order_by('nombre').filter(paralelo__programa_general__programa=pro).filter(nombre = par):
+            for est in items.estudiantes.all():
+                self.est.append(est)
         getHorario = Programa.objects.get(id = pro).nivel.all() # Horario
         horario = []
         for i in getHorario:
             nivel = '' + str(i.nivel)
-            if nivel == n:
+            if nivel == nivel:
                 for j in i.horario.all():
                     horario.append(j.json())
         self.horario = horario
-        self.est = Estudiante.objects.filter(id_programa = pro).filter(matriculaactual__nivel = n)
         return super().dispatch(request, *args, **kwargs)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -41,6 +47,14 @@ class AsistenciaPro(LoginRequiredMixin,CreateView):
         context['horarios'] = self.horario
         context['date'] = datetime.now()
         return context
+    def get(self, request, *args, **kwargs):
+        nivel = self.kwargs['nivel']
+        pro = self.kwargs['programa']
+        par = self.kwargs['paralelo']
+        validacion = AsigacionParalelo.objects.filter(paralelo__usuario_id= self.request.user.id).filter(paralelo__nivel=nivel).order_by('nombre').filter(paralelo__programa_general__programa=pro).filter(nombre = par).exists()
+        if validacion == False:
+            return redirect(f'/docentes/programa/{pro}')
+        return super().get(request, *args, **kwargs)
     def post(self, request, *args, **kwargs):
         data = {}
         try:

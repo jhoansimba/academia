@@ -41,7 +41,8 @@ class Paralelo(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=CASCADE)
     nivel = models.ForeignKey(Numero, on_delete= CASCADE)
     def __str__(self) -> str:
-        return '{} | Nivel:  {} '.format(self.programa_general, self.nivel)
+        return '{} | Nivel:  {} - {}'.format(self.programa_general, self.nivel, self.usuario)
+    
 class AsigacionParalelo(models.Model):
     paralelo= models.ForeignKey(Paralelo, on_delete = CASCADE)
     nombre = models.CharField(max_length=1, verbose_name="Nombre del paralelo")
