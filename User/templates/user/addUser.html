@@ -12,7 +12,7 @@
               {% if field.name == 'password' %}
               <input type="hidden" name="password" value="password">
               {% elif field.name == 'groups' %}
-             <label for="id_groups">Cargo</label>
+             <label for="id_groups">Rol</label>
               <select class="form-select"  name="groups" required id="id_groups">
                   <option value="0">Seleccione una opción</option>
                   {% for i in grupos %}
@@ -35,7 +35,7 @@
       </div>
   </div>  
 </div>  
-{{cursos}}
+
 <script>
     $('#id_groups').on('change', function(){
         let info = $(this).val();

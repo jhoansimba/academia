@@ -18,6 +18,8 @@ class FormularioUser(ModelForm):
         model = Usuario
         fields = ('username', 'first_name', 'last_name', 'password', 'email', 'groups', 'is_staff', 'curso', 'programa')
         labels = {
-            'username' : 'Cédula de Identidad'
+            'username' : 'Cédula de Identidad',
+            'first_name':'Nombres', 
+            'is_staff':'Activo'
         }
         

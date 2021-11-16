@@ -12,6 +12,7 @@ class Usuario(AbstractUser):
     curso = models.ManyToManyField(Cursos, blank=True, verbose_name=" " )
     programa = models.ManyToManyField(Programa, blank=True, verbose_name=" ")
     asignacionEstudiantes = models.ManyToManyField(Estudiante, blank=True, verbose_name="Asignación de Estudiantes ")
+    
     def json(self):
         txt = model_to_dict(self)
         return txt
@@ -25,7 +26,8 @@ class Usuario(AbstractUser):
             if password.count(psw) == 0:
                 self.set_password(self.password)
         return super().save(*args, **kwargs)
-
+    def __str__(self) -> str:
+        return '{} {}'.format(self.first_name, self.last_name)
 class Periodo(models.Model):
     nombre = models.CharField(max_length=50, primary_key=True)
     def __str__(self) -> str:
@@ -56,3 +58,21 @@ class AsigacionParalelo(models.Model):
         return txt
     def __str__(self) -> str:
         return 'paralelo:{}, {}'.format(self.nombre, self.paralelo)
+
+class AsignacionCurso(models.Model):
+    periodo = models.ForeignKey(Periodo, on_delete = CASCADE)
+    curso = models.ManyToManyField(Cursos)
+    usuario = models.ForeignKey(Usuario, on_delete=CASCADE)
+    def __str__(self) -> str:
+        listado = ''
+        for item in self.curso.all():
+            listado += str(item) + ', '
+        return '{}, {} {}'.format(self.periodo, listado, self.usuario)
+class AsignacionCursoEstudiante(models.Model):
+    asignacionCurso = models.ForeignKey(AsignacionCurso, on_delete = CASCADE)
+    estudiantes = models.ManyToManyField(Estudiante)
+    def __str__(self) -> str:
+        listado = ''
+        for item in self.estudiantes.all():
+            listado += str(item) + ', '
+        return '{}, {}'.format(self.asignacionCurso, listado)

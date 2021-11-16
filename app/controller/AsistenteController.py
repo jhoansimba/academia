@@ -58,7 +58,8 @@ class MatriculaList(LoginRequiredMixin, ListView):
             else:
                 noMatriculados += i.id_est + ','
             data.append({'estudiante': i, 'nivel': nivel, 'fecha': fecha, 'matricula': matricula,
-                        'id_comp': id_comp, 'comprobante': Comprobante.objects.all()})
+                        'id_comp': id_comp, 'comprobante': Comprobante.objects.filter(id_est = i)})
+        print("data : " , data)
         context = super().get_context_data(**kwargs)
         context['name'] = ModeloTitulo
         context['object_list'] = data
@@ -303,7 +304,8 @@ class AsignacionListado(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['name'] = 'Listado de Estudiantes'
-        context['cursos_list'] = Programa.objects.all()
+        context['ruta'] = 'programa/'
+        context['cursos_list'] = Programa.objects.all().exclude(nombre = 'ninguno')
         return context
 
 
@@ -341,8 +343,6 @@ class AgregarEstudiantes(CreateView):
     def get_context_data(self, **kwargs):
         id = self.kwargs['programa']
         self.estudiantes = []
-        for i in Paralelo.objects.all():
-            print('IDS: ', i.id)
         for i in Estudiante.objects.filter(id_programa=id):
             for matricula in MatriculaActual.objects.all():
                 for est in matricula.asignacion.all():

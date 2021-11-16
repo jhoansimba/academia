@@ -46,6 +46,9 @@ class AsistenciaPro(LoginRequiredMixin,CreateView):
         context['estudiantes'] = self.est
         context['horarios'] = self.horario
         context['date'] = datetime.now()
+        context['categoria'] = 'P'
+        context['horario'] = 'True'
+
         return context
     def get(self, request, *args, **kwargs):
         nivel = self.kwargs['nivel']

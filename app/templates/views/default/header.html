@@ -96,69 +96,68 @@
     </div> 
 
   </header> -->
-  <header>
-    <nav style="background: rgba(2, 121, 8, 0.932);"
-      class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
-      <div class="container">
-        
-        <a class="navbar-brand"><img src="{%static 'images/LIBRO.png'%}" class="imglogo"><a
-            class="navbar-brand"><img src="{%static 'images/academia.png'%}" class="letras"></a>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse d-sm-inline-flex flex-sm-row-reverse">
-          <ul class="nav nav-pills">
-            <li class="nav-item">
-              <a class="nav-link active bg-info" aria-current="page" href="/">Inicio</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link" href="{% url 'cursos'%}" aria-current="page"
-                style="color: rgb(255, 255, 255);">Servicios</a>
+  <nav style="background: rgba(49, 132, 255, 0.932);"
+    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+    <div class="container">
 
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'nosotros' %}" style="color: white;">Nosotros</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" style="color: white;">Contactos</a>
-            </li>
-
-          </ul>
-
-        </div>
-      </div>
-
-      {% if user.is_authenticated %}
-
-      {% if request.user.is_superuser %}
-      <a class="btn btn-primary" href="/Bienvenido" role="button">Admin</a>
-
-
-
-
-
-      {% else %}
-      {% for i in request.user.groups.all %}
-      <a class="btn btn-primary" href="/Bienvenido" role="button">
-        {{i}}
+      <a class="navbar-brand"><img src="{%static 'images/LIBRO.png'%}" class="imglogo"><a class="navbar-brand"><img
+            src="{%static 'images/academia.png'%}" class="letras"></a>
       </a>
-      {% endfor %}
-      {% endif %}
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse d-sm-inline-flex flex-sm-row-reverse">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="btn btn-second" style="margin: 11px;" aria-current="page" href="/">Inicio</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="btn btn-second" href="{% url 'cursos'%}" aria-current="page" style="margin: 11px; color: rgb(0, 0, 0);">Servicios</a>
 
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-second" href="{% url 'nosotros' %}" style="margin: 11px; color: rgb(0, 0, 0);">Nosotros</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-second" href="#" style="margin: 11px; color: rgb(0, 0, 0);">Contactos</a>
+          </li>
 
-      <div>
-
-
-        <a style="margin: 21px" style="color: aliceblue;" href="{% url 'logout' %}" role="button"><img
-            src="{%static 'images/logout.png'%}" width="35" height="35" style="margin-top: 2%;"></a>
+        </ul>
 
       </div>
-      {% else %}
-      <a style="margin: 21px" class="btn btn-primary" href="/login/" role="button">Iniciar Sesion</a>
+    </div>
 
-      {% endif %}
-    </nav>
-  </header>
- 
+    {% if user.is_authenticated %}
+
+    {% if request.user.is_superuser %}
+    <a class="btn btn-primary" href="/Bienvenido" role="button">Admin</a>
+
+
+
+
+
+    {% else %}
+    {% for i in request.user.groups.all %}
+    <a class="btn btn-primary" href="/Bienvenido" role="button">
+      {{i}}
+    </a>
+    {% endfor %}
+    {% endif %}
+
+
+    <div>
+
+
+      <a style="margin: 21px" style="color: aliceblue;" href="{% url 'logout' %}" role="button"><img
+          src="{%static 'images/logout.png'%}" width="35" height="35" style="margin-top: 2%;"></a>
+
+    </div>
+
+    {% else %}
+    <a style="margin: 21px" class="btn btn-success" href="/login/" role="button">Iniciar Sesion</a>
+
+    {% endif %}
+  </nav>
+
+  {% include "views/default/menu.html" %}

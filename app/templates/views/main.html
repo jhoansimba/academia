@@ -12,7 +12,7 @@
     <div class="card-body">
       <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        
+
         {% if info %}
         <h2> Está seguro de eliminar a <b style="color: red;">{{info.object}}</b> </h2>
         {% endif %}
@@ -38,6 +38,22 @@
           <option value="{{i.id_est}}">{{i}}</option>
           {% endfor %}
         </select>
+        <!-- CursoController - metodo AsignacionCursosAdd
+        @param AsignacionCurso
+        @action add AsignacionCursoEstudiante
+        -->
+        {% elif field.name == 'asignacionCurso' %}
+        <label for="id_asignacionCurso">Asignación de Curso</label>
+        <select class="form-select" name="asignacionCurso" required id="id_asignacionCurso">
+          {% for i in addCursos %}
+          <option value="{{i.id}}">{{i}}</option>
+          {% endfor %}
+        </select>
+          <!-- Add link de ventana para agregar AsignacionCurso -->
+          <a class="related-widget-wrapper-link add-related" id="add_id_asignacionCurso"
+            href="/admin/User/asignacioncurso/add/?_to_field=id&amp;_popup=1" title="Añadir otro asignacion curso"><img
+              src="/static/admin/img/icon-addlink.svg" alt="Añadir">Agregar</a><br>
+
         {% elif field.name == 'paralelo' %}
         <label for="id_paralelo">Seleccione matrícula actual</label>
         <select class="form-select" name="paralelo" required id="id_paralelo">

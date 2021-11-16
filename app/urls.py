@@ -1,3 +1,4 @@
+from app.controller.CursosController import AsignacionCursos, AsignacionCursosAdd, addAsistenciaCurso
 from app.models import Talento_Humano
 from app.controller.AsistenteController import *
 from app.controller.AsistenciaController import *
@@ -14,7 +15,7 @@ urlpatterns = [
     path('representante/listcomprobante/', login_required(listComprobante.as_view()), name='comprobante_estudiantes'),
     path('representante/delete/<pk>',login_required(deleteEstudiuantes.as_view()), name='delete_estudiantes'),
     path('representante/comprobante/<pk>',login_required(Comprobante.as_view()), name='comprobante_estudiantes'),
-    path('representante/salud', login_required(fichaSalud.as_view()), name='list_estudiantes'),
+    path('representante/salud', login_required(fichaSalud.as_view()), name='list_salud'),
     path('representante/addsalud', login_required(addSalud.as_view()), name='add_salud'),
      path('representante/salud/edit/<pk>', login_required(editSalud.as_view()), name='edit_salud'),
       path('representante/salud/delete/<pk>', login_required(deleteSalud.as_view()), name='delete_salud'),
@@ -23,6 +24,7 @@ urlpatterns = [
     path('docentes/', DocenteView.as_view(), name='list_estudiantes_docente'),
     # path('docentes/add', login_required(addNotas.as_view()), name='addNotas'),
     path('docentes/programa/<programa>/nivel/<nivel>/getparalelo/<paralelo>/edit/<pk>', editNotas.as_view(), name='EDITNotas'),
+    path('docentes/curso/<pk>/', addAsistenciaCurso.as_view(), name='asistencia_curso'),
     # path('edit/<pk>', editNotasEstudiantes.as_view(), name='NotasEdit'),
     #  path('docentes/listado/asistencia/add/<str:pro>', AddAsistencia.as_view(), name='add_asistencia'),
     # path('docentes/asistencia/add/<str:pro>', AddAsistencia.as_view(), name='add_asistencia'),
@@ -47,6 +49,8 @@ path('asistente/horarios2', HorariosList2.as_view() ,name='list_Horario2'),
 path('asistente/editHorario/<pk>', editHorario.as_view() ,name='edit_Horario'),
 path('asistente/editHorario2/<pk>', editHorario2.as_view() ,name='edit_Horario2'),
 path('asistente/asignacion', AsignacionListado.as_view() ,name='asignacion_p'),
+path('asistente/asignacioncursos', AsignacionCursos.as_view() ,name='asignacion_c'),
+path('asistente/asignacioncursos/add/<pk>', AsignacionCursosAdd.as_view() ,name='asignacion_c'),
 path('asistente/programa/<programa>/', AsignacionPrograma.as_view(), name='programa_asistente'),
 path('asistente/programa/<programa>/add', AgregarEstudiantes.as_view(), name='AgregarEstudiantes'),
  

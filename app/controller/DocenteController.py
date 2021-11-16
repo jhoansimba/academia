@@ -11,7 +11,7 @@ from app.Formularios.formSalud import AddSalud
 from django.views.generic.edit import DeleteView, UpdateView
 from django.views.generic.list import ListView
 from app.Formularios.formErtudiante import AddEstudiante, FormEstudiante
-from app.models import Cursos, Estudiante, Ficha_salud, Matricula, MatriculaActual, Notas, Numero, Programa
+from app.models import Cursos, Estudiante, Ficha_salud, Horarios, Matricula, MatriculaActual, Notas, Numero, Programa
 from django.views.generic import CreateView
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -26,14 +26,17 @@ class DocenteView(LoginRequiredMixin, TemplateView):
     title = 'Lista de Estudiantes'
 
     def get_context_data(self, **kwargs):
-        cursos = [i.nombre for i in Cursos.objects.filter(
-            usuario__id=self.request.user.id).exclude(nombre='Ninguno')]
-        programa = [i for i in Programa.objects.filter(
-            usuario__id=self.request.user.id).exclude(nombre='Ninguno')]
-        # print(programas)
+        data = []
+        for i in Cursos.objects.filter(usuario__id=self.request.user.id).exclude(nombre='Ninguno'):
+            data.append({'ruta': 'curso/', 'id' : i.nombre, 'nombre': i.nombre, 'imagen' : i.imagen_curso, 'horario': Horarios.objects.get(id_horario = i.horario_id)})
+        
+        for i in Programa.objects.filter(usuario__id=self.request.user.id).exclude(nombre='Ninguno'):
+            data.append({'ruta': 'programa/', 'id' : i.id, 'nombre': i.nombre, 'imagen' : i.imagen})
+
+        
         context = super().get_context_data(**kwargs)
         context['name'] = 'Listado de Estudiantes'
-        context['cursos_list'] = programa
+        context['cursos_list'] = data
         return context
 
     @method_decorator(csrf_exempt)

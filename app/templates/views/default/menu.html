@@ -30,98 +30,109 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="btn-menu">
-            <label style="color: black;" for="btn-menu"><img src="{%static 'images/menu.png'%}" class="imgmenu"> </label>
-        </div>
-
-    </div>
-    <div class="capa"></div>
+    
     <!--	--------------->
 
-
-    <input type="checkbox" id="btn-menu">
-    <div class="container-menu">
-        <div class="cont-menu">
-            {% if request.user.is_authenticated %}
-            <br>
-            <img src="{%static 'images/user.png'%}" class="imgmenu">
-            <p style="color: azure;"> <b>{{request.user.first_name | upper}} {{request.user.last_name | upper}}</b>  </p>
-            {% if request.user.is_superuser %}
-            
-            <nav>
-
-                <a href="/admin/"><img src="{%static 'images/admin.png'%}" class="imgmenu">
-                    <p> Aministrador total</p>
-                </a>
-                <a href="/adduser"><img src="{%static 'images/add_user.png'%}" class="imgmenu">
-                    <p> Registrar Nuevos Usuarios</p>
-                </a>
-                <a href="/admin/auth/group/"><img src="{%static 'images/grupos.png'%}" class="imgmenu">
-                    <p> Roles</p>
-                </a>
-
-            </nav>
-
-            {% else %}
-            {% for i in request.user.groups.all %}
-            <nav>
-
-                {% if i.name == 'Representante' %}
-
-                <a href="/representante/"><img src="{%static 'images/graduado.png'%}" class="imgmenu">
-                    <p>Datos del Estudiante</p>
-                </a>
-                <a href="/representante/salud"><img src="{%static 'images/salud.png'%}" class="imgmenu">
-                    <p>Ficha de Salud</p>
-                </a>
-                <a href="representante/listcomprobante/"><img src="{%static 'images/pago.png'%}" class="imgmenu">
-                    <p>Comprobante Pagado</p>
-                </a>
-                {% endif %}
-                {% if i.name == 'Docentes' %}
-                <a href="docentes/"><img src="{%static 'images/graduado.png'%}" class="imgmenu">
-                    <p>Listado de Cursos</p>
-                </a>
-
-                
-                </a>
-                {% endif %}
-                {% if i.name == 'Asistente' %}
-                <a href="asistente/"> <img src="{%static 'images/graduado.png'%}" class="imgmenu">
-                    <p>Listado de estuadiantes</p>
-                </a>
-                <a href="asistente/horarios"><img src="{%static 'images/horario.png'%}" class="imgmenu">
-                    <p>Horarios</p>
-                <a href="asistente/talentohumano"><img src="{%static 'images/talento.png'%}" class="imgmenu">
-                    <p>Talento Humano</p>
-                </a>
-                <a href="{% url 'asignacion_p' %}"><img src="{%static 'images/paralelos.png'%}" class="imgmenu">
-                    <p>Asignacion de Paralelo</p>
+    {% if request.user.is_authenticated %}
+    <div class="" style="margin-bottom: -40px;z-index: 1; position: sticky; width: 20px;">
+        <div class="btn-menu" style="width: 10px; margin-right: 20px;">
+          <label style="color: black; width: 10px; margin-right: 10px;" for="btn-menu"><img
+              src="{%static 'images/menu.png'%}" style="width: 15px; margin-right: 20px;" class="imgmenu">
+          </label>
+        </div>
+    
+      </div>
+      {% endif %}
+      <div class="capa"></div>
+      <!--	--------------->
+    
+    
+      <input type="checkbox" id="btn-menu">
+      <div class="container-menu" style="z-index: 1;position: absolute;">
+        <div class="cont-menu" style="padding: 20px; z-index: 1; position: absolute; ">
+          {% if request.user.is_authenticated %}
+          <br>
+          <center><img  src="{%static 'images/user.png'%}" class="imgmenu"></center>
+          
+          <p style="color: azure;"> <b>{{request.user.first_name | upper}} {{request.user.last_name | upper}}</b> </p>
+          <hr>
+          {% if request.user.is_superuser %}
+    
+          <nav>
+    
+            <a href="/admin/"><img src="{%static 'images/admin.png'%}" class="imgmenu">
+              <p> Aministrador total</p>
+            </a>
+            <a href="/adduser"><img src="{%static 'images/add_user.png'%}" class="imgmenu">
+              <p> Registrar Nuevos Usuarios</p>
+            </a>
+            <a href="/admin/auth/group/"><img src="{%static 'images/grupos.png'%}" class="imgmenu">
+              <p> Roles</p>
+            </a>
+    
+          </nav>
+    
+          {% else %}
+          {% for i in request.user.groups.all %}
+          <nav>
+    
+            {% if i.name == 'Representante' %}
+    
+            <a href="{% url 'list_estudiantes' %}"><img src="{%static 'images/graduado.png'%}" class="imgmenu">
+              <p>Datos del Estudiante</p>
+            </a>
+            <a href="{% url 'list_salud' %}"><img src="{%static 'images/salud.png'%}" class="imgmenu">
+              <p>Ficha de Salud</p>
+            </a>
+            <a href="{% url 'comprobante_estudiantes' %}"><img src="{%static 'images/pago.png'%}" class="imgmenu">
+            <p>Comprobante Pagado</p>
+            </a>
+            {% endif %}
+            {% if i.name == 'Docentes' %}
+            <a href="{% url 'list_estudiantes_docente' %}"><img src="{%static 'images/graduado.png'%}" class="imgmenu">
+              <p>Listado de Cursos y Programas</p>
+            </a>
+    
+    
+            </a>
+            {% endif %}
+            {% if i.name == 'Asistente' %}
+            <a href="{% url 'Talento_Humano' %}">
+              <p><img src="{%static 'images/talento.png'%}" class="imgmenu"> Talento Humano</p>
+            </a>
+            <a href="{% url 'list_matricula' %}"> 
+              <p><img src="{%static 'images/graduado.png'%}" class="imgmenu"> Listado de estuadiantes</p>
+            </a>
+            <a href="{% url 'list_Horario' %}">
+              <p><img src="{%static 'images/horario.png'%}" class="imgmenu"> Horarios</p>
+              <a href="{% url 'asignacion_p' %}">
+                <p><img src="{%static 'images/paralelos.png'%}" class="imgmenu"> Asignacion de Paralelo</p>
+                <a href="{% url 'asignacion_c' %}">
+                  <p><img src="{%static 'images/paralelos.png'%}" class="imgmenu"> Asignacion de Curso</p>
                 </a>
                 <!--<a href=""><img src="{%static 'images/cursos.png'%}" class="imgmenu">
-                    <p>Agregar cursos</p>
-                </a>-->
+                      <p>Agregar cursos</p>
+                  </a>-->
                 {% endif %}
                 <hr>
                 <a href="{% url 'changepassword'%}"><img src="{%static 'images/password.png'%}" class="imgmenu">
-                    <p>Cambiar Contraseña</p>
+                  <p>Cambiar Contraseña</p>
                 </a>
-
-            </nav>
-
-
-
-            {% endfor %}
-            {% endif %}
-            {% endif %}
-
-
-
-
-            <label for="btn-menu">✖️</label>
+    
+          </nav>
+    
+    
+    
+          {% endfor %}
+          {% endif %}
+          {% endif %}
+    
+    
+    
+    
+          <label for="btn-menu">✖️</label>
         </div>
-    </div>
+      </div>
 </body>
 
 </html>

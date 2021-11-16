@@ -7,7 +7,7 @@
         <div class="col-xs-6 col-md-2">
             <div class="card">
                 <div class="card-header ">
-                    <a href="programa/{{curso.id}}">
+                    <a href="{%if ruta%}{{ruta}}{%else%}{{curso.ruta}}{%endif%}{{curso.id}}">
                         <img src="/media/{{ curso.imagen }}"  class="thumbnail" width="200" height="200" />
                     </a>
                 </div>
@@ -21,8 +21,10 @@
                             </tr>
                             <tr>
                                 <td>
+                                    {% if curso.horario %}
                                     <p class="card-text"> <b> Horario de :</b></p>
                                     <p class="card-text">{{curso.horario }}</p>
+                                    {% endif %}
                                     {% for i in detalle %}
                                     <ul>
                                         <li> {{ i }} </li>

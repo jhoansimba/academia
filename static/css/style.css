@@ -84,7 +84,13 @@
 .button.medium {
 	width:350px;
 }
-
+.btn-second {
+	padding: 5px;
+	background: rgb(60, 193, 255);
+}
+.btn-second:hover {
+	background-color: lightblue;
+}
 
 .button.large {
 	width:450px;

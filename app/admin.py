@@ -12,9 +12,9 @@ admin.site.register(Notas)
 
 @admin.register(Asistencia)
 class Asistencia(admin.ModelAdmin):
-    list_display = ('Estudiante','fecha_asis','estado_asis')
+    list_display = ('Estudiante','fecha_asis','estado_asis', 'categoria')
     search_fields = ('fecha_asis','estado_asis')
-    list_filter = ('estado_asis',)
+    list_filter = ('estado_asis','categoria')
 
 @admin.register(Representante)
 class Representante (admin.ModelAdmin):

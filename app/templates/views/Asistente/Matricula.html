@@ -38,24 +38,25 @@
                     {% else %}
                     <div class="row">
                         <div class="col-lg-10">
-                            {% for comprobante in items.comprobante %}
-                            {% if comprobante.id_est_id == items.estudiante.id_est %}
+                            {% if items.comprobante %}
                             <form action="" method="POST" id="{{items.estudiante.id_est}}">
                                 {% csrf_token %}
                                 <input type="hidden" name="estudiante" value="{{items.estudiante.id_est}}">
                                 <input type="hidden" name="fecha" value="{{date}}">
                                 <select class="form-control" name="id_comp">
-                                    <option value="{{comprobante.i_comp}}" selected>{{comprobante}} </option>
+                                    <option value="{{items.comprobante.0.i_comp}}" selected>{{items.comprobante.0}} </option>
                                 </select>
-                                <a href="/media/{{comprobante.File}}"> Ver</a>
-                                {% endif %}
-                                {% endfor %}
-                        </div>
-                        <div class="col-lg-2">
-                            <input type="checkbox" name="matricula">
+                                <a href="/media/{{items.comprobante.0.File}}" target="_blank" class="btn btn-outline-dark" type="button" > Ver</a>
+                                <div class="col-lg-2">
+                                    <input type="checkbox" class="form-check-input" name="matricula">
+                                </div>
+                            </form>
+                            {% else %}
+                            <p>Sin Archivos que mostrar</p>
+                            {% endif %}
                         </div>
                     </div>
-                    </form>
+
                     {%endif%}
                 </td>
                 </tr>
@@ -66,10 +67,10 @@
     </div>
     <div class="card-footer">
         <button id="save" type="button" class="btn btn-success">Guardar</button>
-        <a href="asignarprograma" type="button" class="btn btn-success">Matricula Programas</a>
-                <a href="asignarcursos" type="button" class="btn btn-success">Matricula Cursos</a>
+        <a href="asignarprograma" type="button" class="btn btn-success">Asignación de Niveles</a>
+        <a href="asignarcursos" type="button" class="btn btn-success">Matricula Cursos</a>
     </div>
-    
+
     <script>
         $('#save').on('click', function () {
             let array = "{{noMatriculados}}".split(",")

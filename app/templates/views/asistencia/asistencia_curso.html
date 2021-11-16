@@ -1,5 +1,19 @@
 {% include "views/default/header.html" %}
-
+<nav aria-label="...">
+    <ul class="pagination">
+      <li class="page-item disabled">
+        <span class="page-link">Previous</span>
+      </li>     
+      <li class="page-item"><a class="page-link" href="/docentes">1</a></li>
+      <li class="page-item active" aria-current="page">
+        <span class="page-link">2</span>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#">Next</a>
+      </li>
+    </ul>
+  </nav>
 <div class="card">
     <div class="card-header">Agregar Asistencia</div>
     <div class="card-body">
@@ -8,14 +22,6 @@
         {% endif %}
                <form action="" id="form" method="POST">
             {% csrf_token %}
-            {% if horario %}
-            <select name="horario_id" class="form-select" required aria-label="Default select example" id="horarios">
-                <option value=""> Seleccione el horario </option>
-                {% for j in horarios %}
-                <option value="{{j.id_horario}}"> {{j.inicio_horario}} {{j.final_horario}} </option>
-                {% endfor %}
-            </select>
-            {% endif %}
             <table class="table">
                 <thead>
                     <th>Nombre del Estudiante</th>
@@ -34,7 +40,6 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <input type="hidden" name="categoria" value="{{categoria}}" >
             <input type="submit" class="btn btn-success" value="Aceptar">
         </form>
     </div>
@@ -47,7 +52,6 @@
         e.preventDefault();
         if(confirm('¿Está seguro de guardar la asistencia?')){
             let form = $('#form').serializeArray();
-            console.log('Formulario: ', form);
             $.ajax({
                 url : '',
                 method : 'POST',

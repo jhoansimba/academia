@@ -9,7 +9,7 @@
     <input id="s3" type="radio" name="slide1" />
     <input id="s4" type="radio" name="slide1" />
    
-    <div class="sh__content">
+    <div class="sh__content"  >
         <!-- Slider Item -->
         <div class="sh__item">
             <img src="{% static 'images/slide1.jpg' %}" alt="imgText" class="imgSlider" />
@@ -55,7 +55,7 @@
        
     </div>
      <!--botones-->
-     <div class="sh__btns">
+     <div class="sh__btns" style="z-index: 0;" >
         <label for="s1"></label>
         <label for="s2"></label>
         <label for="s3"></label>
@@ -77,34 +77,40 @@
 
 <div class="container">
 <div class="row">
-   <dir class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+   <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
       <div class="for_box">
-         <i><img src="{% static 'images/idea.png' %}"></i>
+         <i><center><img src="{% static 'images/idea.png' %}"></center></i>
+        <center>
          <h3>Aprende más</h3>
          <p>Que nuestros Niños tengan un pasantiempo en donde desarrollen nuevas habilidades</p>
-      </div>
-   </dir>
-   <dir class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+        </center>
+        </div>
+   </div>
+   <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
       <div class="for_box">
-         <i><img src="{% static 'images/tarea.png' %}"></i>
+         <i><center><img src="{% static 'images/tarea.png' %}"></center></i>
+         <center>
          <h3>Tareas Dirigidas</h3>
          <p>Ayudar a tus hijos en la nivelación de aprendizaje</p>
+        </center>
       </div>
-   </dir>
-   <dir class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+   </div>
+   <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
       <div class="for_box">
-         <i><img src="{% static 'images/idiomas.png' %}"></i>
+         <i><center><img src="{% static 'images/idiomas.png' %}"></center></i>
+        <center>
          <h3>Cursos de Ingles</h3>
          <p>Aprender Ingles de una forma divertida</p>
+        </center>
       </div>
-   </dir>
-   <dir class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+   </div>
+   <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
       <div class="for_box">
-         <i><img src="{% static 'images/computacion.png' %}"></i>
-         <h3>Computación</h3>
-         <p>La tecnología hoy es parte de nuestra vida diaria, y siempre debes aprender de ella</p>
+         <i><center><img src="{% static 'images/computacion.png' %}"></center></i>
+         <center><h3>Computación</h3>
+         <p>La tecnología hoy es parte de nuestra vida diaria, y siempre debes aprender de ella</p></center>
       </div>
-   </dir>
+   </div>
    
 </div>
 </div>
