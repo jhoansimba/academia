@@ -35,71 +35,11 @@
 
 <body>
 
-  <!--  <header>
-
-    <div  id="navigation" class="navbar navbar-inverse navbar-fixed-top default" role="navigation">
-      <div class="container">
--->
-  <!-- Brand and toggle get grouped for better mobile display -->
-  <!-- <div class="navbar-header">
-          <a class="navbar-brand"><img src="{%static 'images/LIBRO.png'%}" class="imglogo">
-          </a>
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href=>Academia de Formación</a>
-        </div>
-
-        <div class="navbar-collapse d-sm-inline-flex flex-sm-row-reverse">
-          <ul class="nav nav-pills">
-            <li class="nav-item">
-              <a class="nav-link active bg-danger" aria-current="page" href="/">Inicio</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link" href="{% url 'cursos'%}" aria-current="page" style="color: rgb(255, 255, 255);">Servicios</a>
-
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'nosotros' %}" style="color: rgb(255, 254, 254);">Nosotros</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" style="color: rgb(255, 254, 254);">Contactos</a>
-            </li>
-
-            {% if user.is_authenticated %}
-      <a class="btn btn-primary" href="/admin" role="button">Admin</a>
-
-
-      <li>
-        <a href="{% url 'admin:logout' %}" role="button">Cerrar Sesion</a>
-      </li>
-
-      {% else %}
-      <a class="btn btn-primary" href="/admin" role="button">Iniciar Sesion</a>
-      <div>
-        <li>
-          <a class="breadcrumb-item" href="/adduser" role="button">Registrar</a>
-        </li>
-      </div>
-      {% endif %}
-          </ul>
-
-        </div> -->
-
-
-  <!-- /.navbar-collapse -->
-  <!-- </div>
-
-      </div>
-    </div> 
-
-  </header> -->
+  
   <nav style="background: rgba(49, 132, 255, 0.932);"
     class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
     <div class="container">
-
+      
       <a class="navbar-brand"><img src="{%static 'images/LIBRO.png'%}" class="imglogo"><a class="navbar-brand"><img
             src="{%static 'images/academia.png'%}" class="letras"></a>
       </a>
@@ -113,15 +53,18 @@
             <a class="btn btn-second" style="margin: 11px;" aria-current="page" href="/">Inicio</a>
           </li>
           <li class="nav-item dropdown">
-            <a class="btn btn-second" href="{% url 'cursos'%}" aria-current="page" style="margin: 11px; color: rgb(0, 0, 0);">Servicios</a>
+            <a class="btn btn-second" href="{% url 'cursos'%}" aria-current="page"
+              style="margin: 11px; color: rgb(0, 0, 0);">Servicios</a>
 
           </li>
           <li class="nav-item">
-            <a class="btn btn-second" href="{% url 'nosotros' %}" style="margin: 11px; color: rgb(0, 0, 0);">Nosotros</a>
+            <a class="btn btn-second" href="{% url 'nosotros' %}"
+              style="margin: 11px; color: rgb(0, 0, 0);">Nosotros</a>
           </li>
           <li class="nav-item">
             <a class="btn btn-second" href="#" style="margin: 11px; color: rgb(0, 0, 0);">Contactos</a>
           </li>
+          
 
         </ul>
 
@@ -148,16 +91,16 @@
 
     <div>
 
+    <a class="btn btn-logout" style="margin: 21px; width: 41px; ; height: 41px;"  href="{% url 'logout' %}" role="button"></a>
+      
 
-      <a style="margin: 21px" style="color: aliceblue;" href="{% url 'logout' %}" role="button"><img
-          src="{%static 'images/logout.png'%}" width="35" height="35" style="margin-top: 2%;"></a>
-
-    </div>
+  </div>
 
     {% else %}
-    <a style="margin: 21px" class="btn btn-success" href="/login/" role="button">Iniciar Sesion</a>
+    <a style="margin: 21px" class="btn-login" href="/login/" role="button"></a>
 
     {% endif %}
+    
   </nav>
-
-  {% include "views/default/menu.html" %}
+{% include "views/default/menu.html" %}
+  

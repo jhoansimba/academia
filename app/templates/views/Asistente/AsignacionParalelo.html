@@ -5,7 +5,7 @@
         <div class="card-header">
             <h2>Listado de Matrícula</h2>
         </div>
-        
+
         <div class="card-body">
             <h4 class="card-title">{{object_list.0.paralelo}}</h4>
             <h6 class="card-subtitle text-muted">{{object_list.0.Docente}}</h6>
@@ -20,23 +20,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for est in items.estudiantes.all %}
-                    <tr >
-                        <td>{{est}}</td>
-                        
+                    {% for est in items.asignacionEstudiantes.all %}
+                    {% for estudiante in est.asignacion.all%}
+                    <tr>
+                        <td>{{estudiante}}</td>
+
                         <td>{{items.Nivel}} </td>
                         <td>{{items.nombre | upper}} </td>
 
                     </tr>
                     {% endfor %}
+                    {% endfor %}
                 </tbody>
             </table>
             {% endfor %}
-            
+
         </div>
         <div class="card-footer">
-            <a href="add" class="btn btn-success" > Agregar otra Matrícula </a>
-            <a href="{% url 'asignacion_p' %}" class="btn btn-primary" > Regresar </a>
+            <a href="add" class="btn btn-success"> Agregar otra Matrícula </a>
+            <a href="{% url 'asignacion_p' %}" class="btn btn-primary"> Regresar </a>
         </div>
     </div>
 </div>

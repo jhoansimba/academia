@@ -2,77 +2,95 @@
 <div class="container">
 
 
-<div class="card">
-      <div class="card-header">Registro</div>
-      {{form.errors}}
-      <div class="card-body">
-          <form action="" method="POST">
-              {% csrf_token %}
-              {% for field in form %}
-              {% if field.name == 'password' %}
-              <input type="hidden" name="password" value="password">
-              {% elif field.name == 'groups' %}
-             <label for="id_groups">Rol</label>
-              <select class="form-select"  name="groups" required id="id_groups">
-                  <option value="0">Seleccione una opción</option>
-                  {% for i in grupos %}
-                  <option value="{{i.id}}">{{i.name}}</option>
-                  {% endfor %}
-              </select>
-              <div id="cursos" >
-              </div>
-              <div id="programas" >
-              </div>
-              {% else %}
-              {{field.label}}
-              {{field}}
-              {% endif %}
-              {% endfor %}
-              <br>
-              <button type="submit" class="btn btn-success" >Aceptar</button>
-          </form>
-          
-      </div>
-  </div>  
-</div>  
+    <div class="card">
+        <div class="card-header">Registro</div>
+        {{form.errors}}
+        <div class="card-body">
+            <form action="" method="POST">
+                {% csrf_token %}
+                {% for field in form %}
+             
+                {% if field.name == 'password' %}
+                <input type="hidden" name="password" value="password">
+                {% elif field.name == 'groups' %}
+                <label for="id_groups">Rol</label>
+                <select class="form-select" name="groups" required id="id_groups">
+                    <option value="0">Seleccione una opción</option>
+                    {% for i in grupos %}
+                    <option value="{{i.id}}">{{i.name}}</option>
+                    {% endfor %}
+                </select>
+                <div id="cursos">
+                </div>
+                <div id="programas">
+                </div>
+                {% else %}
+                {{field.label}}
+                {{field}}
+               
+                {% endif %}
+                {% endfor %}
+                <br>
+                <button type="submit" class="btn btn-success">Aceptar</button>
+            </form>
+
+        </div>
+    </div>
+</div>
 
 <script>
-    $('#id_groups').on('change', function(){
+    $('#id_groups').on('change', function () {
         let info = $(this).val();
         let docente = document.getElementById('id_groups')[info].innerText;
-        if(docente == 'Docentes'){
+        if (docente == 'Docentes') {
             $.ajax({
-                url : '',
-                method : 'GET',
-                data : {'data': 'docente'}
-            }).done((req)=>{
-                console.log('Respuesta : ', req);
-                console.log('Respuesta : ', req[1].c);
-                console.log('Respuesta : ', req[0].p);
+                url: '',
+                method: 'GET',
+                data: { 'data': 'docente' }
+            }).done((req) => {
                 let opciones1 = '<br>';
                 opciones1 += '<label for="id_curso">Cursos</label>';
                 opciones1 += '<select multiple class="form-select" mul required name="curso" id="id_curso" >';
-                $.each(req[1].c, (key, val)=>{
-                    opciones1 += '<option value="'+val.name+'">'+val.name+'</option>';
+                $.each(req[1].c, (key, val) => {
+                    opciones1 += '<option value="' + val.name + '">' + val.name + '</option>';
                 })
                 opciones1 += '</select>'
                 document.getElementById('cursos').innerHTML = opciones1;
                 let opciones2 = '<label for="id_programa">Programas</label>';
                 opciones2 += '<select multiple class="form-select" required name="programa" id="id_programa" >';
-                    $.each(req[0].p, (key, val)=>{
-                        opciones2 += '<option value="'+val.id+'">'+val.name+'</option>';
-                    })
-                    opciones2 += '</select>'
-                    // opciones2 += '<br>'
-                    document.getElementById('programas').innerHTML = opciones2;
+                $.each(req[0].p, (key, val) => {
+                    opciones2 += '<option value="' + val.id + '">' + val.name + '</option>';
+                })
+                opciones2 += '</select>'
+                document.getElementById('programas').innerHTML = opciones2;
             });
-        }else{
+        } else {
             document.getElementById('cursos').innerHTML = '';
             document.getElementById('programas').innerHTML = '';
 
         }
-        // console.log('Cambio a ', $(this).val());
-        // console.log('Cambio a ', $(this).innerText());
     })
-</script>
-  {% include "views/default/footer.html" %}
+    </script>
+
+<script>
+
+    
+$('#id_username').on('change', function solonumeros(e) {
+        
+        key = e.keyCode || e.wich;
+        teclado = String.fromCharCode(key);
+        numeros = "0123456789";
+        especiales = "8-37-38-46";
+        teclado_especial = false;
+        
+        for (var in especiales) {
+            if (key == especiales[i]) {
+                teclado_especial = true;
+            }
+        }
+        if (numeros.indexOf(teclado) == -1 && !teclado_especial) {
+            return false;
+        }
+    })
+    </script>
+    {% include "views/default/footer.html" %}

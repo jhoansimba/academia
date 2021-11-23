@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.deletion import CASCADE
 from django.forms.models import model_to_dict
 from django.utils import tree
-from app.models import Cursos, Estudiante, Numero, Programa
+from app.models import Cursos, Estudiante, MatriculaActual, Numero, Programa
 
  
 class Usuario(AbstractUser):
@@ -48,7 +48,7 @@ class Paralelo(models.Model):
 class AsigacionParalelo(models.Model):
     paralelo= models.ForeignKey(Paralelo, on_delete = CASCADE)
     nombre = models.CharField(max_length=1, verbose_name="Nombre del paralelo")
-    estudiantes = models.ManyToManyField(Estudiante)
+    asignacionEstudiantes = models.ManyToManyField(MatriculaActual)
     def Nivel(self):
         return '{}'.format(self.paralelo.nivel)
     def Docente(self):
@@ -57,6 +57,7 @@ class AsigacionParalelo(models.Model):
         txt = model_to_dict(self)
         return txt
     def __str__(self) -> str:
+
         return 'paralelo:{}, {}'.format(self.nombre, self.paralelo)
 
 class AsignacionCurso(models.Model):

@@ -1,4 +1,5 @@
 from django.http.response import JsonResponse
+from django.shortcuts import render
 from User.models import Paralelo
 from django.views.generic.base import TemplateView
 from app.Formularios.formAsignar import AsignaciondeNivel
@@ -12,6 +13,8 @@ import datetime
 from app.models import Comprobante, Estudiante, Ficha_salud, Horarios, Matricula, MatriculaActual, Numero, Programa, Talento_Humano
 from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 Modelo = Matricula
 ModeloTitulo = 'Matrícula'
 formulario = FormMatricula
@@ -26,49 +29,28 @@ editar = f'app.chage_{permisos}'
 eliminar = f'app.delete_{permisos}'
 
 
-class MatriculaList(LoginRequiredMixin, ListView):
-    permission_required = listado
-    model = Modelo
-    form_class = formulario
+class MatriculaList(LoginRequiredMixin, TemplateView):
     template_name = templateName
-    # template_name = '/estudiantes/'
     title = Title
 
     def get_context_data(self, **kwargs):
         data = []
         noMatriculados = ''
-        for i in Estudiante.objects.all():
-            nivel = ''
-            fecha = ''
-            matricula = ''
-            id_comp = ''
-            for j in MatriculaActual.objects.all():
-                for k in j.asignacion.all():
-                    if k == i:
-                        nivel = j.nivel
-            if Matricula.objects.filter(estudiante=i).exists():
-                for j in Matricula.objects.filter(estudiante=i):
-                    fecha = j.fecha
-                    if j.matricula == True:
-                        matricula = j.matricula
-                        id_comp = j.id_comp
-                    else:
-                        noMatriculados += i.id_est + ','
-
-            else:
-                noMatriculados += i.id_est + ','
-            data.append({'estudiante': i, 'nivel': nivel, 'fecha': fecha, 'matricula': matricula,
-                        'id_comp': id_comp, 'comprobante': Comprobante.objects.filter(id_est = i)})
-        print("data : " , data)
+        for matriculaActual in MatriculaActual.objects.all():
+            estudiantes = []
+            for est in matriculaActual.asignacion.all():
+                matricula = Matricula.objects.get(estudiante=est, nivel = matriculaActual.nivel) if Matricula.objects.filter(estudiante=est, nivel = matriculaActual.nivel).exists() else ''
+                comprobante = Comprobante.objects.filter(id_est=est) if Comprobante.objects.filter(id_est=est).exists() else ''
+                noMatriculados += est.id_est + f'-{matriculaActual.nivel},'
+                estudiantes.append({'estudiante': est, 'matricula': matricula, 'comprobante' : comprobante, 'nivel': matriculaActual.nivel})
+            data.append({
+                'asignacion': estudiantes,
+            })
         context = super().get_context_data(**kwargs)
-        context['name'] = ModeloTitulo
-        context['object_list'] = data
-        context['noMatriculados'] = noMatriculados
+        context['object_data'] = data
         context['date'] = datetime.datetime.now().strftime('%Y-%m-%d')
-
+        context['noMatriculados'] = noMatriculados
         return context
-
-
 class addMatricula (LoginRequiredMixin, CreateView):
     # permission_required = agregar
     model = Modelo
@@ -90,7 +72,6 @@ class addMatricula (LoginRequiredMixin, CreateView):
             form.save()
             data['info'] = 'Guardado...'
         else:
-            print('No Es válido: ', form.errors)
             data['error'] = 'Error...' + str(form.errors)
 
         return JsonResponse(data, safe=False)
@@ -201,6 +182,68 @@ class editHorario2(LoginRequiredMixin, UpdateView):
         return context
 
 
+class getInfo(TemplateView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request,  *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        materia = ''
+        nivel = ''
+        data = []
+        idAsignacion = ''
+        programa = ''
+        idParalelo = ''
+        try:
+            materia = request.POST['materia']
+        except:
+            pass
+        try:
+            nivel = request.POST['nivel']
+        except:
+            pass
+        try:
+            idAsignacion = request.POST['id']
+            programa = request.POST['programa']
+        except:
+            pass
+        try:
+            idParalelo = request.POST['id_paralelo']
+            programa = request.POST['programa']
+        except:
+            pass
+        if materia and nivel:
+            matriculados = []
+            for matricula in MatriculaActual.objects.filter(nivel=nivel):
+                for estudiantes in matricula.asignacion.all():
+                    matriculados.append(estudiantes)
+            if matriculados:
+                for estudiantes in Estudiante.objects.filter(id_programa=materia):
+                    if estudiantes not in matriculados:
+                        data.append({'estudiantes': estudiantes.json()})
+            else:
+                for estudiantes in Estudiante.objects.filter(id_programa=materia):
+                    data.append({'estudiantes': estudiantes.json()})
+        if idAsignacion:
+            for matricula in MatriculaActual.objects.filter(id=idAsignacion):
+                for estudiantes in matricula.asignacion.all():
+                    for est in Estudiante.objects.filter(id_programa = programa):
+                        if est == estudiantes:
+                            data.append({'est' : estudiantes.Estudiante()})
+
+        if idParalelo:
+            paralelo = Paralelo.objects.get(id = idParalelo)
+            for i in MatriculaActual.objects.all():
+                val = False
+                for j in i.asignacion.all():
+                    for k in Estudiante.objects.filter(id_programa = programa):
+                        if k == j and i.nivel == paralelo.nivel:
+                            val = True
+                if val:
+                    data.append({'id':i.id, 'nivel' : str(i.nivel), 'size': str(len(i.asignacion.all()))})                   
+        return JsonResponse(data, safe=False)
+
+
 class AsignarNiveles(LoginRequiredMixin, CreateView):
     model = MatriculaActual
     form_class = AsignaciondeNivel
@@ -208,17 +251,44 @@ class AsignarNiveles(LoginRequiredMixin, CreateView):
     success_url = URL
 
     def get_context_data(self, **kwargs):
-        curso = Estudiante.objects.filter(id_programa=None)
-        programa = Estudiante.objects.filter(id_curso=None)
         data = []
-        for i in Estudiante.objects.all():
-            if i.id_programa.all():
-                data.append(i)
+        matriculados = []
+        noMatriculados = []
+        for matricula in MatriculaActual.objects.all():
+            for estudiantes in matricula.asignacion.all():
+                matriculados.append({'etudiantes': estudiantes})
+        if matriculados:
+            for estudiantes in Estudiante.objects.all():
+                if estudiantes not in matriculados:
+                    data.append({'etudiantes': estudiantes})
+        else:
+            for estudiantes in Estudiante.objects.all():
+                data.append({'etudiantes': estudiantes})
         context = super().get_context_data(**kwargs)
         context['name'] = f'Agregar {ModeloTitulo}'
         context['programa'] = data
+        context['materia'] = Programa.objects.all().exclude(nombre='ninguno')
+        context['nivel'] = Numero.objects.all()
         context['regresar'] = self.success_url
         return context
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        try:
+            if form.is_valid():
+                asignacion = form.cleaned_data['asignacion']
+                if len(asignacion) >= 3 and len(asignacion) <= 6:  # rango para matrículas
+                    return super().post(request, *args, **kwargs)
+                else:
+                    curso = Estudiante.objects.filter(id_programa=None)
+                    programa = Estudiante.objects.filter(id_curso=None)
+                    data = []
+                    for i in Estudiante.objects.all():
+                        if i.id_programa.all():
+                            data.append(i)
+                    return render(self.request, self.template_name, {'form': self.form_class, 'errores': f'Verifique que el número de estudiantes sea 3 o 6, usted ha seleccionado {len(asignacion)}', 'programa': data, 'materia': Programa.objects.all().exclude(nombre='ninguno'), 'nivel': Numero.objects.all()})
+        except Exception as e:
+            print(f'Error en el método AsignarNiveles:{form}, error: {e}')
 
 
 class AsignarNivelesCurso(LoginRequiredMixin, CreateView):
@@ -305,7 +375,8 @@ class AsignacionListado(TemplateView):
         context = super().get_context_data(**kwargs)
         context['name'] = 'Listado de Estudiantes'
         context['ruta'] = 'programa/'
-        context['cursos_list'] = Programa.objects.all().exclude(nombre = 'ninguno')
+        context['cursos_list'] = Programa.objects.all().exclude(
+            nombre='ninguno')
         return context
 
 
@@ -314,13 +385,6 @@ class AsignacionPrograma(TemplateView):
     estudiantes = []
 
     def get_context_data(self, **kwargs):
-        self.estudiantes = []
-        id = self.kwargs['programa']
-        for i in Estudiante.objects.filter(id_programa=id):
-            for matricula in AsigacionParalelo.objects.filter(paralelo__programa_general__programa_id=id):
-                for est in matricula.estudiantes.all():
-                    if i == est:
-                        self.estudiantes.append(est)
         context = super().get_context_data(**kwargs)
         context['numero'] = Numero.objects.all()
         context['programa'] = id
@@ -343,16 +407,16 @@ class AgregarEstudiantes(CreateView):
     def get_context_data(self, **kwargs):
         id = self.kwargs['programa']
         self.estudiantes = []
+        data = []
         for i in Estudiante.objects.filter(id_programa=id):
             for matricula in MatriculaActual.objects.all():
                 for est in matricula.asignacion.all():
                     if i == est:
                         self.estudiantes.append(est)
-
-        # print(estudiantes)
         context = super().get_context_data(**kwargs)
         context['regresar'] = '/asistente/programa/' + id
         context['paralelo'] = Paralelo.objects.filter(
             programa_general__programa_id=id)
+        context['programa'] = id
         context['estudiantes'] = self.estudiantes
         return context

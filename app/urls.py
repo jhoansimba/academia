@@ -53,5 +53,6 @@ path('asistente/asignacioncursos', AsignacionCursos.as_view() ,name='asignacion_
 path('asistente/asignacioncursos/add/<pk>', AsignacionCursosAdd.as_view() ,name='asignacion_c'),
 path('asistente/programa/<programa>/', AsignacionPrograma.as_view(), name='programa_asistente'),
 path('asistente/programa/<programa>/add', AgregarEstudiantes.as_view(), name='AgregarEstudiantes'),
+path('getinfo/', getInfo.as_view(), name='getinfo'),
  
 ] 

@@ -170,7 +170,6 @@ class Estudiante(models.Model):
     def __str__(self) -> str:
         txt = '{0} {1} '
         return txt.format(self.nombres_est, self.apellidos_est)
-
     def Representante(self):
         txt = '{0} {1} '
         return txt.format(self.representante.nombres_rep, self.representante.apellidos_rep)
@@ -180,10 +179,17 @@ class Estudiante(models.Model):
         return txt.format(self.salud.NomEnfer_fichsa)
 
     def Cursos(self):
-        txt = '{0}'
-        return txt.format(self.cursos.nombre_curso)
+        listado = ''
+        for item in self.id_curso.all():
+            listado += str(item) + ', '
+        return '{}'.format(listado)
+    def Programas(self):
+        listado = ''
+        for item in self.id_programa.all():
+            listado += str(item) + ', '
+        return '{}'.format(listado)
     def json(self):
-        txt = model_to_dict(self, exclude=['imagen_est'])
+        txt = model_to_dict(self, exclude=['imagen_est', 'id_curso', 'id_programa'])
         return txt
     def Direccion(self):
         txt = '{0}{1}{2}'
@@ -382,6 +388,7 @@ class Comprobante (models.Model):
     i_comp = models.AutoField(primary_key=True)
     id_est = models.ForeignKey(Estudiante, on_delete=CASCADE)
     file_comp = models.FileField(null=True, upload_to='files/comprobante')
+    nivel = models.ForeignKey(Numero, on_delete=CASCADE)
 
     def Estudiante(self):
         txt = '{0} {1} '
@@ -395,7 +402,7 @@ class Comprobante (models.Model):
 
     def __str__(self) -> str:
         txt = '{}'
-        return txt.format( self.id_est)
+        return txt.format(self.id_est)
 
 
 class Matricula(models.Model):
@@ -404,6 +411,7 @@ class Matricula(models.Model):
     id_comp = models.ForeignKey(Comprobante, on_delete=CASCADE)
     fecha = models.DateField(verbose_name='Fecha de matrícula')
     matricula = models.BooleanField(default=False)
+    nivel = models.ForeignKey(Numero, on_delete=CASCADE, null=True, blank=True)
 
     def Curso(self):
         txt = []
