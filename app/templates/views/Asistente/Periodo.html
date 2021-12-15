@@ -1,0 +1,70 @@
+{% include "views/default/header.html" %}
+{%load static%}
+
+
+
+  
+  
+
+
+<ul class="container nav nav-tabs ">
+    <li class="nav-item">
+        <a class="nav-link active" style="background-color: rgb(112, 165, 245);" href="">{{name}}</a>
+    </li>
+    <li class="nav-item"> 
+        <a class="nav-link " aria-current="page" href="{%url 'ProgramaGeneralList'%}">Programa General</a>
+    </li>
+    <li class="nav-item"> 
+        <a class="nav-link " aria-current="page" href="{%url 'ParaleloList'%}">Docente</a>
+    </li>
+
+</ul>
+
+
+
+
+
+<div class="card container">
+
+
+    <div class="card-body table-responsive ">
+        <table class="table" id="table_estudiantes">
+            <thead>
+                <tr>
+                    <th>Periodo</th>
+                    <th>Opciones</th>
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for items in object_list %}
+                <tr>
+                    <td> {{items.nombre}} </td>
+
+                    <td>
+                        <a href="editHorario2/{{items.id}}" class="btn btn-warning" type="button">Editar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+
+
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+
+        <a  id="add_id_periodo"
+            href="{%url 'AddPeriodo'%}" title="Añadir otro periodo"><img
+                src="/static/admin/img/icon-addlink.svg" alt="Añadir"> Agregar Periodo</a>
+
+
+
+    </div>
+
+
+</div>
+
+
+{% include "views/default/footer.html" %}

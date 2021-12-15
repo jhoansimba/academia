@@ -1,0 +1,88 @@
+{%load static%}
+{% for i in request.user.groups.all %}
+
+
+{% if i.name == 'Representante' %}
+<a class="accordion-menu"><img src="{%static 'images/familia.png'%}" class="imgmenu"> Representante</a>
+<div class="panel">
+  <a href="{% url 'list_estudiantes' %}">
+    <p><img src="{%static 'images/graduado.png'%}" class="imgmenu">
+      Datos del Estudiante</p>
+  </a>
+  <a href="{% url 'list_salud' %}">
+    <p><img src="{%static 'images/salud.png'%}" class="imgmenu">
+      Ficha de Salud</p>
+  </a>
+  <a href="{% url 'comprobante_estudiantes' %}">
+    <p><img src="{%static 'images/pago.png'%}" class="imgmenu">
+      Comprobante Pagado</p>
+  </a>
+
+</div>
+        
+        {% endif %}
+        {% if i.name == 'Docentes' %}
+        <a class="accordion-menu"><img src="{%static 'images/clase.png'%}" class="imgmenu"> Docente</a>
+<div class="panel">
+  
+    <a href="{% url 'list_estudiantes_docente' %}">
+      <p><img src="{%static 'images/graduado.png'%}" class="imgmenu">
+      Listado de Cursos y Programas</p>
+    </a>
+
+</div>
+        
+
+
+        </a>
+        {% endif %}
+        {% if i.name == 'Asistente' %}
+        <a class="accordion-menu"><img src="{%static 'images/asistente.png'%}" class="imgmenu">Asistente</a>
+        <div class="panel">
+          
+        
+            <a href="{% url 'Talento_Humano' %}">
+              <p><img src="{%static 'images/talento.png'%}" class="imgmenu"> Talento Humano</p>
+            </a>
+            <a href="{% url 'PeriodoList' %}">
+              <p><img src="{%static 'images/calendario.png'%}" class="imgmenu"> Periodos Academicos</p>
+            </a>
+            <a href="{% url 'list_matricula' %}">
+              <p><img src="{%static 'images/graduado.png'%}" class="imgmenu"> Listado de estuadiantes</p>
+            </a>
+            <a href="{% url 'list_Horario' %}">
+              <p><img src="{%static 'images/horario.png'%}" class="imgmenu"> Horarios</p>
+              <a href="{% url 'asignacion_p' %}">
+                <p><img src="{%static 'images/paralelos.png'%}" class="imgmenu"> Asignacion de Paralelo</p>
+                <a href="{% url 'asignacion_c' %}">
+                  <p><img src="{%static 'images/paralelos.png'%}" class="imgmenu"> Asignacion de Curso</p>
+                </a>
+                <!--<a href=""><img src="{%static 'images/cursos.png'%}" class="imgmenu">
+                          <p>Agregar cursos</p>
+                      </a>-->
+        </div>
+            {% endif %}
+
+            
+            
+            {% endfor %}
+            
+
+                <script>
+                var acc = document.getElementsByClassName("accordion-menu");
+                var i;
+                
+                for (i = 0; i < acc.length; i++) {
+                  acc[i].addEventListener("click", function() {
+                    this.classList.toggle("active-menu");
+                    var panel = this.nextElementSibling;
+                    if (panel.style.display === "block") {
+                      panel.style.display = "none";
+                    } else {
+                      panel.style.display = "block";
+                    }
+                  });
+                }
+                </script>
+                
+                </body>

@@ -32,11 +32,12 @@ class Periodo(models.Model):
     nombre = models.CharField(max_length=50, primary_key=True)
     def __str__(self) -> str:
         return '{}'.format(self.nombre)
+
 class ProgramaGeneral(models.Model):
     periodo = models.ForeignKey(Periodo, on_delete = CASCADE) 
     programa = models.ForeignKey(Programa, on_delete = CASCADE)
     def __str__(self) -> str:
-            return '{} -  {}'.format(self.periodo,self.programa)
+            return 'periodo:{} -  {}'.format(self.periodo,self.programa)
 
 class Paralelo(models.Model):
     programa_general = models.ForeignKey(ProgramaGeneral, on_delete = CASCADE) 

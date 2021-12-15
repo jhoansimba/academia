@@ -9,8 +9,12 @@ class FormularioUser(ModelForm):
             i.field.widget.attrs['class'] = 'form-control'
             i.field.widget.attrs['autocomplete'] = 'off'
         self.fields['username'].widget.attrs['autofocus'] = True
-        # self.fields['password'].widget.attrs['hidden'] = True
-        # self.fields['is_superuser'].widget.attrs['class'] = 'form-check-input'
+        self.fields['username'].widget.attrs['onpaste'] = "return false"
+        self.fields['username'].widget.attrs['onkeypress'] = "return soloNumeros(event)"
+        self.fields['first_name'].widget.attrs['onkeypress'] = "return soloLetras(event)"
+        self.fields['first_name'].widget.attrs['onpaste'] = "return false"
+        self.fields['last_name'].widget.attrs['onkeypress'] = "return soloLetras(event)"
+        self.fields['last_name'].widget.attrs['onpaste'] = "return false"
         self.fields['is_staff'].widget.attrs['class'] = 'form-check-input'
         self.fields['curso'].widget.attrs['hidden'] = True
         self.fields['programa'].widget.attrs['hidden'] = True

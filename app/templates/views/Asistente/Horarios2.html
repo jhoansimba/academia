@@ -3,17 +3,17 @@
 
 
 
-<ul class="nav nav-tabs " >
+<ul class="container nav nav-tabs " >
     <li class="nav-item">
       <a class="nav-link" href="horarios">Programas</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link active" aria-current="page" href="horarios2">Cursos</a>
+      <a class="nav-link active" style="background-color: rgb(112, 165, 245);" aria-current="page" href="horarios2">Cursos</a>
     </li>
    
   </ul>
 
-<div class="card">
+<div class="card container">
     <div class="card-header">{{name}}</div>
 
     <div class="card-body table-responsive ">
@@ -49,4 +49,6 @@
             href="/admin/app/cursos/add/?_to_field=nombre&amp;_popup=1" title="Añadir otro cursos" style=""><img
                 src="/static/admin/img/icon-addlink.svg" alt="Añadir"> Agregar Programa</a>
     </div>
+</div>
+    
     {% include "views/default/footer.html" %}

@@ -28,12 +28,13 @@ class DocenteView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         data = []
         for i in Cursos.objects.filter(usuario__id=self.request.user.id).exclude(nombre='Ninguno'):
-            data.append({'ruta': 'curso/', 'id' : i.nombre, 'nombre': i.nombre, 'imagen' : i.imagen_curso, 'horario': Horarios.objects.get(id_horario = i.horario_id)})
-        
-        for i in Programa.objects.filter(usuario__id=self.request.user.id).exclude(nombre='Ninguno'):
-            data.append({'ruta': 'programa/', 'id' : i.id, 'nombre': i.nombre, 'imagen' : i.imagen})
+            data.append({'ruta': 'curso/', 'id': i.nombre, 'nombre': i.nombre,
+                        'imagen': i.imagen_curso, 'horario': Horarios.objects.get(id_horario=i.horario_id)})
 
-        
+        for i in Programa.objects.filter(usuario__id=self.request.user.id).exclude(nombre='Ninguno'):
+            data.append({'ruta': 'programa/', 'id': i.id,
+                        'nombre': i.nombre, 'imagen': i.imagen})
+
         context = super().get_context_data(**kwargs)
         context['name'] = 'Listado de Estudiantes'
         context['cursos_list'] = data
@@ -78,7 +79,8 @@ class getParalelo(TemplateView):
     def get(self, request, *args, **kwargs):
         nivel = self.kwargs['nivel']
         pro = self.kwargs['programa']
-        validacion = AsigacionParalelo.objects.filter(paralelo__usuario_id=self.request.user.id).filter(paralelo__nivel=nivel).order_by('nombre').filter(paralelo__programa_general__programa=pro).exists()
+        validacion = AsigacionParalelo.objects.filter(paralelo__usuario_id=self.request.user.id).filter(
+            paralelo__nivel=nivel).order_by('nombre').filter(paralelo__programa_general__programa=pro).exists()
         if validacion == False:
             print('Esntró')
             return redirect(f'/docentes/programa/{pro}')
@@ -105,7 +107,7 @@ class Listado(LoginRequiredMixin, TemplateView):
         code = ''
         paralelo = ''
         validacion = AsigacionParalelo.objects.filter(paralelo__usuario_id=self.request.user.id).filter(
-            paralelo__nivel=nivel).order_by('nombre').filter(paralelo__programa_general__programa=pro).filter(nombre = par).exists()
+            paralelo__nivel=nivel).order_by('nombre').filter(paralelo__programa_general__programa=pro).filter(nombre=par).exists()
         if validacion == False:
             return redirect(f'/docentes/programa/{pro}')
         for i in Notas.objects.all():

@@ -1,5 +1,5 @@
 .imglogo {
-    max-width: 81%;
+    max-width: 71%;
 }
 .imgmenu {
 	width: 21px; 
@@ -16,11 +16,14 @@
 .letras {
     max-width: 191%;
 }
+.navbar-background {
+	background: linear-gradient(#3183fd,#7aafff,#cee1fc,#7aafff,#3183fd)		;
+}
 .navbar-brand {
     max-width: 15%;
 }
 .imgSlider{
-    max-width :50%;
+    max-width :90%;
 }
 .sheetSlider {
     background-color: #ffffff; 
@@ -92,10 +95,10 @@
 }
 .btn-second {
 	padding: 5px;
-	background:  rgba(120, 173, 253, 0.932);
+	background:  rgba(223, 227, 243, 0)
 }
 .btn-second:hover {
-	background-color: lightblue;
+	background-color: rgba(39, 24, 255, 0.445);
 }
 .btn-login {
 background-image: url(../images/usuario.png);
@@ -104,7 +107,7 @@ background-size: cover;
 margin: 0;
 padding: 0;
 width:9%; 
-height: 51px;
+height: 13px;
 
 }
 .btn-login:hover{
@@ -114,7 +117,7 @@ height: 51px;
 	margin: 0;
 	padding: 0;
 	width:9%; 
-	height: 51px;
+	height: 13px;
 }
 .btn-logout{
 	background-image: url(../images/logout.png);
@@ -148,12 +151,35 @@ height: 51px;
 	box-shadow:0px 0px 0px;
 	padding-top:7px;
 }
+ 
+.border {
+	border: white 51px ridge;
+  }
 
 
 
 
 
 
+  .card-in {
+	/* Add shadows to create the "card" effect */
+	box-shadow: 0 6px 11px 0 rgba(0, 0, 0, 0.459);
+	transition: 0.3s;
+	border-radius: 8px; /* 5px rounded corners */
+  }
+  
+  /* On mouse-over, add a deeper shadow */
+  .card-in:hover {
+	box-shadow: 0 8px 16px 0 rgba(1, 31, 59, 0.2);
+  }
+  
+  /* Add some padding inside the card container */
+  .container {
+	padding: 2px 16px;
+  }
 
+  /* listado*/
 
-
+  .nav-tab {
+	  background-color: aquamarine;
+  }

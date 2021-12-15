@@ -47,7 +47,7 @@ class CursosController():
         for i in Programa.objects.order_by('nombre').exclude(nombre='ninguno'):
             data.append({'ruta': '/cursos/',
                         'nombre': i.nombre, 'imagen': i.imagen})
-        return render(request, 'views/docente/listadoDocente.html', {'cursos_list':data})
+        return render(request,'views/docente/listadoDocente.html', {'cursos_list':data})
 
     def details(request, cursoid):
         object = Cursos_models.getcurso(cursoid)

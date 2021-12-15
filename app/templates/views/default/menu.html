@@ -3,136 +3,99 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Menù Lateral con Css</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/sheetslider.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}">
-    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+  <meta charset="UTF-8">
+  <title>Menù Lateral con Css</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/sheetslider.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}">
+  <link rel="stylesheet" href="http://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
 
-    <script src="https://code.jquery.com/jquery-3.6.0.js"
-        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-    <script src="http://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-    <!-- <script src="{%static 'js/jquery-3.6.0.min.js' %}" type="text/javascript"></script> -->
-    <script src="{%static 'js/bootstrap.bundle.js' %}" type="text/javascript"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <script src="http://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+  <!-- <script src="{%static 'js/jquery-3.6.0.min.js' %}" type="text/javascript"></script> -->
+  <script src="{%static 'js/bootstrap.bundle.js' %}" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="{% static 'css/fancybox/jquery.fancybox.css' %}">
+  <link rel="stylesheet" href="{% static 'css/fancybox/jquery.fancybox.css' %}">
 
-    <link href="{% static 'css/bootstrap-theme.css' %}" rel="stylesheet" />
-    <link rel="stylesheet" href="{% static 'css/slippry.css' %}">
-    <!--<link href="assets/css/style.css" rel="stylesheet" />-->
-    <link rel="stylesheet" href="{% static 'color/default.css' %}">
-    <script src="{% static 'js/modernizr.custom.js' %}"></script>
+  <link href="{% static 'css/bootstrap-theme.css' %}" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/slippry.css' %}">
+  <!--<link href="assets/css/style.css" rel="stylesheet" />-->
+  <link rel="stylesheet" href="{% static 'color/default.css' %}">
+  <script src="{% static 'js/modernizr.custom.js' %}"></script>
 
 
 </head>
 
 <body>
-    
-    <!--	--------------->
 
-    {% if request.user.is_authenticated %}
-    <div class="" style="margin-bottom: -40px;z-index: 1; position: sticky; width: 25px;">
-        <div class="btn-menu" style="width: 10px; margin-right: 20px;">
-          <label class="btn btn-m" style="color: black; width: 35px; margin-right: 10px;" for="btn-menu">
-              
-          </label>
-        </div>
-    
-      </div>
-      {% endif %}
-      <div class="capa"></div>
-      <!--	--------------->
-    
-    
-      <input type="checkbox" id="btn-menu">
-      <div class="container-menu" style="z-index: 1;position: absolute;">
-        <div class="cont-menu" style="padding: 20px; z-index: 1; position: absolute; ">
-          {% if request.user.is_authenticated %}
-          <br>
-          <center><img  src="{%static 'images/user.png'%}" class="imgmenu"></center>
+  <!--	--------------->
+
+  {% if request.user.is_authenticated %}
+  <div class="" style="margin-bottom: -40px;z-index: 1; position: sticky; width: 25px;">
+    <div class="btn-menu" style="width: 10px; margin-right: 20px;">
+      <label class="btn btn-m" style="color: black; width: 35px; margin-right: 10px;" for="btn-menu">
+
+      </label>
+    </div>
+
+  </div>
+  {% endif %}
+  <div class="capa"></div>
+  <!--	--------------->
+
+
+  <input type="checkbox" id="btn-menu">
+  <div class="container-menu" style="z-index: 1;position: absolute;">
+    <div class="cont-menu" style="padding: 20px; z-index: 1; position: absolute; ">
+      {% if request.user.is_authenticated %}
+      <br>
+      <center><img src="{%static 'images/user.png'%}" class="imgmenu"></center>
+      <center>
+        <p style="color: azure;"> <b>{{request.user.first_name | upper}} {{request.user.last_name | upper}}</b> </p>
+      </center>
+      <nav>
+        {% if request.user.is_superuser %}
+        
+        <hr>
+      
+
+        <a href="/admin/"> <p><img src="{%static 'images/admin.png'%}" class="imgmenu">
+           Aministrador total</p>
+        </a>
+        <a href="/adduser"> <p><img src="{%static 'images/add_user.png'%}" class="imgmenu">
+          Registrar Nuevos Usuarios</p>
+        </a>
+        <a href="/admin/auth/group/"> <p><img src="{%static 'images/grupos.png'%}" class="imgmenu">
+           Roles</p>
+        </a>
+
+        {% include "views/default/nav-menu.html" %}
+        
+        {% else %}
+        {% include "views/default/nav-menu.html" %}
+      
+            {% endif %}
+            {% endif %}
           
-          <p style="color: azure;"> <b>{{request.user.first_name | upper}} {{request.user.last_name | upper}}</b> </p>
-          <hr>
-          {% if request.user.is_superuser %}
-    
-          <nav>
-    
-            <a href="/admin/"><img src="{%static 'images/admin.png'%}" class="imgmenu">
-              <p> Aministrador total</p>
+
+
+
+            
+            <hr>
+                      <a href="{% url 'changepassword'%}"> <p><img src="{%static 'images/password.png'%}" class="imgmenu">
+             Cambiar Contraseña</p>
             </a>
-            <a href="/adduser"><img src="{%static 'images/add_user.png'%}" class="imgmenu">
-              <p> Registrar Nuevos Usuarios</p>
-            </a>
-            <a href="/admin/auth/group/"><img src="{%static 'images/grupos.png'%}" class="imgmenu">
-              <p> Roles</p>
-            </a>
-    
-          </nav>
-    
-          {% else %}
-          {% for i in request.user.groups.all %}
-          <nav>
-    
-            {% if i.name == 'Representante' %}
-    
-            <a href="{% url 'list_estudiantes' %}"><img src="{%static 'images/graduado.png'%}" class="imgmenu">
-              <p>Datos del Estudiante</p>
-            </a>
-            <a href="{% url 'list_salud' %}"><img src="{%static 'images/salud.png'%}" class="imgmenu">
-              <p>Ficha de Salud</p>
-            </a>
-            <a href="{% url 'comprobante_estudiantes' %}"><img src="{%static 'images/pago.png'%}" class="imgmenu">
-            <p>Comprobante Pagado</p>
-            </a>
-            {% endif %}
-            {% if i.name == 'Docentes' %}
-            <a href="{% url 'list_estudiantes_docente' %}"><img src="{%static 'images/graduado.png'%}" class="imgmenu">
-              <p>Listado de Cursos y Programas</p>
-            </a>
-    
-    
-            </a>
-            {% endif %}
-            {% if i.name == 'Asistente' %}
-            <a href="{% url 'Talento_Humano' %}">
-              <p><img src="{%static 'images/talento.png'%}" class="imgmenu"> Talento Humano</p>
-            </a>
-            <a href="{% url 'list_matricula' %}"> 
-              <p><img src="{%static 'images/graduado.png'%}" class="imgmenu"> Listado de estuadiantes</p>
-            </a>
-            <a href="{% url 'list_Horario' %}">
-              <p><img src="{%static 'images/horario.png'%}" class="imgmenu"> Horarios</p>
-              <a href="{% url 'asignacion_p' %}">
-                <p><img src="{%static 'images/paralelos.png'%}" class="imgmenu"> Asignacion de Paralelo</p>
-                <a href="{% url 'asignacion_c' %}">
-                  <p><img src="{%static 'images/paralelos.png'%}" class="imgmenu"> Asignacion de Curso</p>
-                </a>
-                <!--<a href=""><img src="{%static 'images/cursos.png'%}" class="imgmenu">
-                      <p>Agregar cursos</p>
-                  </a>-->
-                {% endif %}
-                <hr>
-                <a href="{% url 'changepassword'%}"><img src="{%static 'images/password.png'%}" class="imgmenu">
-                  <p>Cambiar Contraseña</p>
-                </a>
-    
-          </nav>
-    
-    
-    
-          {% endfor %}
-          {% endif %}
-          {% endif %}
-    
-    
-    
-    
-          <label for="btn-menu">✖️</label>
-        </div>
-      </div>
+
+      </nav>
+
+
+
+      <label for="btn-menu">✖️</label>
+    </div>
+  </div>
 </body>
 
 </html>

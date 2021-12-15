@@ -10,18 +10,26 @@
   <meta name="description" content="" />
   <meta name="author" content="" />
   {%load static%}
+  <script src="//code.jquery.com/jquery.js"></script>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/zkreations/SheetSlider@2.2.0/dist/sheetslider.min.js" />
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/sheetslider.min.css' %}">
+  <link rel="stylesheet" type="text/javascript" href="{% static 'js/sheetslider.min.js' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/estilos.css' %}">
+  
+ 
   <link rel="stylesheet" href="http://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
     crossorigin="anonymous"></script>
   <script src="http://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
   <!-- <script src="{%static 'js/jquery-3.6.0.min.js' %}" type="text/javascript"></script> -->
   <script src="{%static 'js/bootstrap.bundle.js' %}" type="text/javascript"></script>
+  <script src="{%static 'js/main.js' %}" type="text/javascript"></script>
 
   <link rel="stylesheet" href="{% static 'css/fancybox/jquery.fancybox.css' %}">
 
@@ -35,11 +43,10 @@
 
 <body>
 
-  
-  <nav style="background: rgba(49, 132, 255, 0.932);"
-    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+
+  <nav class="navbar navbar-background navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
     <div class="container">
-      
+
       <a class="navbar-brand"><img src="{%static 'images/LIBRO.png'%}" class="imglogo"><a class="navbar-brand"><img
             src="{%static 'images/academia.png'%}" class="letras"></a>
       </a>
@@ -50,21 +57,21 @@
       <div class="navbar-collapse d-sm-inline-flex flex-sm-row-reverse">
         <ul class="nav nav-pills">
           <li class="nav-item">
-            <a class="btn btn-second" style="margin: 11px;" aria-current="page" href="/">Inicio</a>
+            <a class="btn btn-second" style="margin: 11px;" aria-current="page" href="/"> <font size="4.5">Inicio</font> </a>
           </li>
-          <li class="nav-item dropdown">
+          <li class="nav-item">
             <a class="btn btn-second" href="{% url 'cursos'%}" aria-current="page"
-              style="margin: 11px; color: rgb(0, 0, 0);">Servicios</a>
+              style="margin: 11px; color: rgb(0, 0, 0);"><font size="4.5">Servicios</font></a>
 
           </li>
           <li class="nav-item">
             <a class="btn btn-second" href="{% url 'nosotros' %}"
-              style="margin: 11px; color: rgb(0, 0, 0);">Nosotros</a>
+              style="margin: 11px; color: rgb(0, 0, 0);"><font size="4.5">Nosotros</font></a>
           </li>
           <li class="nav-item">
-            <a class="btn btn-second" href="#" style="margin: 11px; color: rgb(0, 0, 0);">Contactos</a>
+            <a class="btn btn-second" href="#" style="margin: 11px; color: rgb(0, 0, 0);"><font size="4.5">Contactos</font></a>
           </li>
-          
+
 
         </ul>
 
@@ -81,26 +88,26 @@
 
 
     {% else %}
-    {% for i in request.user.groups.all %}
+
     <a class="btn btn-primary" href="/Bienvenido" role="button">
-      {{i}}
+      {{user.first_name}}
     </a>
-    {% endfor %}
+
     {% endif %}
 
 
     <div>
 
-    <a class="btn btn-logout" style="margin: 21px; width: 41px; ; height: 41px;"  href="{% url 'logout' %}" role="button"></a>
-      
+      <a class="btn btn-logout" style="margin: 21px; width: 41px; ; height: 41px;" href="{% url 'logout' %}"
+        role="button"></a>
 
-  </div>
+
+    </div>
 
     {% else %}
-    <a style="margin: 21px" class="btn-login" href="/login/" role="button"></a>
+    <a style="margin: 21px " class="btn-login" href="/login/" role="button"></a>
 
     {% endif %}
-    
+
   </nav>
-{% include "views/default/menu.html" %}
-  
+  {% include "views/default/menu.html" %}

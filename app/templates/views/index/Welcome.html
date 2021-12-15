@@ -5,26 +5,54 @@
 <link rel="stylesheet" href="{% static 'css/bienvenido.css' %}">
 
 <div class="card text-center">
-  
+
   <div class="card-header">
 
 
-    
-    
-    
-    
+
+
+
+
     {% if user.is_authenticated %}
-    
+
     {% if request.user.is_superuser %}
-    <h2>Bienvenido has iniciado como usuario de Administrador
+    <h2>
+      Bienvenido has iniciado como usuario de:
+    </h2>
+     
+
+      <span>
+        <font size=6>- Administrador{% for i in request.user.groups.all %} - {{i}}
+        {% endfor %}-
+
+        </font>
+
+
+      </span>
+ 
       
+      
+      
+
       {% else %}
+
+
+
+
+      <h2>Bienvenido has iniciado como usuario de : </h2>
       {% for i in request.user.groups.all %}
-      
-      <h2>Bienvenido has iniciado como usuario de {{i}} </h2>
-      
-      
-      {% endfor %}
+
+      <span>
+        <font size=6>- {{i}}
+        {% endfor %}-
+
+        </font>
+
+
+      </span>
+
+
+
       {% endif %}
       {% endif %}
   </div>

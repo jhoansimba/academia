@@ -1,7 +1,7 @@
 {% include "views/default/header.html" %}
 {%load static%}
 
-<div class="card">
+<div class="card container">
     <div class="card-header"><br> Talento Humano</div>
 
     <div class="card-body table-responsive ">
@@ -40,7 +40,8 @@
                                     </button>
                                 </h2>
                                 <div id="flush-collapse{{items.cedula_th}}" class="accordion-collapse collapse"
-                                    aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                    aria-labelledby="flush-heading{{items.cedula_th}}"
+                                    data-bs-parent="#accordionFlushExample">
                                     <div>
                                         <a href="/media/{{items.HojaVida}}" target="_blank"> <img
                                                 src="{%static 'images/doc.png'%}" class="imgmenu"></a> Hoja de Vida
@@ -94,12 +95,12 @@
                     </td>
 
     </div>
-    
+
     <td>
         {{items.id_direccion}}
     </td>
     <td>
-        <a href="talentohumano/edit/{{items.id}}" class="btn btn-warning" type="button">Editar</a>
+        <a href="talentohumano/edit/{{items.cedula_th}}" class="btn btn-warning" type="button">Editar</a>
     </td>
     </tr>
     {% endfor %}
@@ -110,5 +111,6 @@
 <div class="card-footer">
     <a href="talentohumano/add" type="button" class="btn btn-success">Agregar</a>
 
+</div>
 </div>
 {% include "views/default/footer.html" %}

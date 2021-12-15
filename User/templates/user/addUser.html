@@ -9,7 +9,7 @@
             <form action="" method="POST">
                 {% csrf_token %}
                 {% for field in form %}
-             
+
                 {% if field.name == 'password' %}
                 <input type="hidden" name="password" value="password">
                 {% elif field.name == 'groups' %}
@@ -27,7 +27,7 @@
                 {% else %}
                 {{field.label}}
                 {{field}}
-               
+
                 {% endif %}
                 {% endfor %}
                 <br>
@@ -70,27 +70,50 @@
 
         }
     })
-    </script>
 
-<script>
-
-    
-$('#id_username').on('change', function solonumeros(e) {
-        
-        key = e.keyCode || e.wich;
-        teclado = String.fromCharCode(key);
-        numeros = "0123456789";
-        especiales = "8-37-38-46";
-        teclado_especial = false;
-        
-        for (var in especiales) {
-            if (key == especiales[i]) {
-                teclado_especial = true;
+    $('#id_first_name1').on('change keyup', function () {
+        let valor = $(this).val().toString();
+        numeros = '1234567890';
+        for (let i in numeros) {
+            let nombre = '';
+            let eliminacion = valor.split(numeros[i]);
+            valor = '';
+            for (let j in eliminacion) {
+                valor += eliminacion[j];
             }
         }
-        if (numeros.indexOf(teclado) == -1 && !teclado_especial) {
-            return false;
+        $(this).val(valor);
+    });
+    function soloLetras(e) {
+        key = e.keyCode || e.which;
+        tecla = String.fromCharCode(key).toLowerCase();
+        letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+        especiales = [8, 37, 39, 46];
+        tecla_especial = false
+        for (var i in especiales) {
+            if (key == especiales[i]) {
+                tecla_especial = true;
+                break;
+            }
         }
-    })
-    </script>
-    {% include "views/default/footer.html" %}
+        if (letras.indexOf(tecla) == -1 && !tecla_especial)
+            return false;
+    }
+    function soloNumeros(e) {
+        key = e.keyCode || e.which;
+        tecla = String.fromCharCode(key).toLowerCase();
+        letras = "0987654321";
+        especiales = [8, 37, 39, 46];
+        tecla_especial = false
+        for (var i in especiales) {
+            if (key == especiales[i]) {
+                tecla_especial = true;
+                break;
+            }
+        }
+        if (letras.indexOf(tecla) == -1 && !tecla_especial)
+            return false;
+    }
+
+</script>
+{% include "views/default/footer.html" %}

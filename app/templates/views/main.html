@@ -213,7 +213,7 @@
 
           console.log('Valor request: ', req);
           let selector = '<label for="id_asignacionEstudiantes">Asignación de Estudiantes</label>';
-          selector += '<select class="form-select" name="asignacionEstudiantes" onclick="test(this)" required id="asig_estu">';
+          selector += '<select class="form-select" name="asignacionEstudiantes" onclick="test(this)" required="required" id="asig_estu">';
           selector += '<option value="0">Seleccione un grupo</option>';
           $.each(req, (key, val) => {
             selector += '<option value="' + val.id + '">Estudiantes registrados en el Nivel ' + val.nivel + ',  (' + val.size + ') Registros </option>';

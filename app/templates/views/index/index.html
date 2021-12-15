@@ -3,36 +3,36 @@
 
 
 
-<div class="sheetSlider sh--default">
+<div class="sheetSlider border sh-default sh-auto sh--default back container card-in ">
     <input id="s1" type="radio" name="slide1" checked />
     <input id="s2" type="radio" name="slide1" />
     <input id="s3" type="radio" name="slide1" />
     <input id="s4" type="radio" name="slide1" />
-   
-    <div class="sh__content"  >
+
+    <div class="sh__content">
         <!-- Slider Item -->
-        <div class="sh__item">
-            <img src="{% static 'images/slide1.jpg' %}" alt="imgText" class="imgSlider" />
+        <div class="sh__item sh-vertical">
+            <img src="{% static 'images/slide2.png' %}" alt="imgText" class="imgSlider" />
             <!-- Item Info -->
             <div class="sh__meta">
                 <h4>Programas</h4>
                 <span>Ingles y Computación</span>
             </div>
         </div>
-         <!-- Slider Item -->
-         <div class="sh__item">
-            <img src="{% static 'images/slide5.jpg' %}" alt="imgText" class="imgSlider" />
+        <!-- Slider Item -->
+        <div class="sh__item">
+            <img src="{% static 'images/slide1.png' %}" alt="imgText" class="imgSlider" />
             <!-- Item Info -->
             <div class="sh__meta">
                 <h4>Tareas dirigidas</h4>
                 <span>
-                    
+
                 </span>
             </div>
         </div>
         <!-- Slider Item -->
         <div class="sh__item">
-            <img src="{% static 'images/slide3.jpg' %}" alt="imgText" class="imgSlider" />
+            <img src="{% static 'images/slide3.png' %}" alt="imgText" class="imgSlider" />
             <!-- Item Info -->
             <div class="sh__meta">
                 <h4>Cursos Vacacionales</h4>
@@ -40,27 +40,27 @@
             </div>
         </div>
         <div class="sh__item">
-            <img src="{% static 'images/slide4.jpg' %}" alt="imgText" class="imgSlider" />
+            <img src="{% static 'images/slide2.jpg' %}" alt="imgText" class="imgSlider" />
             <!-- Item Info -->
             <div class="sh__meta">
                 <h4>Talleres</h4>
                 <span></span>
             </div>
         </div>
-       
-       
-      
-        
-        
-       
+
+
+
+
+
+
     </div>
-     <!--botones-->
-     <div class="sh__btns" style="z-index: 0;" >
+    <!--botones-->
+    <div class="sh__btns" style="z-index: 0;">
         <label for="s1"></label>
         <label for="s2"></label>
         <label for="s3"></label>
         <label for="s4"></label>
-  
+
     </div><!-- .sh__btns -->
     <!--flechas-->
     <div class="sh__arrows">
@@ -68,51 +68,73 @@
         <label for="s2"></label>
         <label for="s3"></label>
         <label for="s4"></label>
-      
+
     </div><!-- .sh__arrows -->
-    
+
 </div>
 
 <br>
 
 <div class="container">
-<div class="row">
-   <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
-      <div class="for_box">
-         <i><center><img src="{% static 'images/idea.png' %}"></center></i>
-        <center>
-         <h3>Aprende más</h3>
-         <p>Que nuestros Niños tengan un pasantiempo en donde desarrollen nuevas habilidades</p>
-        </center>
+    <div class="row">
+        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+            <div class="for_box">
+                <i>
+                    <center><img src="{% static 'images/idea.png' %}"></center>
+                </i>
+                <center>
+                    <h3>Aprende más</h3>
+                    <p>Que nuestros Niños tengan un pasantiempo en donde desarrollen nuevas habilidades</p>
+                </center>
+            </div>
         </div>
-   </div>
-   <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
-      <div class="for_box">
-         <i><center><img src="{% static 'images/tarea.png' %}"></center></i>
-         <center>
-         <h3>Tareas Dirigidas</h3>
-         <p>Ayudar a tus hijos en la nivelación de aprendizaje</p>
-        </center>
-      </div>
-   </div>
-   <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
-      <div class="for_box">
-         <i><center><img src="{% static 'images/idiomas.png' %}"></center></i>
-        <center>
-         <h3>Cursos de Ingles</h3>
-         <p>Aprender Ingles de una forma divertida</p>
-        </center>
-      </div>
-   </div>
-   <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
-      <div class="for_box">
-         <i><center><img src="{% static 'images/computacion.png' %}"></center></i>
-         <center><h3>Computación</h3>
-         <p>La tecnología hoy es parte de nuestra vida diaria, y siempre debes aprender de ella</p></center>
-      </div>
-   </div>
-   
+        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+            <div class="for_box">
+                <i>
+                    <center><img src="{% static 'images/tarea.png' %}"></center>
+                </i>
+                <center>
+                    <h3>Tareas Dirigidas</h3>
+                    <p>Ayudar a tus hijos en la nivelación de aprendizaje</p>
+                </center>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+            <div class="for_box">
+                <i>
+                    <center><img src="{% static 'images/idiomas.png' %}"></center>
+                </i>
+                <center>
+                    <h3>Cursos de Ingles</h3>
+                    <p>Aprender Ingles de una forma divertida</p>
+                </center>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+            <div class="for_box">
+                <i>
+                    <center><img src="{% static 'images/computacion.png' %}"></center>
+                </i>
+                <center>
+                    <h3>Computación</h3>
+                    <p>La tecnología hoy es parte de nuestra vida diaria, y siempre debes aprender de ella</p>
+                </center>
+            </div>
+        </div>
+
+    </div>
 </div>
-</div>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
+<hr>
+<h4 class="container">¿En donde estamos Ubicados?</h4>
+<br>
+<center> <iframe class="border sh-default sh-auto sh--default back container card-in "
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.424705198519!2d-77.73619138598!3d0.8048232994128766!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e296f4b4aee421f%3A0x9d1ad4327d2d4aa4!2sUniversidad%20Polit%C3%A9cnica%20Estatal%20del%20Carchi!5e0!3m2!1ses!2sec!4v1639430017994!5m2!1ses!2sec"
+        width="1170" height="320" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+</center>
+
+<br>
 
 {% include "views/default/footer.html" %}

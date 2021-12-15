@@ -1,6 +1,6 @@
 from django.http.response import JsonResponse
 from django.shortcuts import render
-from User.models import Paralelo
+from User.models import AsignacionCurso, Paralelo, Periodo
 from django.views.generic.base import TemplateView
 from app.Formularios.formAsignar import AsignaciondeNivel
 from django.forms.models import ModelFormOptions
@@ -39,10 +39,13 @@ class MatriculaList(LoginRequiredMixin, TemplateView):
         for matriculaActual in MatriculaActual.objects.all():
             estudiantes = []
             for est in matriculaActual.asignacion.all():
-                matricula = Matricula.objects.get(estudiante=est, nivel = matriculaActual.nivel) if Matricula.objects.filter(estudiante=est, nivel = matriculaActual.nivel).exists() else ''
-                comprobante = Comprobante.objects.filter(id_est=est) if Comprobante.objects.filter(id_est=est).exists() else ''
+                matricula = Matricula.objects.get(estudiante=est, nivel=matriculaActual.nivel) if Matricula.objects.filter(
+                    estudiante=est, nivel=matriculaActual.nivel).exists() else ''
+                comprobante = Comprobante.objects.filter(
+                    id_est=est) if Comprobante.objects.filter(id_est=est).exists() else ''
                 noMatriculados += est.id_est + f'-{matriculaActual.nivel},'
-                estudiantes.append({'estudiante': est, 'matricula': matricula, 'comprobante' : comprobante, 'nivel': matriculaActual.nivel})
+                estudiantes.append({'estudiante': est, 'matricula': matricula,
+                                   'comprobante': comprobante, 'nivel': matriculaActual.nivel})
             data.append({
                 'asignacion': estudiantes,
             })
@@ -51,6 +54,8 @@ class MatriculaList(LoginRequiredMixin, TemplateView):
         context['date'] = datetime.datetime.now().strftime('%Y-%m-%d')
         context['noMatriculados'] = noMatriculados
         return context
+
+
 class addMatricula (LoginRequiredMixin, CreateView):
     # permission_required = agregar
     model = Modelo
@@ -227,20 +232,25 @@ class getInfo(TemplateView):
         if idAsignacion:
             for matricula in MatriculaActual.objects.filter(id=idAsignacion):
                 for estudiantes in matricula.asignacion.all():
-                    for est in Estudiante.objects.filter(id_programa = programa):
+                    for est in Estudiante.objects.filter(id_programa=programa):
                         if est == estudiantes:
-                            data.append({'est' : estudiantes.Estudiante()})
+                            data.append({'est': estudiantes.Estudiante()})
 
         if idParalelo:
-            paralelo = Paralelo.objects.get(id = idParalelo)
+            lista = []
+            for i in AsigacionParalelo.objects.all():
+                for j in i.asignacionEstudiantes.all():
+                    lista.append(j.id)
+            paralelo = Paralelo.objects.get(id=idParalelo)
             for i in MatriculaActual.objects.all():
                 val = False
                 for j in i.asignacion.all():
-                    for k in Estudiante.objects.filter(id_programa = programa):
+                    for k in Estudiante.objects.filter(id_programa=programa):
                         if k == j and i.nivel == paralelo.nivel:
                             val = True
-                if val:
-                    data.append({'id':i.id, 'nivel' : str(i.nivel), 'size': str(len(i.asignacion.all()))})                   
+                if val and i.id not in lista:
+                    data.append({'id': i.id, 'nivel': str(i.nivel),
+                                'size': str(len(i.asignacion.all()))})
         return JsonResponse(data, safe=False)
 
 
@@ -318,13 +328,93 @@ class TalentoHumano(LoginRequiredMixin, ListView):
     form_class = FormHumano
     template_name = 'views/Asistente/TalentoHumano.html'
 
-    title = Title
+    title = "Periodos"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['name'] = 'Horarios'
       #  context['object_list'] = self.model.objects.filter(matricula = True)
 
+        return context
+
+
+class PeriodoList(LoginRequiredMixin, ListView):
+    permission_required = listado
+    model = Periodo
+    form_class = FormPeriodo
+    template_name = 'views/Asistente/Periodo.html'
+
+    title = "Periodos"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['name'] = 'Periodos'
+
+        return context
+class ProgramaGeneralList(LoginRequiredMixin, ListView):
+    permission_required = listado
+    model = ProgramaGeneral
+    form_class = FormProgramaGeneral
+    template_name = 'views/Asistente/ProgramaGeneral.html'
+
+    title = "Programa General"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['name'] = 'Programa General'
+
+        return context
+class ParaleloList(LoginRequiredMixin, ListView):
+   permission_required = listado
+   model = Paralelo
+   form_class = FormParalelo
+   template_name = 'views/Asistente/Docenteparalelo.html'
+   title = Title
+   def get_context_data(self, **kwargs):
+       context = super().get_context_data(**kwargs)
+       context['name2'] = 'Asignacion Docente'
+     #  context['object_list'] = self.model.objects.filter(matricula = True)
+       return context
+
+
+class addPeriodo (LoginRequiredMixin, CreateView):
+    
+    model = Periodo
+    form_class = FormPeriodo
+    template_name = 'views/main.html'
+    success_url = '/asistente/periodo'
+    title = Title
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['name'] = 'Agregar periodo'
+     #  context['object_list'] = self.model.objects.filter(matricula = True)
+        return context
+class addProgramaGeneral (LoginRequiredMixin, CreateView):
+    
+    model = ProgramaGeneral
+    form_class = FormProgramaGeneral
+    template_name = 'views/main.html'
+    success_url = '/asistente/programageneral'
+    title = Title
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['name'] = 'Agregar Programa General'
+     #  context['object_list'] = self.model.objects.filter(matricula = True)
+        return context
+class addParalelo (LoginRequiredMixin, CreateView):
+
+    model = Paralelo
+    form_class = FormParalelo
+    template_name = 'views/main.html'
+    success_url = '/asistente/paralelo'
+    title = Title
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['name'] = 'Agregar Programa General'
+     #  context['object_list'] = self.model.objects.filter(matricula = True)
         return context
 
 
@@ -385,6 +475,7 @@ class AsignacionPrograma(TemplateView):
     estudiantes = []
 
     def get_context_data(self, **kwargs):
+        id = self.kwargs['programa']
         context = super().get_context_data(**kwargs)
         context['numero'] = Numero.objects.all()
         context['programa'] = id
@@ -406,6 +497,14 @@ class AgregarEstudiantes(CreateView):
 
     def get_context_data(self, **kwargs):
         id = self.kwargs['programa']
+        data = []
+        paralelos = []
+        for j in AsigacionParalelo.objects.all():
+            data.append(j.paralelo)
+        for i in Paralelo.objects.filter(programa_general__programa_id=id):
+            if i not in data:
+                paralelos.append(i)
+
         self.estudiantes = []
         data = []
         for i in Estudiante.objects.filter(id_programa=id):
@@ -415,8 +514,8 @@ class AgregarEstudiantes(CreateView):
                         self.estudiantes.append(est)
         context = super().get_context_data(**kwargs)
         context['regresar'] = '/asistente/programa/' + id
-        context['paralelo'] = Paralelo.objects.filter(
-            programa_general__programa_id=id)
+        context['paralelo'] = paralelos
         context['programa'] = id
+        context['name'] = 'Asignación de Paralelo'
         context['estudiantes'] = self.estudiantes
         return context
