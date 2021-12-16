@@ -124,35 +124,36 @@ class Listado(LoginRequiredMixin, TemplateView):
                             for est in getEstudiantes:
                                 if est.nombre == par:
                                     paralelo = est.nombre
-                                    for item in est.estudiantes.all():
-                                        if l == j and j == item and nivel == est.paralelo.nivel.nivel:
-                                            try:
-                                                # Existen notas de este estudiante registradas
-                                                data.append({'notas': Notas.objects.get(
-                                                    estudiante_id=j.id_est).json()})
-                                            except Exception as e:
-                                                # No existen notas de este estudiante registradas
-                                                data.append(
-                                                    {'notas': {
-                                                        'code': f'ID_{j.id_est}',
-                                                        'est': j,
-                                                        'estudiante': j.id_est,
-                                                        'p_nota1': 0,
-                                                        'p_nota2': 0,
-                                                        'p_nota3': 0,
-                                                        's_nota1': 0,
-                                                        's_nota2': 0,
-                                                        's_nota3': 0,
-                                                        't_nota1': 0,
-                                                        't_nota2': 0,
-                                                        't_nota3': 0,
-                                                        'suma': 0,
-                                                        'promedio': 0,
-                                                    }
-                                                    }
-                                                )
-                                                code += f'ID_{j.id_est}' + ','
-
+                                    for item in est.asignacionEstudiantes.all():
+                                        for estudiante in item.asignacion.all():
+                                            if l == j and j == estudiante and nivel == est.paralelo.nivel.nivel:
+                                                try:
+                                                    # Existen notas de este estudiante registradas
+                                                    data.append({'notas': Notas.objects.get(
+                                                        estudiante_id=j.id_est).json()})
+                                                except Exception as e:
+                                                    print('Error en la clase Listado: ln-135', e)
+                                                    # No existen notas de este estudiante registradas
+                                                    data.append(
+                                                        {'notas': {
+                                                            'code': f'ID_{j.id_est}',
+                                                            'est': j,
+                                                            'estudiante': j.id_est,
+                                                            'p_nota1': 0,
+                                                            'p_nota2': 0,
+                                                            'p_nota3': 0,
+                                                            's_nota1': 0,
+                                                            's_nota2': 0,
+                                                            's_nota3': 0,
+                                                            't_nota1': 0,
+                                                            't_nota2': 0,
+                                                            't_nota3': 0,
+                                                            'suma': 0,
+                                                            'promedio': 0,
+                                                        }
+                                                        }
+                                                    )
+                                                    code += f'ID_{j.id_est}' + ','
         return render(request, 'views/docente/listadoEstudiantes.html', {'Estudiantes': data, 'programa': pro, 'nivel': nivel, 'save': save, 'code': code, 'name': 'Registro de notas', 'prog': [i.nombre for i in Programa.objects.filter(id=pro)], 'paralelo': paralelo})
 
 
