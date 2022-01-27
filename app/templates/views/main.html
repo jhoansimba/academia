@@ -33,22 +33,42 @@
           <option value="{{i.id_est}}">{{i.Estudiante}}</option>
           {% endfor %}
         </select>
+        {% elif field.name == 'id_est' %}
+        <label for="id_est">Estudiante</label>
+        <select class="form-select" name="id_est" required id="id_est">
+          <option value="0">Seleccione un Estudiante</option>
+          {% for i in estudiantes %}
+          <option value="{{i.id_est}}">{{i.Estudiante}}</option>
+          {% endfor %}
+        </select>
         <!-- AsignarNiveles asignación de niveles
         @param asignacion
         @action filtro por programa
         -->
         {% elif field.name == 'asignacion' %}
-        <label for="id_materias">Materias</label>
+        <label for="id_materias">{{tipoOpcion}}</label>
         <select class="form-select" name="materia" required id="id_materias">
-          <option value="0">Seleccione una materia</option>
+          <option value="0">Seleccione una opción</option>
           {% for i in materia %}
-          <option value="{{i.id}}">{{i}}</option>
+          <option value="{%if descripcion == 'Nivel'%}{{i.id}}{% else %}{{i.nombre}}{% endif  %}">{{i}}</option>
           {% endfor %}
         </select>
         {% elif field.name == 'nivel' %}
+          {% if descripcion == 'Nivel' %}
+            <label for="id_nivel">{{descripcion}}</label>
+          <select class="form-select" name="nivel" required id="id_nivel">
+            <option value="">Seleccione un opción</option>
+            {% for i in nivel %}
+            <option value="{{i.id}}">{{i}}</option>
+            {% endfor %}
+          </select>
+          {% endif %}
+        <div id="estudiante">
+        </div>
+        {% elif field.name == 'nivel_comp' %}
         <label for="id_nivel">Nivel</label>
-        <select class="form-select" name="nivel" required id="id_nivel">
-          <option value="0">Seleccione un nivel</option>
+        <select class="form-select" name="nivel_comp" id="nivel_comp">
+          <option value="">Seleccione un nivel</option>
           {% for i in nivel %}
           <option value="{{i.id}}">{{i}}</option>
           {% endfor %}
@@ -169,12 +189,41 @@
 
 
 
+<!-- Para verificar si es Nivel o Estudiante al agregar check -->
 
 
 <script type="text/javascript">
+  $('#id_materias').on('change', function () {
+    if("{{descripcion}}" == 'Nivel'){
+      $('#id_nivel').val("");
+      let datos = document.getElementById('estudiante');
+          datos.innerHTML = '';
+    }else{
+      let materia = $('#id_materias').val();
+      $.ajax({
+        url: '/getinfo/',
+        method: 'POST',
+        data: { 'opcion': 'Estudiante', 'materia': materia }
+      }).done((req) => {
+        console.log('Request: ', req);
+        let opciones = '<br>';
+        opciones += '<label for="id_asignacion">Lista de Estudiantes</label>';
+        opciones += '<select multiple class="form-select" required name="asignacion" id="id_asignacion" >';
+        $.each(req, (key, val) => {
+          opciones += '<option value="' + val.estudiantes.id_est + '">' + val.estudiantes.nombres_est + ' ' + val.estudiantes.apellidos_est + '</option>';
+        });
+        opciones += '</select>';
+        opciones += '<br>';
+        let datos = document.getElementById('estudiante');
+        datos.innerHTML = opciones;
+      });
+
+    }
+  });
   $('#id_nivel').on('change', function () {
     let nivel = $(this).val();
     let materia = $('#id_materias').val();
+    let opcion = "{{descripcion}}";
     if (materia != 0 && nivel != 0) {
       $.ajax({
         url: '/getinfo/',
@@ -193,13 +242,11 @@
         let datos = document.getElementById('estudiante');
         datos.innerHTML = opciones;
       });
-    } else {
+    }else {
       document.getElementById('estudiante').innerHTML = '';
     }
   });
-  $('#algo').on('change', function () {
-    alert('CAmbió');
-  });
+  
   $('#id_paralelo').on('change', function () {
     let id = $(this).val();
     if (id != 0) {
@@ -209,8 +256,6 @@
         data: { 'id_paralelo': id, 'programa': '{{programa}}' }
       }).done((req) => {
         if (req) {
-
-
           console.log('Valor request: ', req);
           let selector = '<label for="id_asignacionEstudiantes">Asignación de Estudiantes</label>';
           selector += '<select class="form-select" name="asignacionEstudiantes" onclick="test(this)" required="required" id="asig_estu">';
@@ -276,5 +321,38 @@
   }
     }
     */
+</script>
+<script>
+  function soloLetras(e) {
+       key = e.keyCode || e.which;
+       tecla = String.fromCharCode(key).toLowerCase();
+       letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+       especiales = [8, 37, 39, 46];
+       tecla_especial = false
+       for (var i in especiales) {
+           if (key == especiales[i]) {
+               tecla_especial = true;
+               break;
+           }
+       }
+       if (letras.indexOf(tecla) == -1 && !tecla_especial)
+           return false;
+   }
+   function soloNumeros(e) {
+       key = e.keyCode || e.which;
+       tecla = String.fromCharCode(key).toLowerCase();
+       letras = "0987654321";
+       especiales = [8, 37, 39, 46];
+       tecla_especial = false
+       for (var i in especiales) {
+           if (key == especiales[i]) {
+               tecla_especial = true;
+               break;
+           }
+       }
+       if (letras.indexOf(tecla) == -1 && !tecla_especial)
+           return false;
+   }
+
 </script>
 {% include "views/default/footer.html" %}

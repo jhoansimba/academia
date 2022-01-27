@@ -15,6 +15,7 @@ from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from academia21 import settings
 Modelo = Matricula
 ModeloTitulo = 'Matrícula'
 formulario = FormMatricula
@@ -39,18 +40,21 @@ class MatriculaList(LoginRequiredMixin, TemplateView):
         for matriculaActual in MatriculaActual.objects.all():
             estudiantes = []
             for est in matriculaActual.asignacion.all():
-                matricula = Matricula.objects.get(estudiante=est, nivel=matriculaActual.nivel) if Matricula.objects.filter(
+                print('Estudiante: ', est)
+                matricula = Matricula.objects.filter(estudiante=est, nivel=matriculaActual.nivel).first() if Matricula.objects.filter(
                     estudiante=est, nivel=matriculaActual.nivel).exists() else ''
                 comprobante = Comprobante.objects.filter(
                     id_est=est) if Comprobante.objects.filter(id_est=est).exists() else ''
                 noMatriculados += est.id_est + f'-{matriculaActual.nivel},'
                 estudiantes.append({'estudiante': est, 'matricula': matricula,
                                    'comprobante': comprobante, 'nivel': matriculaActual.nivel})
-            data.append({
-                'asignacion': estudiantes,
-            })
+            if estudiantes:
+                data.append({
+                    'asignacion': estudiantes,
+                })
         context = super().get_context_data(**kwargs)
         context['object_data'] = data
+        context['name'] = 'Matrícula de Estudiantes'
         context['date'] = datetime.datetime.now().strftime('%Y-%m-%d')
         context['noMatriculados'] = noMatriculados
         return context
@@ -183,7 +187,7 @@ class editHorario2(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['name'] = f'Actualizar {ModeloTitulo}'
-        context['regresar'] = "Horarios2"
+        context['regresar'] = "/asistente/horarios2"
         return context
 
 
@@ -199,8 +203,14 @@ class getInfo(TemplateView):
         idAsignacion = ''
         programa = ''
         idParalelo = ''
+        opcionEst = ''
         try:
             materia = request.POST['materia']
+        except:
+            pass
+        try:
+            materia = request.POST['materia']
+            opcionEst = request.POST['opcion']
         except:
             pass
         try:
@@ -228,6 +238,18 @@ class getInfo(TemplateView):
                         data.append({'estudiantes': estudiantes.json()})
             else:
                 for estudiantes in Estudiante.objects.filter(id_programa=materia):
+                    data.append({'estudiantes': estudiantes.json()})
+        if materia and opcionEst:
+            matriculados = []
+            for matricula in MatriculaActual.objects.filter(nivel=None):
+                for estudiantes in matricula.asignacion.all():
+                    matriculados.append(estudiantes)
+            if matriculados:
+                for estudiantes in Estudiante.objects.filter(id_curso=materia):
+                    if estudiantes not in matriculados:
+                        data.append({'estudiantes': estudiantes.json()})
+            else:
+                for estudiantes in Estudiante.objects.filter(id_curso=materia):
                     data.append({'estudiantes': estudiantes.json()})
         if idAsignacion:
             for matricula in MatriculaActual.objects.filter(id=idAsignacion):
@@ -279,6 +301,8 @@ class AsignarNiveles(LoginRequiredMixin, CreateView):
         context['programa'] = data
         context['materia'] = Programa.objects.all().exclude(nombre='ninguno')
         context['nivel'] = Numero.objects.all()
+        context['tipoOpcion'] = 'Materia'
+        context['descripcion'] = 'Nivel'
         context['regresar'] = self.success_url
         return context
 
@@ -287,16 +311,15 @@ class AsignarNiveles(LoginRequiredMixin, CreateView):
         try:
             if form.is_valid():
                 asignacion = form.cleaned_data['asignacion']
-                if len(asignacion) >= 3 and len(asignacion) <= 6:  # rango para matrículas
+                print('Asignacipon: ', asignacion)
+                if len(asignacion) >= int(settings.DESDE) and len(asignacion) <= int(settings.HASTA):  # rango para matrículas
                     return super().post(request, *args, **kwargs)
                 else:
-                    curso = Estudiante.objects.filter(id_programa=None)
-                    programa = Estudiante.objects.filter(id_curso=None)
                     data = []
                     for i in Estudiante.objects.all():
                         if i.id_programa.all():
                             data.append(i)
-                    return render(self.request, self.template_name, {'form': self.form_class, 'errores': f'Verifique que el número de estudiantes sea 3 o 6, usted ha seleccionado {len(asignacion)}', 'programa': data, 'materia': Programa.objects.all().exclude(nombre='ninguno'), 'nivel': Numero.objects.all()})
+                    return render(self.request, self.template_name, {'form': self.form_class, 'descripcion': 'Nivel','tipoOpcion': 'Materia' ,'errores': f'Verifique que el número de estudiantes sea {settings.DESDE} o {settings.HASTA}, usted ha seleccionado {len(asignacion)}', 'programa': data, 'materia': Programa.objects.all().exclude(nombre='ninguno'), 'nivel': Numero.objects.all()})
         except Exception as e:
             print(f'Error en el método AsignarNiveles:{form}, error: {e}')
 
@@ -308,8 +331,6 @@ class AsignarNivelesCurso(LoginRequiredMixin, CreateView):
     success_url = URL
 
     def get_context_data(self, **kwargs):
-        curso = Estudiante.objects.filter(id_programa=None)
-        programa = Estudiante.objects.filter(id_curso=None)
         data = []
         for i in Estudiante.objects.all():
             if i.id_curso.all():
@@ -317,9 +338,28 @@ class AsignarNivelesCurso(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['name'] = f'Agregar {ModeloTitulo}'
         context['programa'] = data
+        context['materia'] = Cursos.objects.all().exclude(nombre='ninguno')
         context['niveles'] = 'Niveles'
+        context['tipoOpcion'] = 'Curso'
+        context['descripcion'] = 'Estudiantes'
         context['regresar'] = self.success_url
         return context
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        try:
+            if form.is_valid():
+                asignacion = form.cleaned_data['asignacion']
+                print('Asignacipon: ', asignacion)
+                if len(asignacion) >= settings.DESDE and len(asignacion) <= settings.HASTA:  # rango para matrículas
+                    return super().post(request, *args, **kwargs)
+                else:
+                    data = []
+                    for i in Estudiante.objects.all():
+                        if i.id_programa.all():
+                            data.append(i)
+                    return render(self.request, self.template_name, {'form': self.form_class, 'descripcion': 'Estudiantes','tipoOpcion': 'Curso' ,'errores': f'Verifique que el número de estudiantes sea 3 o 6, usted ha seleccionado {len(asignacion)}', 'programa': data, 'materia': Cursos.objects.all().exclude(nombre='ninguno'), 'nivel': Numero.objects.all()})
+        except Exception as e:
+            print(f'Error en el método AsignarNivelesCurso:{form}, error: {e}')
 
 
 class TalentoHumano(LoginRequiredMixin, ListView):
@@ -388,6 +428,7 @@ class addPeriodo (LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['name'] = 'Agregar periodo'
+        context['regresar'] = '/asistente/periodo'
      #  context['object_list'] = self.model.objects.filter(matricula = True)
         return context
 class addProgramaGeneral (LoginRequiredMixin, CreateView):
@@ -401,6 +442,7 @@ class addProgramaGeneral (LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['name'] = 'Agregar Programa General'
+        context['regresar'] = '/asistente/programageneral'
      #  context['object_list'] = self.model.objects.filter(matricula = True)
         return context
 class addParalelo (LoginRequiredMixin, CreateView):
@@ -414,6 +456,7 @@ class addParalelo (LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['name'] = 'Agregar Programa General'
+        context['regresar'] = '/asistente/paralelo'
      #  context['object_list'] = self.model.objects.filter(matricula = True)
         return context
 

@@ -32,6 +32,7 @@ class Ficha_salud (admin.ModelAdmin):
     list_display=('id_est', 'Salud', 'descripcion_fichsal', 'accionesTomar_fichsal', 'telefonoEmer_fichsal')
 
 admin.site.register(Talento_Humano)
+
 admin.site.register(Cargo)
 
 @ admin.register(Comprobante)

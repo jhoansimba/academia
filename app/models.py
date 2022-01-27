@@ -1,4 +1,4 @@
-from django.db.models.fields import CharField, DateField
+from django.db.models.fields import CharField, DateField, TextField
 from django.db.models.fields.files import ImageField
 from django.forms.models import model_to_dict
 from django.utils import tree
@@ -150,19 +150,19 @@ class Cursos(models.Model):
 class Estudiante(models.Model):
     # id_est=models.AutoField(primary_key=True)
     id_est = models.CharField(
-        max_length=10, primary_key=True, verbose_name='Cedula')
-    imagen_est = models.ImageField(null=True, upload_to='images/estudiante')
-    nombres_est = models.CharField(max_length=25)
-    apellidos_est = models.CharField(max_length=25)
+        max_length=10, primary_key=True, verbose_name='Cédula')
+    imagen_est = models.ImageField(null=True,verbose_name='Fotografía', upload_to='images/estudiante',)
+    nombres_est = models.CharField(max_length=25, verbose_name='Nombres')
+    apellidos_est = models.CharField(max_length=25, verbose_name='Apellidos')
     # edad_est=models.DateField()
     fecha_est = models.DateField(verbose_name='Fecha Nacimiento')
-    email_est = models.EmailField()
-    telefono_est = models.CharField(max_length=10)
+    email_est = models.EmailField(verbose_name='Correo Electrónico')
+    telefono_est = models.CharField(max_length=10, verbose_name='Número de Telefono')
     id_rep = models.CharField(max_length=3, null=True, blank=True)
    # id_fichsal=models.ForeignKey(Ficha_salud,on_delete=models.CASCADE)
-    id_curso = models.ManyToManyField(Cursos, null=True, blank=True)
-    id_programa = models.ManyToManyField(Programa, null=True, blank=True)
-    id_direccion = models.ForeignKey(Direccion, on_delete=models.CASCADE)
+    id_curso = models.ManyToManyField(Cursos, null=True, blank=True, verbose_name='Cursos')
+    id_programa = models.ManyToManyField(Programa, null=True, blank=True, verbose_name='Programas')
+    id_direccion = models.ForeignKey(Direccion, on_delete=models.CASCADE, verbose_name='Dirección Domiciliaria')
 
     def Estudiante(self):
         txt = '{0} {1} '
@@ -199,11 +199,11 @@ class Estudiante(models.Model):
 class Ficha_salud (models.Model):
     id_est = models.ForeignKey(Estudiante, on_delete=CASCADE)
     id_fichsal = models.AutoField(primary_key=True)
-    NomEnfer_fichsa = models.CharField(max_length=11, verbose_name='Nombre')
+    NomEnfer_fichsa = models.CharField(max_length=11, verbose_name='Nombre de Enfermedad')
     descripcion_fichsal = models.TextField(verbose_name='Descripción')
     accionesTomar_fichsal = models.TextField(verbose_name='Acciones a tomar')
     telefonoEmer_fichsal = models.CharField(
-        max_length=10, verbose_name='Telefono de emergencia')
+        max_length=10, verbose_name='Teléfono de emergencia')
 
     def Salud(self):
         txt = '{0}'
@@ -260,7 +260,7 @@ class Talento_Humano (models.Model):
     apellidos_th = models.CharField(max_length=25, verbose_name='Apellidos')
     cargo_th = models.ForeignKey(Cargo, on_delete=models.CASCADE, verbose_name='Cargo por el que postula')
     Fecha= models.DateField(verbose_name='Fecha de Entrega lista chequeo')
-    telefono = models.CharField(max_length=10)
+    telefono = models.CharField(max_length=10,verbose_name="Teléfono")
     HojaVida= models.FileField(upload_to = HojaDeVida, verbose_name='1. Hoja de Vida')
     # HojaVida= models.FileField(upload_to='file/talento_humano/hoja de vida')
     CopiaCedula= models.FileField(upload_to=CopiadeCedula, verbose_name='2. Copia de la cédula')
@@ -386,9 +386,9 @@ class Notas (models.Model):
 
 class Comprobante (models.Model):
     i_comp = models.AutoField(primary_key=True)
-    id_est = models.ForeignKey(Estudiante, on_delete=CASCADE)
-    file_comp = models.FileField(null=True, upload_to='files/comprobante')
-    nivel = models.ForeignKey(Numero, on_delete=CASCADE)
+    id_est = models.ForeignKey(Estudiante, on_delete=CASCADE, verbose_name="Estudiante")
+    file_comp = models.FileField(null=True, upload_to='files/comprobante', verbose_name="Comprobante de pago")
+    nivel_comp = models.ForeignKey(Numero, on_delete=CASCADE, verbose_name="Nivel",null=True, blank=True)
 
     def Estudiante(self):
         txt = '{0} {1} '
@@ -450,6 +450,6 @@ class Asistencia (models.Model):
         return txt
 class MatriculaActual(models.Model):
     asignacion = models.ManyToManyField(Estudiante)
-    nivel = models.ForeignKey(Numero, on_delete=CASCADE)
+    nivel = models.ForeignKey(Numero, on_delete=CASCADE, null=True, blank=True)
     def __str__(self) -> str:
         return '{} {} {}'.format(self.asignacion,"a",self.nivel)

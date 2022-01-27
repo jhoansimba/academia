@@ -63,11 +63,11 @@ class CursosController():
                 return HttpResponseRedirect('admin')
 
 
-class ProgramaController():
-    def index(request):
-        programa_list = programa_models.programa_list()
-        context = {'programa_list': programa_list}
-        return render(request, 'views/cursos/programa.html', context)
+#class ProgramaController():
+#    def index(request):
+#        programa_list = programa_models.programa_list()
+#        context = {'programa_list': programa_list}
+#        return render(request, 'views/cursos/programa.html', context)
 
 # consulta
 # def getcursos(idcurso):
@@ -77,18 +77,11 @@ class ProgramaController():
 
 
 class AsignacionCursos(LoginRequiredMixin, TemplateView):
-    template_name = 'views/docente/listadoDocente.html'
-
+    template_name = 'views/Asistente/asignacion_curso.html'
     def get_context_data(self, **kwargs):
-        data = []
-        for i in Cursos.objects.all():
-            if i.nombre != 'ninguno':
-                data.append({'id': i.nombre, 'nombre': i.nombre, 'imagen': i.imagen_curso,
-                            'horario': Horarios.objects.get(id_horario=i.horario_id)})
         context = super().get_context_data(**kwargs)
-        context['cursos_list'] = data
-        context['ruta'] = 'asignacioncursos/add/'
-
+        context['name'] = 'Listado de Estudiantes'
+        context['object_list'] = Estudiante.objects.filter()
         return context
 
 

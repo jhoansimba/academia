@@ -61,6 +61,16 @@ class AsigacionParalelo(models.Model):
 
         return 'paralelo:{}, {}'.format(self.nombre, self.paralelo)
 
+# class MatriculanCurso(models.Model):
+#     periodo = models.ForeignKey(Periodo, on_delete = CASCADE)
+#     curso = models.ManyToManyField(Cursos)
+#     comprobante = models.FileField()
+#     estado = models.BooleanField()
+#     def __str__(self) -> str:
+#         listado = ''
+#         for item in self.curso.all():
+#             listado += str(item) + ', '
+#         return '{}, {} {}'.format(self.periodo, listado, self.usuario)
 class AsignacionCurso(models.Model):
     periodo = models.ForeignKey(Periodo, on_delete = CASCADE)
     curso = models.ManyToManyField(Cursos)

@@ -1,6 +1,6 @@
 {% include "views/default/header.html" %}
 
-
+{%load static%}
 
 <div class="card container">
     <div class="card-header">{{name}}</div>
@@ -11,20 +11,25 @@
                 <tr>
                    <th>Estudiante</th>
                    
-                    <th>Comprbante</th>                               
+                    <th>Comprobante</th>                               
+                    
+                    <th>Opciones</th>                               
                    
                 </tr>
             </thead>
             <tbody>
                 {% for items in object_list %}
                 <tr>
-                    <td>{{items.Estudiante}}</td>
+                    <td> {{items.id_est}}</td>
                     
-                    <td>  <iframe src="{{items.file_comp.url}}" style="border-radius: 30px;" alt="{{items.Estudiante}}" width="100" height="100" > </td>
-                   
+                    <td>  
+                        <a href="{{items.file_comp.url}}" alt="{{items.id_est}}" target="_blank"> <img
+                            src="{%static 'images/doc.png'%}" class="imgmenu"></a>
+                    </td>
+              
                     <td>
-                        <a href="salud/edit/{{items.id_fichsal}}" class="btn btn-outline-warning">Editar</a>
-                        <a href="salud/delete/{{items.id_fichsal}}" class="btn btn-outline-danger">Eliminar</a>
+                        <a href="/representante/comprobante/edit/{{items.i_comp}}" class="btn btn-outline-warning">Editar</a>
+                        
                     </td>
                 </tr>
                 {% endfor %}

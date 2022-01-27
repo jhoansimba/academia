@@ -80,6 +80,8 @@ class FormHumano (ModelForm):
         for i in self.visible_fields():
             i.field.widget.attrs['class'] = 'form-control'
             i.field.widget.attrs['autocomplete'] = 'off'
+            self.fields['cedula_th'].widget.attrs['onkeypress'] = "return soloNumeros(event)"
+            self.fields['telefono'].widget.attrs['onkeypress'] = "return soloNumeros(event)"
 
     class Meta:
         model = Talento_Humano

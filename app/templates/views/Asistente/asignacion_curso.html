@@ -3,41 +3,37 @@
 <div class="container">
     <div class="card">
         <div class="card-header">
-            <h2>Listado de Matrícula</h2>
+            <h2>{{name}}</h2>
         </div>
         
         <div class="card-body">
-            <h4 class="card-title">{{object_list.0.paralelo}}</h4>
-            <h6 class="card-subtitle text-muted">{{object_list.0.Docente}}</h6>
-            {% for items in object_list %}
             <table class="table table-hover">
                 <thead>
                     <tr>
-
                         <th>Estudiantes</th>
-                        <th>Nivel</th>
-                        <th>Paralelo</th>
+                        <th>Curso</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for est in items.estudiantes.all %}
-                    <tr >
-                        <td>{{est}}</td>
-                        
-                        <td>{{items.Nivel}} </td>
-                        <td>{{items.nombre | upper}} </td>
+                    {% for est in object_list %}
+                    <tr>
+                        <td> {{est}}</td>
+                        <td>
+                            {% for curso in est.id_curso.all %} 
+                            <li> {{curso}} </li>
+                            {% endfor %}
+
+                        </td>
 
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            {% endfor %}
-            
         </div>
-        <div class="card-footer">
-            <a href="add" class="btn btn-success" > Agregar otra Matrícula </a>
-            <a href="{% url 'asignacion_p' %}" class="btn btn-primary" > Regresar </a>
-        </div>
+        <!-- <div class="card-footer"> -->
+            <!-- <a href="add" class="btn btn-success" > Agregar otra Matrícula </a> -->
+            <!-- <a href="{% url 'asignacion_p' %}" class="btn btn-primary" > Regresar </a> -->
+        <!-- </div> -->
     </div>
 </div>
 {% include "views/default/footer.html" %}

@@ -4,7 +4,7 @@ from app.mixin import PermisosUsuario
 from django.http.response import HttpResponse, JsonResponse
 from django.views.generic.base import TemplateView, View
 from django.views.generic.edit import DeleteView, UpdateView
-from app.Formularios.formErtudiante import AddComprobante, AddEstudiante, FormEstudiante
+from app.Formularios.formErtudiante import AddComprobante, AddEstudiante, FormComprobante, FormEstudiante
 from app.models import Estudiante, Notas, Comprobante, Numero, Programa
 from django.views.generic import CreateView
 from django.utils.decorators import method_decorator
@@ -19,12 +19,13 @@ class addComprobante (LoginRequiredMixin, PermisosUsuario, CreateView):
     model = Comprobante
     form_class = AddComprobante
     template_name = 'views/main.html'
-    success_url = '/representante/'
+    success_url = '/representante/listcomprobante'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['name'] = 'Agregar estudiantes'
+        context['name'] = 'Agregar Comprobante'
         context['estudiantes'] = Estudiante.objects.filter(id_rep = self.request.user.pk)
-        context['regresar'] = '/representante/'
+        context['nivel'] = Numero.objects.all()
+        context['regresar'] = '/representante/listcomprobante'
         return context
 class listComprobante(LoginRequiredMixin, PermisosUsuario, TemplateView):
     permission_required = 'app.view_estudiante'
@@ -34,11 +35,38 @@ class listComprobante(LoginRequiredMixin, PermisosUsuario, TemplateView):
     title = 'Comprobante'
 
     def get_context_data(self, **kwargs):
-        # est = Estudiante.objects.filter(id_rep = self.request.user.pk)
-        # print(est)
+        estudiante = Estudiante.objects.filter(id_rep = self.request.user.pk)
+        data = []
+        for est in Comprobante.objects.all():
+            if est.id_est in estudiante:
+                data.append(est)
+
         context = super().get_context_data(**kwargs)
         context['name'] = 'Listado de Comprobante'
-        context['object_list'] = Estudiante.objects.filter(id_rep = self.request.user.pk)
+        context['object_list'] = data
+        return context
+
+class editComprobante(LoginRequiredMixin,UpdateView):
+    model = Comprobante
+    form_class = FormComprobante
+    template_name = 'views/main.html'
+    success_url = '/representante/listcomprobante'
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, instance = self.get_object())
+        if form.is_valid():
+            form.save()
+        return super().post(request, *args, **kwargs)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['name'] = 'Actualizar Comprobante'
+        context['regresar'] = '/representante/listcomprobante'
+        return context
+
+
 
 class listEstudiantes(LoginRequiredMixin, PermisosUsuario, TemplateView):
     permission_required = 'app.view_estudiante'
@@ -116,7 +144,7 @@ class deleteEstudiuantes(LoginRequiredMixin, PermisosUsuario, DeleteView):
         context['regresar'] = '/estudiantes/'
         context['info'] = kwargs
         return context
-class Comprobante (LoginRequiredMixin,View):
+class ComprobanteView (LoginRequiredMixin,View):
     def link_callback(self, uri, rel):
             result = finders.find(uri)
             if result:

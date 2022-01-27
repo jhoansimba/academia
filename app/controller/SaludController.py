@@ -36,7 +36,7 @@ class addSalud (LoginRequiredMixin,CreateView):
             return context
 
 
-class editSalud(LoginRequiredMixin, PermisosUsuario,UpdateView):
+class editSalud(LoginRequiredMixin,UpdateView):
     model = Ficha_salud
     form_class = FormSalud
     template_name = 'views/main.html'
@@ -56,7 +56,7 @@ class editSalud(LoginRequiredMixin, PermisosUsuario,UpdateView):
         context['regresar'] = '/representante/salud'
         return context
 
-class deleteSalud(LoginRequiredMixin, PermisosUsuario, DeleteView):
+class deleteSalud(LoginRequiredMixin, DeleteView):
     permission_required = 'app.delete_estudiante'
     model = fichaSalud
     form_class = FormSalud

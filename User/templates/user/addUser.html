@@ -14,8 +14,8 @@
                 <input type="hidden" name="password" value="password">
                 {% elif field.name == 'groups' %}
                 <label for="id_groups">Rol</label>
-                <select class="form-select" name="groups" required id="id_groups">
-                    <option value="0">Seleccione una opción</option>
+                <select multiple class="form-select" name="groups" required id="id_groups">
+                    <option hidden value="0"></option>
                     {% for i in grupos %}
                     <option value="{{i.id}}">{{i.name}}</option>
                     {% endfor %}
@@ -25,6 +25,8 @@
                 <div id="programas">
                 </div>
                 {% else %}
+               <br>
+               
                 {{field.label}}
                 {{field}}
 
@@ -115,5 +117,8 @@
             return false;
     }
 
+$ (function() {
+    $("#id_username").maxLength(10);
+})
 </script>
 {% include "views/default/footer.html" %}

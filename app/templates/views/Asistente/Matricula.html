@@ -5,7 +5,7 @@
     <div class="card-header">{{name}}</div>
 
     <div class="card-body table-responsive ">
-        {% for items in object_data %}
+        
 
         <table class="table" id="table_estudiantes">
             <thead>
@@ -19,69 +19,72 @@
                 </tr>
             </thead>
             <tbody>
-                {% for est in items.asignacion %}
-                <tr>
-                    <td> {{est.estudiante}} </td>
-                    <td> {{est.estudiante.Cursos}} </td>
-                    <td> {{est.estudiante.Programas}} </td>
-                    <td> {{est.nivel}} </td>
-                    <td>
-                        {% if est.matricula.nivel == est.nivel %}
-                        {{est.matricula.fecha}} 
-                        {% endif %}
-
-
-                    </td>
-                    <td>
-                        {% for comp in est.comprobante %}
-                            {% if est.matricula.matricula == True and comp.nivel == est.nivel and est.matricula.nivel == est.nivel %}
-                            <input type="checkbox" checked disabled>
-                            <a href="/media/{{comp.file_comp}}"> Ver Comprobante </a>
-                            {% else %}
-                            <div class="row">
-                                <div class="col-lg-10">
-                                    {% if comp.nivel == est.nivel %}
-                                    <form action="" method="POST" id="{{comp.id_est.id_est}}-{{est.nivel}}">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="estudiante" value="{{comp.id_est.id_est}}">
-                                        <input type="hidden" name="fecha" value="{{date|lower}}">
-                                        <input type="hidden" name="nivel" value="{{est.nivel}}">
-                                        <select class="form-control" name="id_comp">
-                                            <option value="{{comp.i_comp}}" selected>{{comp}}
-                                            </option>
-                                        </select>
-                                        <a href="/media/{{comp.file_comp}}" target="_blank"
-                                            class="btn btn-outline-dark" type="button"> Ver</a>
-                                        <div class="col-lg-2">
-                                            <input type="checkbox" class="form-check-input" name="matricula">
+                {% for items in object_data %}
+                    {% for est in items.asignacion %}
+                        <tr>
+                            <td> {{est.estudiante}} </td>
+                            <td> {{est.estudiante.Cursos}} </td>
+                            <td> {{est.estudiante.Programas}} </td>
+                            <td> {%if est.nivel %}{{est.nivel}}{% endif %} </td>
+                            <td>
+                                {% if est.matricula.nivel == est.nivel %}
+                                {{est.matricula.fecha}} 
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% for comp in est.comprobante %}
+                                    {% if est.matricula.matricula == True and comp.nivel_comp == est.nivel and est.matricula.nivel == est.nivel  or est.matricula.matricula == True and est.nivel == None%}
+                                    <input type="checkbox" checked disabled>
+                                    <a href="/media/{{comp.file_comp}}"> Ver Comprobante </a>
+                                    {% else %}
+                                    <div class="row">
+                                        <div class="col-lg-10">
+                                            {% if comp.nivel_comp == est.nivel or est.nivel == None %}
+                                            <form action="" method="POST" id="{{comp.id_est.id_est}}-{{est.nivel}}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="estudiante" value="{{comp.id_est.id_est}}">
+                                                <input type="hidden" name="fecha" value="{{date|lower}}">
+                                                <input type="hidden" name="nivel" value="{%if est.nivel %}{{est.nivel}}{% endif %}">
+                                                <select class="form-control" name="id_comp">
+                                                    <option value="{{comp.i_comp}}" selected>{{comp}}
+                                                    </option>
+                                                </select>
+                                                <a href="/media/{{comp.file_comp}}" target="_blank"
+                                                    class="btn btn-outline-dark" type="button"> Ver</a>
+                                                <div class="col-lg-2">
+                                                    <input type="checkbox" id="id_check" class="form-check-input" name="matricula">
+                                                </div>
+                                            </form>
+                                            {% endif %}
                                         </div>
-                                    </form>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            {%endif%}
-                        {% endfor %}
-                    </td>
-                </tr>
+                                    </div>
+                                    {%endif%}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
                 {% endfor %}
-
             </tbody>
         </table>
-        {% endfor %}
+       
     </div>
     <div class="card-footer">
-        <button id="save" type="button" class="btn btn-success">Guardar</button>
+        <button id="save" type="button" disabled class="btn btn-success">Guardar</button>
         <a href="asignarprograma" type="button" class="btn btn-success">Asignación de Niveles</a>
         <a href="asignarcursos" type="button" class="btn btn-success">Matricula Cursos</a>
     </div>
-
     <script>
+        // Método para activar botón para matricular
+        $('#id_check').on('change', function () {
+            let btn = document.getElementById('save');
+            btn.disabled = false;
+        });
+    // método para guardar los datos de nivel
         $('#save').on('click', function () {
-            let array = "{{noMatriculados}}".split(",")
+            let array = "{{noMatriculados}}".split(",");
             for (let index = 0; index < array.length - 1; index++) {
                 const element = '#' + array[index];
                 let form = $(element).serializeArray();
-                console.log('Valo formulatio: ', form);
                 if (form.length == 6) {
                     $.ajax({
                         url: 'add',
@@ -92,14 +95,11 @@
                             alert('Error: ', req.errors);
                             return false;
                         }
-
                     }));
                 }
             }
             alert('Matrícula registrada');
             location.reload();
-
-
         });
 
 

@@ -1,0 +1,89 @@
+<html lang="en">
+
+  {%load static%}
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+</head>
+
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+  <!-- <img src="" alt=""> -->
+  <center>
+
+
+    <table cellpadding="0" cellspacing="0" align="left">
+      <tbody>
+        <tr>
+          <td width="0" height="0"></td>
+          <td width="175"></td>
+          <td width="765"></td>
+          <td width="164"></td>
+        </tr>
+        <tr>
+          <td height="85"></td>
+          <td align="left" valign="top"><img width="175" height="85" src="images/LIBRO.png" v:shapes="Imagen_x0020_2">
+      
+          </td>
+          <td></td>
+    
+        </tr>
+      </tbody>
+    </table>
+    <h1><b>UNIVERSIDAD POLITÉCNICA ESTATAL DEL CARCHI </b></h1>
+  </center>
+  <center>
+    <h1><b>EMPRESA PÚBLICA </b></h1>
+
+  </center>
+  <center>
+    <h2><b>CERTIFICADO DE PAGO DE ESTUDIANTES</b></h2>
+    <h1 style="text-align: left;"><b></b></h1>
+  </center>
+  <h1> Con el siguiente recibo, usted tendra que acercarce a la oficina de la
+    Empresa Pública UPEC a realizar el pago correspondiente, despues de eso
+    este documento lo subira a un repositorio como constancia del pago
+    realizado con su respectivo sello de cancelado. </h1>
+  <br>
+  <hr>
+  <h1>Nombre del estudiante: <b>{{est.Estudiante}}</b> </h1>
+  {% if est.id_curso %}
+  <h2>Nombre del Curso(s): {% for cursos in est.id_curso.all %} </h2>
+  <h3> {{cursos}}</h3>
+  {% for detalle in cursos.detalle.all %}
+  <li>{{detalle}} </li>
+  {% endfor %} {% endfor %} {% endif %} {% if est.id_programa %}
+  <h2>Nombre del Programa(s): {% for programa in est.id_programa.all %} </h2>
+  <h3> {{programa}} </h3>
+  <li>valor: <b> {{programa.mensualidad}} $</b></li>
+  {% endfor %} {% endif %} {% if precioCurso %}
+  <h3>Total a pagar por Curso(s): {{precioCurso}}</h3>
+  {%endif%} {% if precioPrograma %}
+  <h3>Total a pagar por Programa(s): {{precioPrograma}}</h3>
+  {%endif%}
+  <hr>
+  <h1>Total a cancelar: <b>{{total}}</b> </h1>
+  <hr><br>
+  <br>
+  <br>
+  <center> 
+    <table style="width: 2205px; height: 236px;" border="1">
+      
+      <tbody>
+        <tr>
+          <td style="width: 458.233px; height: 18px; text-align: center;">
+            <h1>Sello de pago</h1>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </center>
+  </body>
+
+</html>

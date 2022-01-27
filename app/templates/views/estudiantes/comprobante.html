@@ -1,27 +1,53 @@
-<html lang="en">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  </head>
-  <body>{% load i18n static %}
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
-    <!-- <img src="" alt=""> -->
+<html>
+
+<head>
+  <style>
+    @page {
+      size: a4 portrait;
+
+      @frame header_frame {
+        /* Static Frame */
+        -pdf-frame-content: header_content;
+        left: 0pt;
+        top: 0pt;
+        height: 890pt;
+        width: 1000pt;
+      }
+
+      @frame content_frame {
+        /* Content Frame */
+        left: 50pt;
+        width: 512pt;
+        top: 90pt;
+        height: 632pt;
+      }
+
+      @frame footer_frame {
+        /* Another static Frame */
+        -pdf-frame-content: footer_content;
+        left: 50pt;
+        width: 512pt;
+        top: 772pt;
+        height: 20pt;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Content for Static Frame 'header_frame' -->
+  <div id="header_content">
+    <img src="images/Membretada.png" style="width: 1000px" alt="" text-align: center;" />
+  </div>
+
+  <!-- HTML Content -->
+  <div>
     <center>
-      <h1 style="text-align: left;"><b><img src="%7B%static%20%27images/LIBRO.png%27%%7D"
-            alt="libro ep" title="libro" style="width: 201px; height: 144px;">&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <br>
-        </b></h1>
       <h1><b>UNIVERSIDAD POLITÉCNICA ESTATAL DEL CARCHI </b></h1>
     </center>
     <center>
-      <h1><b>EMPRESA PÚBLICA</b></h1>
+      <h1><b>EMPRESA PÚBLICA </b></h1>
+
     </center>
     <center>
       <h2><b>CERTIFICADO DE PAGO DE ESTUDIANTES</b></h2>
@@ -31,7 +57,6 @@
       Empresa Pública UPEC a realizar el pago correspondiente, despues de eso
       este documento lo subira a un repositorio como constancia del pago
       realizado con su respectivo sello de cancelado. </h1>
-    <br>
     <hr>
     <h1>Nombre del estudiante: <b>{{est.Estudiante}}</b> </h1>
     {% if est.id_curso %}
@@ -51,21 +76,11 @@
     <hr>
     <h1>Total a cancelar: <b>{{total}}</b> </h1>
     <hr><br>
-      <br>
-      <br>
-    <center> </center>
-    <table style="width: 2205px; height: 236px;" border="1">
-      <tbody>
-        <tr>
-          <td style="width: 458.233px; height: 18px; text-align: center;">
-            <h1>Sello de pago</h1>
-          </td>
-        </tr>
-        <tr>
-          <td><br>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </body>
+    <center>
+      <td align="center"><img width="551" height="185" src="images/sello de pago.png" v:shapes="Imagen_x0020_2">
+    </center>
+
+  </div>
+</body>
+
 </html>

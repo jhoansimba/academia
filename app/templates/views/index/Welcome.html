@@ -5,62 +5,11 @@
 <link rel="stylesheet" href="{% static 'css/bienvenido.css' %}">
 
 <div class="card text-center">
-
-  <div class="card-header">
-
-
-
-
-
-
-    {% if user.is_authenticated %}
-
-    {% if request.user.is_superuser %}
-    <h2>
-      Bienvenido has iniciado como usuario de:
-    </h2>
-     
-
-      <span>
-        <font size=6>- Administrador{% for i in request.user.groups.all %} - {{i}}
-        {% endfor %}-
-
-        </font>
-
-
-      </span>
- 
-      
-      
-      
-
-      {% else %}
-
-
-
-
-      <h2>Bienvenido has iniciado como usuario de : </h2>
-      {% for i in request.user.groups.all %}
-
-      <span>
-        <font size=6>- {{i}}
-        {% endfor %}-
-
-        </font>
-
-
-      </span>
-
-
-
-      {% endif %}
-      {% endif %}
-  </div>
   <div class="card-body">
-    <h5 class="card-title"><img src="{%static 'images/BIENVENIDOS.png'%}" class="imglogo" alt=""></h5>
+    <img src="{%static 'images/BIENVENIDOS.png'%}" class="imglogo" alt="">
+    
   </div>
-  <div class="card-footer text-muted">
-  </div>
+  
 </div>
 
 {% include "views/default/footer.html" %}

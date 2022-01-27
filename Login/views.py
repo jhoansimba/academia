@@ -23,7 +23,7 @@ class Login(LoginView):
         if request.user.is_authenticated:
             return redirect(LOGIN_REDIRECT_URL)
         return super().dispatch(request, *args, **kwargs)
-class resetPassword(LoginRequiredMixin ,FormView):
+class resetPassword(FormView):
     form_class = resetPasswordForm
     template_name = 'reset.html'
     success_url = '/login/'
@@ -54,25 +54,35 @@ class resetPassword(LoginRequiredMixin ,FormView):
 
     def post(self, request, *args, **kwargs):
         try:
-            username = request.POST['username']
-            email = request.POST['email']
-            usuario = Usuario.objects.filter(username = username).exists()
+            usuario = ''
+            username = ''
+            email = ''
+            try:
+                username = request.POST['username']
+                email = request.POST['email']
+            except Exception as e:
+                print('Sin datos ln-61: ', e)
+    
+            if username and email:
+                usuario = Usuario.objects.filter(username = username).exists()
             if usuario:
                 usuario = Usuario.objects.get(username = username)
                 if email == usuario.email:
                     self.SendMail(usuario.pk, usuario.email)
+                    print('Se cae aquí')
                     return render(request, 'login.html', {'success': 'Email enviado correctamente, porfavor, revise su bandeja de entrada'})
+                    # return render(self.success_url)
                 else:
                     print('Email incorrecto')
-                    return render(request, self.template_name, {'form': self.form_class, 'errorf': 'Email incorrecto'})
+                    return render(request= request, template_name='reset.html',context= {'form': self.form_class, 'errorf': 'Email incorrecto'})
             else:
                 print('Usuario no existe')
                 return render(request, self.template_name, {'form': self.form_class, 'errorf': 'Usuario no registrado'})
         except Exception as e:
-            print('Error ln-30: ', e)
+            print('Error ln-73: ', e)
             # return super().post(request, *args, **kwargs)
 
-class updatePassword(LoginRequiredMixin, TemplateView):
+class updatePassword(TemplateView):
     template_name = 'update.html'
     def get(self, request, *args, **kwargs):
         try:

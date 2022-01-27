@@ -1,0 +1,95 @@
+{% include "views/default/header.html" %}
+{% load i18n static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        input[type=text],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            resize: vertical;
+        }
+        input[type=email],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            resize: vertical;
+        }
+
+        input[type=submit] {
+            background-color: #04AA6D;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=submit]:hover {
+            background-color: #819482;
+        }
+
+        .container-c {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body class="body">
+
+    <h2 class="container">Contactos</h2>
+    <h4 class="container">Escríbenos y en breve los pondremos en contacto contigo</h4>
+    <br>
+    <div class="container-c container">
+        <form action="">
+            <label for="fname">Nombres<span class="obligatorio">*</span></label>
+            <input type="text" id="fname" name="firstname" required="obligatorio" placeholder="Escribe tus nombre">
+
+            <label for="lname">Apellido<span class="obligatorio">*</span></label>
+            <input type="text" id="lname" name="lastname" required="obligatorio" placeholder="Escribe tus apellido">
+                  
+            <label for="email" >Email<span class="obligatorio">*</span>
+            </label>
+            <input type="email" name="email" id="email" required="obligatorio"
+                placeholder="Escribe tu Email">
+
+
+            <label for="subject">Comentario<span class="obligatorio">*</span></label>
+            <textarea id="subject" name="subject"  style="height:200px"></textarea>
+
+            <input type="submit" value="Enviar">
+        </form>
+    </div>
+
+</body>
+
+</html>
+
+
+{% include "views/default/footer.html" %}
+

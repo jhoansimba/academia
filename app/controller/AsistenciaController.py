@@ -28,10 +28,12 @@ class AsistenciaPro(LoginRequiredMixin,CreateView):
         nivel = self.kwargs['nivel']
         pro = self.kwargs['programa']
         par = self.kwargs['paralelo']
-        validacion = AsigacionParalelo.objects.filter(paralelo__usuario_id= self.request.user.id).filter(paralelo__nivel=nivel).order_by('nombre').filter(paralelo__programa_general__programa=pro).filter(nombre = par)
+        # validacion = AsigacionParalelo.objects.filter(paralelo__usuario_id= self.request.user.id).filter(paralelo__nivel=nivel).order_by('nombre').filter(paralelo__programa_general__programa=pro).filter(nombre = par)
         for items in AsigacionParalelo.objects.filter(paralelo__usuario_id= self.request.user.id).filter(paralelo__nivel=nivel).order_by('nombre').filter(paralelo__programa_general__programa=pro).filter(nombre = par):
-            for est in items.estudiantes.all():
-                self.est.append(est)
+            print('valor de items: ', items)
+            for est in items.asignacionEstudiantes.all():
+                for asignacion in est.asignacion.all():
+                    self.est.append(asignacion)
         getHorario = Programa.objects.get(id = pro).nivel.all() # Horario
         horario = []
         for i in getHorario:

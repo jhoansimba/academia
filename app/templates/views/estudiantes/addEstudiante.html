@@ -1,5 +1,17 @@
 {% include "views/default/header.html" %}
 <div class="container">
+  <script src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+  <script src="/admin/jsi18n/"></script>
+  <script src="/static/admin/js/vendor/jquery/jquery.js"></script>
+  <script src="/static/admin/js/calendar.js"></script>
+  <script src="/static/admin/js/jquery.init.js"></script>
+  <script src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+  <script src="/static/admin/js/core.js"></script>
+  <script src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+  <script src="/static/admin/js/actions.js"></script>
+  <script src="/static/admin/js/urlify.js"></script>
+  <script src="/static/admin/js/prepopulate.js"></script>
+  <script src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
 
 
   <div class="card">
@@ -22,8 +34,9 @@
         <div class="input-group">
           {{field}}
           <div class="input-group-append">
-            <a class="related-widget-wrapper-link add-related btn btn-outline-success " id="add_id_id_ciudad"
-            href="/direccion/" title="Añadir otro ciudad"><img
+            
+            <a class="related-widget-wrapper-link add-related btn btn-outline-success" id="add_id_id_direccion"
+              href="/admin/app/direccion/add/?_to_field=id_direc&amp;_popup=1" title="Añadir otro direccion"><img
                 src="/static/admin/img/icon-addlink.svg" alt="Añadir" type="button">Agregar otra</a>
           </div>
         </div>
@@ -41,4 +54,37 @@
     </div>
   </div>
 </div>
+<script>
+   function soloLetras(e) {
+        key = e.keyCode || e.which;
+        tecla = String.fromCharCode(key).toLowerCase();
+        letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+        especiales = [8, 37, 39, 46];
+        tecla_especial = false
+        for (var i in especiales) {
+            if (key == especiales[i]) {
+                tecla_especial = true;
+                break;
+            }
+        }
+        if (letras.indexOf(tecla) == -1 && !tecla_especial)
+            return false;
+    }
+    function soloNumeros(e) {
+        key = e.keyCode || e.which;
+        tecla = String.fromCharCode(key).toLowerCase();
+        letras = "0987654321";
+        especiales = [8, 37, 39, 46];
+        tecla_especial = false
+        for (var i in especiales) {
+            if (key == especiales[i]) {
+                tecla_especial = true;
+                break;
+            }
+        }
+        if (letras.indexOf(tecla) == -1 && !tecla_especial)
+            return false;
+    }
+
+</script>
 {% include "views/default/footer.html" %}

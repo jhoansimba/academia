@@ -89,9 +89,9 @@
             </td>
             <td>
               {% if items.notas.estado %}
-              <b style="color: green;">Si</b>
+              <b style="color: green;">Aprobado</b>
               {% else %}
-              <b style="color: red;">No</b>
+              <b style="color: red;">Reprobado</b>
               {% endif %}
             </td>
           </tr>
@@ -103,7 +103,7 @@
 
   </div>
   <div class="card-footer">
-    <a href="asistencia" type="button" class="btn btn-success">asistencia</a>
+    <a href="asistencia" type="button" class="btn btn-success">Asistencia</a>
     <a class="btn btn-primary" href="javascript:history.back()"> Volver Atrás</a>
     <a onclick="saveAll('{{save}}', '{{code}}')" type="button" class="btn btn-warning">Guardar todo</a>
 

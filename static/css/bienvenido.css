@@ -1,7 +1,9 @@
 .card-body{
-    margin: 0;
+    margin-top:-10px;
+    max-height: 100%;
+    max-width: 100%;
     padding: 0;
-    background: url(../images/back.jpg);   
+    background: radial-gradient(#F9A9CF,#F6D1E3,#D4EBDB,#B8C3E1);   
     background-size: cover;
     background-position: center;
     font-family: sans-serif;

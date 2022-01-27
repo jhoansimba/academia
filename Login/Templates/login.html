@@ -6,7 +6,22 @@
 
     <div class="card">
         <div class="card-header">Inicio de Sesión</div>
-        {{form.errors}}
+
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>Error!</strong> {{error}}
+            </div>
+            {% endfor %}
+        {% endif %}
         {% if success %}
         
         <div class="alert alert-info">
@@ -17,7 +32,7 @@
         {% endif %}
 
         <div class="card-body">
-            <form action="" method="POST" enctype="multipart/form-data">
+            <form action="/login/" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <label for="id_username">Usuario</label>
                 <input type="text" class="form-control" name="username" id="id_username">
@@ -27,7 +42,7 @@
                 <br>
                 <button type="submit" class="btn btn-success">Aceptar</button>
                 <a href='/' class="btn btn-primary">Regresar</a>
-                <a class="form-recovery" href=" reset ">Olvidé mi Contraseña</a>
+                <a class="form-recovery" href="{% url 'reset'%}">Olvidé mi Contraseña</a>
             </form>
         </div>
     </div>
