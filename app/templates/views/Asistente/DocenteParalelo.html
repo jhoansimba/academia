@@ -27,6 +27,9 @@
     <li class="nav-item">
         <a class="nav-link active" style="background-color: rgb(112, 165, 245);" aria-current="page" href="">Docente</a>
     </li>
+    <li class="nav-item"> 
+        <a class="nav-link " aria-current="page" href="{%url 'parametros'%}">Parametros Constantes</a>
+    </li>
 
 </ul>
 
@@ -44,7 +47,7 @@
                     <th>Periodo</th>
                     <th>Nivel</th>
                     <th>Docente</th>
-                    <th>Opciones</th>
+                    <!--<th>Opciones</th>-->
 
 
 
@@ -54,12 +57,12 @@
                 {% for items in object_list %}
                 <tr>
                     <td> {{items.programa_general}} </td>
-                    <td> {{items.nivel}} </td>
+                    <td> {{items.nivel_Paralelo}} </td>
                     <td> {{items.usuario}} </td>
 
-                    <td>
+                   <!-- <td>
                         <a href="" class="btn btn-warning" type="button">Editar</a>
-                    </td>
+                    </td>-->
                 </tr>
                 {% endfor %}
 
@@ -69,14 +72,7 @@
     </div>
     <div class="card-footer">
 
-        <a class="related-widget-wrapper-link add-related" id="add_id_paralelo"
-            href="/admin/User/paralelo/add/?_to_field=id&amp;_popup=1" title="Añadir otro paralelo"><img
-                src="/static/admin/img/icon-addlink.svg" alt="Añadir">Agregar Programa</a>
-
-      
-
-
-
+        <a href="add" class="btn btn-warning" type="button">Asignar Docente</a>
     </div>
 
 

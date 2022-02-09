@@ -25,8 +25,9 @@ SECRET_KEY = '1acy6ll3jxj)rmg^dcfrnt9$nih$zf2tbb_z-#ue-*6r=&n&fj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
+#DEBUG = False # Cuando ya le subas al hosting
+# # ALLOWED_HOSTS = ['http://localhost:8000'] dirección
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -79,7 +80,9 @@ WSGI_APPLICATION = 'academia21.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/3.1/ref/settings/#databas
+ 
+
 
 DATABASES = {
     'default': {
@@ -125,8 +128,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-DESDE = 3
-HASTA = 5
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 

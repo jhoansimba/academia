@@ -76,6 +76,9 @@ class Horarios (models.Model):
 
 class Numero(models.Model):
     nivel = models.CharField(verbose_name='Nivel Número #: ', max_length=1)
+    def json(self):
+        txt = model_to_dict(self)
+        return txt
     def __str__(self) -> str:
         return '{}'.format(self.nivel)
 
@@ -439,6 +442,7 @@ class Asistencia (models.Model):
     estado_asis = models.BooleanField()
     niveles = models.CharField(max_length=1, null = True, blank = True)
     categoria = models.CharField(max_length=1, null=True, blank= True)
+    programaID = models.CharField(max_length=20, null=True, blank= True)
     fecha_asis = models.DateField(blank=True,null=True, verbose_name='Fecha de asistencia')
     horario_id = models.ForeignKey(
         Horarios, on_delete=CASCADE,blank=True,null=True, verbose_name='Hora')
@@ -453,3 +457,10 @@ class MatriculaActual(models.Model):
     nivel = models.ForeignKey(Numero, on_delete=CASCADE, null=True, blank=True)
     def __str__(self) -> str:
         return '{} {} {}'.format(self.asignacion,"a",self.nivel)
+class ParametrosConstantes(models.Model):
+    inicio = models.PositiveIntegerField(verbose_name="Mínimo de estudiantes")
+    fin = models.PositiveIntegerField(verbose_name="Máximo de estudiantes")
+    descripcion = models.CharField(max_length=30)
+    nombre = models.CharField(max_length=3)
+    def __str__(self) -> str:
+        return 'inicio: {}, fin: {}, descripcion: {}, nombre: {}'.format(self.inicio, self.fin, self.descripcion, self.nombre)

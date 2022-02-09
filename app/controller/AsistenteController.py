@@ -1,6 +1,6 @@
 from django.http.response import JsonResponse
 from django.shortcuts import render
-from User.models import AsignacionCurso, Paralelo, Periodo
+from User.models import AsignacionCurso, AsignacionCursoEstudiante, Paralelo, Periodo, Usuario
 from django.views.generic.base import TemplateView
 from app.Formularios.formAsignar import AsignaciondeNivel
 from django.forms.models import ModelFormOptions
@@ -10,7 +10,7 @@ from app.Formularios.formSalud import AddSalud, FormSalud
 from django.views.generic.edit import DeleteView, UpdateView
 from django.views.generic.list import ListView
 import datetime
-from app.models import Comprobante, Estudiante, Ficha_salud, Horarios, Matricula, MatriculaActual, Numero, Programa, Talento_Humano
+from app.models import Comprobante, Estudiante, Ficha_salud, Horarios, Matricula, MatriculaActual, Numero, ParametrosConstantes, Programa, Talento_Humano
 from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
@@ -204,6 +204,12 @@ class getInfo(TemplateView):
         programa = ''
         idParalelo = ''
         opcionEst = ''
+        addCurso = ''
+        idCursoPeriodo = ''
+        addPro = ''
+        idProgramaG = ''
+        idPrograma = ''
+        idDocente = ''
         try:
             materia = request.POST['materia']
         except:
@@ -211,6 +217,24 @@ class getInfo(TemplateView):
         try:
             materia = request.POST['materia']
             opcionEst = request.POST['opcion']
+        except:
+            pass
+        try:
+            # data: { 'idPrograma': idPrograma, 'idDocente': idDocente }
+            idPrograma = request.POST['idPrograma']
+            idDocente = request.POST['idDocente']
+        except:
+            pass
+        try:
+            # data: { 'opcion': 'addCurso', 'idCursoPeriodo': idCursoPeriodo }
+            addCurso = request.POST['opcion']
+            idCursoPeriodo = request.POST['idCursoPeriodo']
+        except:
+            pass
+        try:
+            # data: { 'addPro': 'addPro', 'idProgramaG': idProgramaG }
+            addPro = request.POST['addPro']
+            idProgramaG = request.POST['idProgramaG']
         except:
             pass
         try:
@@ -268,11 +292,44 @@ class getInfo(TemplateView):
                 val = False
                 for j in i.asignacion.all():
                     for k in Estudiante.objects.filter(id_programa=programa):
-                        if k == j and i.nivel == paralelo.nivel:
+                        if k == j and i.nivel == paralelo.nivel_Paralelo:
                             val = True
                 if val and i.id not in lista:
                     data.append({'id': i.id, 'nivel': str(i.nivel),
                                 'size': str(len(i.asignacion.all()))})
+        if addCurso and idCursoPeriodo:
+            data = []
+            estudiantesMatriculados = []
+            idCurso = AsignacionCurso.objects.get(id=idCursoPeriodo).Curso()
+            for asignacion in AsignacionCursoEstudiante.objects.filter(asignacionCurso=idCursoPeriodo):
+                for est in asignacion.estudiantes_curso.all():
+                    estudiantesMatriculados.append(est)
+            if estudiantesMatriculados:
+                for est in Estudiante.objects.filter(id_curso=idCurso[0].nombre):
+                    if est not in estudiantesMatriculados:
+                        data.append(est.json())
+            else:
+                for est in Estudiante.objects.filter(id_curso=idCurso[0].nombre):
+                    data.append(est.json())
+        if addPro and idProgramaG:
+            data = []
+            idPrograma = ProgramaGeneral.objects.get(id=idProgramaG).programa
+            for user in Usuario.objects.filter(programa=idPrograma):
+                data.append({'id': user.pk, 'nombre': user.NombreCompleto()})
+        if idPrograma and idDocente:
+            data = []
+            idPro = ProgramaGeneral.objects.get(id=idPrograma).programa
+            nivelesExistentes = []
+            for i in Paralelo.objects.filter(usuario=idDocente, programa_general__programa=idPro):
+                nivelesExistentes.append(i.nivel_Paralelo)
+            if nivelesExistentes:
+                for i in Numero.objects.all():
+                    if i not in nivelesExistentes:
+                        data.append(i.json())
+            else:
+                for i in Numero.objects.all():
+                        data.append(i.json())
+
         return JsonResponse(data, safe=False)
 
 
@@ -308,18 +365,19 @@ class AsignarNiveles(LoginRequiredMixin, CreateView):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
+        CONSTANTES = ParametrosConstantes.objects.get(nombre='LRP')
         try:
             if form.is_valid():
                 asignacion = form.cleaned_data['asignacion']
-                print('Asignacipon: ', asignacion)
-                if len(asignacion) >= int(settings.DESDE) and len(asignacion) <= int(settings.HASTA):  # rango para matrículas
+                # rango para matrículas
+                if len(asignacion) >= CONSTANTES.inicio and len(asignacion) <= CONSTANTES.fin:
                     return super().post(request, *args, **kwargs)
                 else:
                     data = []
                     for i in Estudiante.objects.all():
                         if i.id_programa.all():
                             data.append(i)
-                    return render(self.request, self.template_name, {'form': self.form_class, 'descripcion': 'Nivel','tipoOpcion': 'Materia' ,'errores': f'Verifique que el número de estudiantes sea {settings.DESDE} o {settings.HASTA}, usted ha seleccionado {len(asignacion)}', 'programa': data, 'materia': Programa.objects.all().exclude(nombre='ninguno'), 'nivel': Numero.objects.all()})
+                    return render(self.request, self.template_name, {'form': self.form_class, 'descripcion': 'Nivel', 'tipoOpcion': 'Materia', 'errores': f'Verifique que el número de estudiantes sea {CONSTANTES.inicio} o {CONSTANTES.fin}, usted ha seleccionado {len(asignacion)}', 'programa': data, 'materia': Programa.objects.all().exclude(nombre='ninguno'), 'nivel': Numero.objects.all()})
         except Exception as e:
             print(f'Error en el método AsignarNiveles:{form}, error: {e}')
 
@@ -344,20 +402,23 @@ class AsignarNivelesCurso(LoginRequiredMixin, CreateView):
         context['descripcion'] = 'Estudiantes'
         context['regresar'] = self.success_url
         return context
+
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
+        CONSTANTES = ParametrosConstantes.objects.get(nombre='LRC')
         try:
             if form.is_valid():
                 asignacion = form.cleaned_data['asignacion']
                 print('Asignacipon: ', asignacion)
-                if len(asignacion) >= settings.DESDE and len(asignacion) <= settings.HASTA:  # rango para matrículas
+                # rango para matrículas
+                if len(asignacion) >= CONSTANTES.inicio and len(asignacion) <= CONSTANTES.fin:
                     return super().post(request, *args, **kwargs)
                 else:
                     data = []
                     for i in Estudiante.objects.all():
                         if i.id_programa.all():
                             data.append(i)
-                    return render(self.request, self.template_name, {'form': self.form_class, 'descripcion': 'Estudiantes','tipoOpcion': 'Curso' ,'errores': f'Verifique que el número de estudiantes sea 3 o 6, usted ha seleccionado {len(asignacion)}', 'programa': data, 'materia': Cursos.objects.all().exclude(nombre='ninguno'), 'nivel': Numero.objects.all()})
+                    return render(self.request, self.template_name, {'form': self.form_class, 'descripcion': 'Estudiantes', 'tipoOpcion': 'Curso', 'errores': f'Verifique que el número de estudiantes sea {CONSTANTES.inicio} o {CONSTANTES.fin}, usted ha seleccionado {len(asignacion)}', 'programa': data, 'materia': Cursos.objects.all().exclude(nombre='ninguno'), 'nivel': Numero.objects.all()})
         except Exception as e:
             print(f'Error en el método AsignarNivelesCurso:{form}, error: {e}')
 
@@ -391,6 +452,8 @@ class PeriodoList(LoginRequiredMixin, ListView):
         context['name'] = 'Periodos'
 
         return context
+
+
 class ProgramaGeneralList(LoginRequiredMixin, ListView):
     permission_required = listado
     model = ProgramaGeneral
@@ -404,12 +467,15 @@ class ProgramaGeneralList(LoginRequiredMixin, ListView):
         context['name'] = 'Programa General'
 
         return context
+
+
 class ParaleloList(LoginRequiredMixin, ListView):
    permission_required = listado
    model = Paralelo
    form_class = FormParalelo
    template_name = 'views/Asistente/Docenteparalelo.html'
    title = Title
+
    def get_context_data(self, **kwargs):
        context = super().get_context_data(**kwargs)
        context['name2'] = 'Asignacion Docente'
@@ -418,7 +484,7 @@ class ParaleloList(LoginRequiredMixin, ListView):
 
 
 class addPeriodo (LoginRequiredMixin, CreateView):
-    
+
     model = Periodo
     form_class = FormPeriodo
     template_name = 'views/main.html'
@@ -431,8 +497,10 @@ class addPeriodo (LoginRequiredMixin, CreateView):
         context['regresar'] = '/asistente/periodo'
      #  context['object_list'] = self.model.objects.filter(matricula = True)
         return context
+
+
 class addProgramaGeneral (LoginRequiredMixin, CreateView):
-    
+
     model = ProgramaGeneral
     form_class = FormProgramaGeneral
     template_name = 'views/main.html'
@@ -445,6 +513,8 @@ class addProgramaGeneral (LoginRequiredMixin, CreateView):
         context['regresar'] = '/asistente/programageneral'
      #  context['object_list'] = self.model.objects.filter(matricula = True)
         return context
+
+
 class addParalelo (LoginRequiredMixin, CreateView):
 
     model = Paralelo
@@ -561,4 +631,38 @@ class AgregarEstudiantes(CreateView):
         context['programa'] = id
         context['name'] = 'Asignación de Paralelo'
         context['estudiantes'] = self.estudiantes
+        return context
+class ParametroList(LoginRequiredMixin, ListView):
+   permission_required = listado
+   model = ParametrosConstantes
+   form_class = FormParametros
+   template_name = 'views/Asistente/Parametros.html'
+   title = Title
+   def get_context_data(self, **kwargs):
+       context = super().get_context_data(**kwargs)
+       context['name'] = 'Parametros Constantes'
+     #  context['object_list'] = self.model.objects.filter(matricula = True)
+       return context
+
+class editParametros(LoginRequiredMixin, UpdateView):
+    permission_required = editar
+    model = ParametrosConstantes
+    form_class = EditParametros
+    template_name = 'views/main.html'
+    success_url = '/asistente/parametros'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, instance=self.get_object())
+        if form.is_valid():
+            form.save()
+        return super().post(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['name'] = f'Actualizar {ModeloTitulo}'
+        context['regresar'] = "../horarios"
         return context

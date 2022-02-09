@@ -45,5 +45,6 @@ admin.site.register(Numero)
 admin.site.register(Cursos)
 admin.site.register(Detalles)
 admin.site.register(Niveles)
+admin.site.register(ParametrosConstantes)
 # admin.site.register(Aul)
 

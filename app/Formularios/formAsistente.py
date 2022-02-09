@@ -1,7 +1,7 @@
 from User.models import AsigacionParalelo, Paralelo, Periodo, ProgramaGeneral
 from django.forms import ModelForm, widgets
 from django import forms
-from app.models import Cursos, Ficha_salud, Horarios, Matricula, Programa, Talento_Humano
+from app.models import Cursos, Ficha_salud, Horarios, Matricula, ParametrosConstantes, Programa, Talento_Humano
 from django.forms import ModelForm, widgets
 
 
@@ -136,4 +136,23 @@ class FormProgramaGeneral(ModelForm):
 
     class Meta:
         model = ProgramaGeneral
+        fields = '__all__'
+
+class FormParametros(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for i in self.visible_fields():
+            i.field.widget.attrs['class'] = 'form-control'
+            i.field.widget.attrs['autocomplete'] = 'off'
+
+class EditParametros(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for i in self.visible_fields():
+            i.field.widget.attrs['class'] = 'form-control'
+            i.field.widget.attrs['autocomplete'] = 'off'
+       # self.fields['matricula'].widget.attrs['class'] = 'form-check-input'
+
+    class Meta:
+        model = ParametrosConstantes
         fields = '__all__'

@@ -3,22 +3,23 @@
 
 
 
-  
-  
+
+
 
 
 <ul class="container nav nav-tabs ">
     <li class="nav-item">
         <a class="nav-link " href="{%url 'PeriodoList'%}">Periodos</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link active" style="background-color: rgb(112, 165, 245);"  aria-current="page" href="">{{name}}</a>
-    </li>
     <li class="nav-item"> 
+        <a class="nav-link " aria-current="page" href="{%url 'ProgramaGeneralList'%}">Programa General</a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link " aria-current="page" href="{%url 'ParaleloList'%}">Docente</a>
     </li>
-    <li class="nav-item"> 
-        <a class="nav-link " aria-current="page" href="{%url 'parametros'%}">Parametros Constantes</a>
+    <li class="nav-item">
+        <a class="nav-link active" style="background-color: rgb(112, 165, 245);" aria-current="page"
+            href="">{{name}}</a>
     </li>
 
 </ul>
@@ -34,38 +35,41 @@
         <table class="table" id="table_estudiantes">
             <thead>
                 <tr>
-                    <th>{{name}}</th>
-                    <!--<th>Opciones</th>-->
-
-
-
+                    <th>{{name}}: Número de estudiantes por Paralelo
+                    </th>
+                    
                 </tr>
             </thead>
+            
+        
+            
             <tbody>
                 {% for items in object_list %}
                 <tr>
-                    <td> {{items.periodo}} - {{items.programa}} </td>
+                    <td> Mínimo de estudiantes {{items.inicio}}
 
-                   <!-- <td>
+                        <br>
+                        Máximo de estuadiantes {{items.fin}}
+                    </td>
+                    <!-- <td>
                         <a href="" class="btn btn-warning" type="button">Editar</a>
                     </td>-->
                 </tr>
-                {% endfor %}
-
-
             </tbody>
         </table>
     </div>
     <div class="card-footer">
 
-    
 
-        <a  id="add_id_periodo" class="btn btn-warning" type="button"
-            href="{%url 'addProgramaGeneralList'%}" title="Añadir otro periodo"> Agregar Programa</a>
+
+        <a href="parametros/update/{{items.id}}" class="btn btn-warning" type="button"">Actualizar Parametros</a>
 
 
 
     </div>
+                {% endfor %}
+
+
 
 
 </div>

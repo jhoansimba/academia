@@ -90,6 +90,7 @@
         {% elif field.name == 'asignacionCurso' %}
         <label for="id_asignacionCurso">Asignación de Curso</label>
         <select class="form-select" name="asignacionCurso" required id="id_asignacionCurso">
+          <option value selected>Seleccione una opción</option>
           {% for i in addCursos %}
           <option value="{{i.id}}">{{i}}</option>
           {% endfor %}
@@ -98,6 +99,17 @@
         <a class="related-widget-wrapper-link add-related" id="add_id_asignacionCurso"
           href="/admin/User/asignacioncurso/add/?_to_field=id&amp;_popup=1" title="Añadir otro asignacion curso"><img
             src="/static/admin/img/icon-addlink.svg" alt="Añadir">Agregar</a><br>
+          
+        
+        {% elif field.name == 'estudiantes_curso' %}
+        <div id="asignacionEstudianteCurso" ></div>
+        {% elif field.name == 'programa_general' %}
+        {{field.label}}
+        {{field}}
+        {% elif field.name == 'usuario' %}
+        <div id="usuario" ></div>
+        {% elif field.name == 'nivel_Paralelo' %}
+        <div id="nivelParalelo"></div>
 
         {% elif field.name == 'paralelo' %}
         <label for="id_paralelo">Seleccione matrícula actual</label>
@@ -133,7 +145,7 @@
         {% elif field.name == 'niveles' %}
         <label for="id_niveles">Seleccione el Nivel</label>
         <select class="form-select" name="niveles" required id="id_niveles">
-          <option value="">Seleccione una opción</option>
+          <option value="" selected>Seleccione una opción</option>
           {% for i in nivel %}
           <option value="{{i.id}}">{{i}}</option>
           {% endfor %}
@@ -169,7 +181,6 @@
               title="Añadir otro ciudad"><img src="/static/admin/img/icon-addlink.svg" alt="Añadir"
                 type="button">Agregar otra</a>
             <br>
-
           </div>
         </div>
         <br>
@@ -220,6 +231,88 @@
 
     }
   });
+  // Función para asígnar estudiantes a un curso con su docente y/o pariodo
+  $('#id_asignacionCurso').on('change', function () {
+    let idCursoPeriodo = $(this).val();
+      if(idCursoPeriodo != ''){
+        $.ajax({
+          url: '/getinfo/',
+          method: 'POST',
+          data: { 'opcion': 'addCurso', 'idCursoPeriodo': idCursoPeriodo }
+        }).done((req) => {
+          console.log('Request: ', req);
+          let opciones = '<br>';
+          opciones += '<label for="id_estudiantes_curso">Lista de Estudiantes</label>';
+          opciones += '<select multiple class="form-select" required name="estudiantes_curso" id="id_estudiantes_curso" >';
+          $.each(req, (key, val) => {
+            opciones += '<option value="' + val.id_est + '">' + val.nombres_est + ' ' + val.apellidos_est + '</option>';
+          });
+          opciones += '</select>';
+          opciones += '<br>';
+          let datos = document.getElementById('asignacionEstudianteCurso');
+          datos.innerHTML = opciones;
+        });
+
+      }
+    
+  });
+  
+  //Asignación de Docente
+  $('#id_programa_general').on('change', function () {
+    document.getElementById('usuario').innerHTML = '';
+    let idProgramaG = $(this).val();
+      if(idProgramaG != ''){
+        $.ajax({
+          url: '/getinfo/',
+          method: 'POST',
+          data: { 'addPro': 'addPro', 'idProgramaG': idProgramaG }
+        }).done((req) => {
+          console.log('Request: ', req);
+          let opciones = '<br>';
+          opciones += '<label for="id_usuario">Lista de Docentes</label>';
+          opciones += '<select class="form-select" required name="usuario" onclick="getNivel()" id="id_usuario" >';
+            opciones += '<option value="">Seleccione un Docente</option>';
+          $.each(req, (key, val) => {
+            opciones += '<option value="' + val.id+ '">' + val.nombre+ '</option>';
+          });
+          opciones += '</select>';
+          opciones += '<br>';
+          let datos = document.getElementById('usuario');
+          datos.innerHTML = opciones;
+        });
+
+      }
+      document.getElementById('nivelParalelo').innerHTML = '';
+    
+  });
+  // eliminación de nivel registrado un docente
+  function getNivel() {
+    let idDocente = $('#id_usuario').val();
+    let idPrograma = $('#id_programa_general').val();
+    if(idDocente && idPrograma){
+        document.getElementById('nivelParalelo').innerHTML = '';
+        $.ajax({
+          url: '/getinfo/',
+          method: 'POST',
+          data: { 'idPrograma': idPrograma, 'idDocente': idDocente }
+        }).done((req) => {
+          console.log('Request: ', req);
+          let opciones = '<label for="id_nivel_Paralelo">Nivel Paralelo</label>';
+          opciones += '<select class="form-select" required name="nivel_Paralelo" id="id_nivel_Paralelo" >';
+          opciones += '<option value="">Seleccione un Nivel</option>';
+          $.each(req, (key, val) => {
+            opciones += '<option value="' + val.id+ '">' + val.nivel+ '</option>';
+          });
+          opciones += '</select>';
+          opciones += '<br>';
+          let nivel = document.getElementById('nivelParalelo');
+          nivel.innerHTML = opciones;
+        });
+      }
+    
+  }
+  
+  
   $('#id_nivel').on('change', function () {
     let nivel = $(this).val();
     let materia = $('#id_materias').val();

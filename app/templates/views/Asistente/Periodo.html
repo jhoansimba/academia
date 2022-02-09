@@ -17,7 +17,10 @@
     <li class="nav-item"> 
         <a class="nav-link " aria-current="page" href="{%url 'ParaleloList'%}">Docente</a>
     </li>
-
+    <li class="nav-item"> 
+        <a class="nav-link " aria-current="page" href="{%url 'parametros'%}">Parametros Constantes</a>
+    </li>
+    
 </ul>
 
 
@@ -32,7 +35,7 @@
             <thead>
                 <tr>
                     <th>Periodo</th>
-                    <th>Opciones</th>
+                   <!--<th>Opciones</th>-->
 
 
 
@@ -43,9 +46,9 @@
                 <tr>
                     <td> {{items.nombre}} </td>
 
-                    <td>
+                  <!--  <td>
                         <a href="" class="btn btn-warning" type="button">Editar</a>
-                    </td>
+                    </td>-->
                 </tr>
                 {% endfor %}
 
@@ -56,8 +59,7 @@
     <div class="card-footer">
 
         <a  id="add_id_periodo"
-            href="{%url 'AddPeriodo'%}" title="Añadir otro periodo"><img
-                src="/static/admin/img/icon-addlink.svg" alt="Añadir"> Agregar Periodo</a>
+            href="{%url 'AddPeriodo'%}" title="Añadir otro periodo" class="btn btn-warning" type="button"> Agregar Periodo</a>
 
 
 

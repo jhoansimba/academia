@@ -10,7 +10,7 @@ from ..models import Asistencia, Cursos, Estudiante, Horarios, Programa
 from django.db import models
 from django.shortcuts import redirect, render, HttpResponse
 from datetime import datetime
-
+from .service import getTime
 # cursos_model
 
 
@@ -81,7 +81,7 @@ class AsignacionCursos(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['name'] = 'Listado de Estudiantes'
-        context['object_list'] = Estudiante.objects.filter()
+        context['object_list'] = AsignacionCursoEstudiante.objects.all()
         return context
 
 
@@ -92,18 +92,20 @@ class AsignacionCursosAdd(LoginRequiredMixin, CreateView):
     success_url = '/asistente/asignacioncursos'
 
     def get(self, request, *args, **kwargs):
-        if Cursos.objects.filter(nombre=self.kwargs['pk']).exists() == False:
-            return redirect(self.success_url)
+        # if Cursos.objects.filter(nombre=self.kwargs['pk']).exists() == False:
+        #     return redirect(self.success_url)
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['regresar'] = '/asistente/asignacioncursos'
         context['name'] = 'Agregar Curso'
-        context['addCursos'] = AsignacionCurso.objects.filter(
-            curso=self.kwargs['pk'])
-        context['estudiantes'] = Estudiante.objects.filter(
-            id_curso=self.kwargs['pk'])
+        context['addCursos'] = AsignacionCurso.objects.all()
+        # filter(
+            # curso=self.kwargs['pk'])
+
+        # context['estudiantes'] = Estudiante.objects.filter(
+        #     id_curso=self.kwargs['pk'])
         return context
 
 
@@ -116,11 +118,10 @@ class addAsistenciaCurso(CreateView):
 
     def get_context_data(self, **kwargs):
         ## AsignacionCursoEstudiante.objects.filter(asignacionCurso__curso = 'Música')
-        print('PK: ', self.kwargs['pk'])
         estudiante = []
         for est in Estudiante.objects.filter(id_curso=self.kwargs['pk']):
             for asignacion in AsignacionCursoEstudiante.objects.filter(asignacionCurso__curso=self.kwargs['pk']):
-                for i in asignacion.estudiantes.all():
+                for i in asignacion.estudiantes_curso.all():
                     if est == i:
                         estudiante.append(i)
         context = super().get_context_data(**kwargs)
@@ -134,24 +135,31 @@ class addAsistenciaCurso(CreateView):
             curso = self.kwargs['pk']
             form = AddAsistenciaForm(request.POST)
             if form.is_valid():
+                fechaActual = getTime()
                 data = form.cleaned_data['estudiante']
-                form.cleaned_data['fecha_asis'] = datetime.now().strftime(
-                    '%Y-%m-%d')
-                for i in Estudiante.objects.filter(id_curso=curso):
-                    if i in data:
-                        est = Estudiante.objects.filter(id_est=i.id_est)
-                        form.cleaned_data['estado_asis'] = True
-                    else:
-                        est = Estudiante.objects.filter(id_est=i.id_est)
-                        form.cleaned_data['estado_asis'] = False
-                    form.cleaned_data['estudiante'] = est
-                    registro = AddAsistenciaForm(form.clean())
-                    if registro.is_valid():
-                        registro.save()
-                    else:
-                        print('Error no valido ln-138: ')
-                        print(registro.errors)
-                data = {'info': 'Datos Guardados'}
+                horario = Cursos.objects.get(nombre = curso).horario
+                form.cleaned_data['fecha_asis'] = fechaActual['datetime'].split('T')[0]
+                if(Asistencia.objects.filter(programaID = f'C{curso}').filter(fecha_asis = fechaActual['datetime'].split('T')[0]).exists() == False) :
+                    for i in Estudiante.objects.filter(id_curso=curso):
+                        if i in data:
+                            est = Estudiante.objects.filter(id_est=i.id_est)
+                            form.cleaned_data['estado_asis'] = True
+                        else:
+                            est = Estudiante.objects.filter(id_est=i.id_est)
+                            form.cleaned_data['estado_asis'] = False
+                        form.cleaned_data['estudiante'] = est
+                        form.cleaned_data['programaID'] = f'C{curso}'
+                        form.cleaned_data['horario_id'] = horario
+                        registro = AddAsistenciaForm(form.clean())
+                        if registro.is_valid():
+                            registro.save()
+                        else:
+                            print('Error no valido ln-138: ')
+                            print(registro.errors)
+                    data = {'info': 'Datos Guardados'}
+                else:
+                    data={'errors' : 'Ya se ha registrado asistencia este día'}
+
             else:
                 print('Error Formulario no valido: ', form.errors)
                 data = {'errors': 'Error uno ' + str(form.errors)}

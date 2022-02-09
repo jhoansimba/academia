@@ -80,16 +80,15 @@ class getParalelo(TemplateView):
         nivel = self.kwargs['nivel']
         pro = self.kwargs['programa']
         validacion = AsigacionParalelo.objects.filter(paralelo__usuario_id=self.request.user.id).filter(
-            paralelo__nivel=nivel).order_by('nombre').filter(paralelo__programa_general__programa=pro).exists()
+            paralelo__nivel_Paralelo=nivel).order_by('nombre').filter(paralelo__programa_general__programa=pro).exists()
         if validacion == False:
-            print('Esntró')
             return redirect(f'/docentes/programa/{pro}')
         data = {
             'programa': pro,
             'nivel': nivel,
             'paralelo': AsigacionParalelo.objects
             .filter(paralelo__usuario_id=self.request.user.id)
-            .filter(paralelo__nivel=nivel).order_by('nombre')
+            .filter(paralelo__nivel_Paralelo=nivel).order_by('nombre')
             .filter(paralelo__programa_general__programa=pro)
         }
         return render(request, self.template_name, data)
@@ -107,7 +106,7 @@ class Listado(LoginRequiredMixin, TemplateView):
         code = ''
         paralelo = ''
         validacion = AsigacionParalelo.objects.filter(paralelo__usuario_id=self.request.user.id).filter(
-            paralelo__nivel=nivel).order_by('nombre').filter(paralelo__programa_general__programa=pro).filter(nombre=par).exists()
+            paralelo__nivel_Paralelo=nivel).order_by('nombre').filter(paralelo__programa_general__programa=pro).filter(nombre=par).exists()
         if validacion == False:
             return redirect(f'/docentes/programa/{pro}')
         for i in Notas.objects.all():
@@ -126,7 +125,7 @@ class Listado(LoginRequiredMixin, TemplateView):
                                     paralelo = est.nombre
                                     for item in est.asignacionEstudiantes.all():
                                         for estudiante in item.asignacion.all():
-                                            if l == j and j == estudiante and nivel == est.paralelo.nivel.nivel:
+                                            if l == j and j == estudiante and nivel == est.paralelo.nivel_Paralelo.nivel:
                                                 try:
                                                     # Existen notas de este estudiante registradas
                                                     data.append({'notas': Notas.objects.get(

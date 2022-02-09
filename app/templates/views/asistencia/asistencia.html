@@ -53,10 +53,13 @@
                 method : 'POST',
                 data : form
             }).done((req) =>{
+                console.log('request: ', req);
+                console.log('error: ', req.errors);
                 if(req.info){
                     alert('Asistencia registrada');
+                    location.reload()
                 }else{
-                    alert('Error: ', req.errors);
+                    alert(req.errors);
                 }
             });
         }else{

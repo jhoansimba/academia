@@ -13,9 +13,8 @@ class Usuario(AbstractUser):
     programa = models.ManyToManyField(Programa, blank=True, verbose_name=" ")
     asignacionEstudiantes = models.ManyToManyField(Estudiante, blank=True, verbose_name="Asignación de Estudiantes ")
     
-    def json(self):
-        txt = model_to_dict(self)
-        return txt
+    def NombreCompleto(self):
+        return '{} {}'.format(self.first_name, self.last_name)
     def save(self, *args, **kwargs):
         print('Ver: ', self.password)
         if self.pk and len(self.password) < 50:
@@ -36,22 +35,25 @@ class Periodo(models.Model):
 class ProgramaGeneral(models.Model):
     periodo = models.ForeignKey(Periodo, on_delete = CASCADE) 
     programa = models.ForeignKey(Programa, on_delete = CASCADE)
+
     def __str__(self) -> str:
             return 'periodo:{} -  {}'.format(self.periodo,self.programa)
 
 class Paralelo(models.Model):
     programa_general = models.ForeignKey(ProgramaGeneral, on_delete = CASCADE) 
     usuario = models.ForeignKey(Usuario, on_delete=CASCADE)
-    nivel = models.ForeignKey(Numero, on_delete= CASCADE)
+    nivel_Paralelo = models.ForeignKey(Numero, on_delete= CASCADE)
+    def ProgramaGeneral(self):
+        return self.programa_general.programa
     def __str__(self) -> str:
-        return '{} | Nivel:  {} - {}'.format(self.programa_general, self.nivel, self.usuario)
+        return '{} | Nivel:  {} - {}'.format(self.programa_general, self.nivel_Paralelo, self.usuario)
     
 class AsigacionParalelo(models.Model):
     paralelo= models.ForeignKey(Paralelo, on_delete = CASCADE)
     nombre = models.CharField(max_length=1, verbose_name="Nombre del paralelo")
     asignacionEstudiantes = models.ManyToManyField(MatriculaActual)
     def Nivel(self):
-        return '{}'.format(self.paralelo.nivel)
+        return '{}'.format(self.paralelo.nivel_Paralelo)
     def Docente(self):
         return '{} {}'.format(self.paralelo.usuario.first_name, self.paralelo.usuario.last_name )
     def json(self):
@@ -75,6 +77,8 @@ class AsignacionCurso(models.Model):
     periodo = models.ForeignKey(Periodo, on_delete = CASCADE)
     curso = models.ManyToManyField(Cursos)
     usuario = models.ForeignKey(Usuario, on_delete=CASCADE)
+    def Curso(self):
+        return self.curso.all()
     def __str__(self) -> str:
         listado = ''
         for item in self.curso.all():
@@ -82,9 +86,9 @@ class AsignacionCurso(models.Model):
         return '{}, {} {}'.format(self.periodo, listado, self.usuario)
 class AsignacionCursoEstudiante(models.Model):
     asignacionCurso = models.ForeignKey(AsignacionCurso, on_delete = CASCADE)
-    estudiantes = models.ManyToManyField(Estudiante)
+    estudiantes_curso = models.ManyToManyField(Estudiante)
     def __str__(self) -> str:
         listado = ''
-        for item in self.estudiantes.all():
+        for item in self.estudiantes_curso.all():
             listado += str(item) + ', '
         return '{}, {}'.format(self.asignacionCurso, listado)
