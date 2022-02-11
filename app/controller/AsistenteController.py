@@ -328,7 +328,7 @@ class getInfo(TemplateView):
                         data.append(i.json())
             else:
                 for i in Numero.objects.all():
-                        data.append(i.json())
+                    data.append(i.json())
 
         return JsonResponse(data, safe=False)
 
@@ -377,7 +377,7 @@ class AsignarNiveles(LoginRequiredMixin, CreateView):
                     for i in Estudiante.objects.all():
                         if i.id_programa.all():
                             data.append(i)
-                    return render(self.request, self.template_name, {'form': self.form_class, 'descripcion': 'Nivel', 'tipoOpcion': 'Materia', 'errores': f'Verifique que el número de estudiantes sea {CONSTANTES.inicio} o {CONSTANTES.fin}, usted ha seleccionado {len(asignacion)}', 'programa': data, 'materia': Programa.objects.all().exclude(nombre='ninguno'), 'nivel': Numero.objects.all()})
+                    return render(self.request, self.template_name, {'form': self.form_class, 'descripcion': 'Nivel', 'tipoOpcion': 'Materia', 'errores': f'Verifique que el número de estudiantes sea {CONSTANTES.inicio} a {CONSTANTES.fin}, usted ha seleccionado {len(asignacion)}', 'programa': data, 'materia': Programa.objects.all().exclude(nombre='ninguno'), 'nivel': Numero.objects.all()})
         except Exception as e:
             print(f'Error en el método AsignarNiveles:{form}, error: {e}')
 
@@ -405,7 +405,7 @@ class AsignarNivelesCurso(LoginRequiredMixin, CreateView):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
-        CONSTANTES = ParametrosConstantes.objects.get(nombre='LRC')
+        CONSTANTES = ParametrosConstantes.objects.get(nombre='LRP')
         try:
             if form.is_valid():
                 asignacion = form.cleaned_data['asignacion']
@@ -470,17 +470,17 @@ class ProgramaGeneralList(LoginRequiredMixin, ListView):
 
 
 class ParaleloList(LoginRequiredMixin, ListView):
-   permission_required = listado
-   model = Paralelo
-   form_class = FormParalelo
-   template_name = 'views/Asistente/Docenteparalelo.html'
-   title = Title
+    permission_required = listado
+    model = Paralelo
+    form_class = FormParalelo
+    template_name = 'views/Asistente/Docenteparalelo.html'
+    title = Title
 
-   def get_context_data(self, **kwargs):
-       context = super().get_context_data(**kwargs)
-       context['name2'] = 'Asignacion Docente'
-     #  context['object_list'] = self.model.objects.filter(matricula = True)
-       return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['name2'] = 'Asignacion Docente'
+      #  context['object_list'] = self.model.objects.filter(matricula = True)
+        return context
 
 
 class addPeriodo (LoginRequiredMixin, CreateView):
@@ -495,7 +495,7 @@ class addPeriodo (LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['name'] = 'Agregar periodo'
         context['regresar'] = '/asistente/periodo'
-     #  context['object_list'] = self.model.objects.filter(matricula = True)
+      #  context['object_list'] = self.model.objects.filter(matricula = True)
         return context
 
 
@@ -511,7 +511,7 @@ class addProgramaGeneral (LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['name'] = 'Agregar Programa General'
         context['regresar'] = '/asistente/programageneral'
-     #  context['object_list'] = self.model.objects.filter(matricula = True)
+      #  context['object_list'] = self.model.objects.filter(matricula = True)
         return context
 
 
@@ -527,7 +527,7 @@ class addParalelo (LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['name'] = 'Agregar Programa General'
         context['regresar'] = '/asistente/paralelo'
-     #  context['object_list'] = self.model.objects.filter(matricula = True)
+      #  context['object_list'] = self.model.objects.filter(matricula = True)
         return context
 
 
@@ -632,17 +632,21 @@ class AgregarEstudiantes(CreateView):
         context['name'] = 'Asignación de Paralelo'
         context['estudiantes'] = self.estudiantes
         return context
+
+
 class ParametroList(LoginRequiredMixin, ListView):
-   permission_required = listado
-   model = ParametrosConstantes
-   form_class = FormParametros
-   template_name = 'views/Asistente/Parametros.html'
-   title = Title
-   def get_context_data(self, **kwargs):
-       context = super().get_context_data(**kwargs)
-       context['name'] = 'Parametros Constantes'
-     #  context['object_list'] = self.model.objects.filter(matricula = True)
-       return context
+    permission_required = listado
+    model = ParametrosConstantes
+    form_class = FormParametros
+    template_name = 'views/Asistente/Parametros.html'
+    title = Title
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['name'] = 'Parametros Constantes'
+      #  context['object_list'] = self.model.objects.filter(matricula = True)
+        return context
+
 
 class editParametros(LoginRequiredMixin, UpdateView):
     permission_required = editar
